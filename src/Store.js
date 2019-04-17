@@ -20,6 +20,7 @@ class Store {
   @observable files = {};
   @observable file = null;
   @observable fileTitle = null;
+  @observable articleText = "";
   @action async getFiles() {
     try {
       const files = await textile.files.list({
@@ -40,7 +41,32 @@ class Store {
       });
     }
   }
-  @action async createArticle(articleName, articleText) {
+  @action setArticleText (articleText) {
+    runInAction('setArticleText', () => {
+      this.articleText = articleText
+    });
+  }
+  @action async createArticle(articleName) {
+    if (!this.articleText) {
+      toast({
+        title: 'Error!',
+        description: 'Article text is required',
+        type: 'error',
+        time: 0
+      });
+      return;
+    }
+
+    if (!articleName) {
+      toast({
+        title: 'Error!',
+        description: 'Article title is required',
+        type: 'error',
+        time: 0
+      });
+      return;
+    }
+
     const THREAD_NAME = articleName
     const THREAD_KEY = articleName
 
@@ -67,21 +93,47 @@ class Store {
       }
 
       const form = new FormData();
-      const blob = new Blob([articleText], { type: 'text/plain' })
+      const blob = new Blob([this.articleText], { type: 'text/plain' })
       blob.lastModifiedDate = new Date()
       blob.name = articleName
       form.append('file', blob, articleName)
 
       await textile.files.addFile(blobThread.id, form, articleName);
-
       toast({
         title: 'Success',
         description: 'Your file has been uploaded!'
       });
-      this.getFiles()
+      runInAction('getFile', () => {
+        this.fileTitle = articleName
+        this.file = this.articleText
+      }); 
+      this.getFiles();
     } catch (ex) {
       console.log('failed to add file')
       console.error(ex);
+      toast({
+        title: 'Error!',
+        description: 'Failed to create your article 😔',
+        type: 'error',
+        time: 0
+      });
+    }
+  }
+  @action getFileFromThread(thread) {
+    if (thread.files &&
+      thread.files[0] &&
+      thread.files[0].file &&
+      thread.files[0].file.hash &&
+      thread.files[0].file.key) {
+        return thread.files[0].file
+    } else {
+      toast({
+        title: 'Error!',
+        description: 'No file found 😔',
+        type: 'error',
+        time: 0
+      });
+      return null
     }
   }
   @action async getFile(title, hash, key) {
@@ -92,7 +144,7 @@ class Store {
     });
   }
   @action async clearFile() {
-    runInAction('getFile', () => {
+    runInAction('clearFile', () => {
       this.fileTitle = null
       this.file = null
     });

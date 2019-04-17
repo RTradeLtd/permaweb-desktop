@@ -16,7 +16,7 @@ class App extends Component {
       switch (screen) {
         case 'online':
           return (
-            <div style={{ width: '80%', maxWidth: '500px', margin: '1em auto' }}>
+            <div style={{ width: '80%', maxWidth: '800px', margin: '1em auto' }}>
               <Profile />
             </div>
           )
