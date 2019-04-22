@@ -8,16 +8,22 @@ before_script:
 
 Test:
   stage: test
+  tags:
+    - Yarn
   script:
     - yarn test --ci --all
 
 Audit:
   stage: test
+  tags:
+    - Yarn
   script:
     - yarn audit
 
 Build:
   stage: build
+  tags:
+    - Yarn
   script:
     - yarn build
     - yarn dist
