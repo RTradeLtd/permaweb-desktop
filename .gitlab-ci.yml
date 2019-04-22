@@ -1,0 +1,23 @@
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - yarn install
+
+Test:
+  stage: test
+  script:
+    - yarn test --ci --all
+
+Audit:
+  stage: test
+  script:
+    - yarn audit
+
+Build:
+  stage: build
+  script:
+    - yarn build
+    - yarn dist
