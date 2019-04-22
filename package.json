@@ -1,11 +1,17 @@
 {
-  "name": "textile-react-demo",
+  "name": "epona-desktop",
   "version": "0.1.0",
+  "description": "Epona Desktop Application",
+  "author": {
+    "name": "Epona Developers",
+    "email": "admin@getepona.com"
+  },
   "private": true,
   "dependencies": {
     "@craco/craco": "^3.5.0",
     "@textileio/js-http-client": "^0.1.9",
     "ed25519": "0.0.4",
+    "electron-is-dev": "^1.1.0",
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",
     "moment": "^2.24.0",
@@ -25,7 +31,12 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "preelectron-pack": "yarn build",
+    "electron-pack": "build --em.main=build/electron.js"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -38,6 +49,49 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.3.4",
-    "babel-preset-mobx": "^2.0.0"
-  }
+    "babel-preset-mobx": "^2.0.0",
+    "concurrently": "^4.1.0",
+    "electron": "^4.1.4",
+    "electron-builder": "^20.39.0",
+    "electron-builder-squirrel-windows": "^20.40.0",
+    "wait-on": "^3.2.0"
+  },
+  "main": "public/electron.js",
+  "build": {
+    "appId": "com.getepona.react",
+    "productName": "Epona",
+    "files": [
+      "build/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "msi",
+        "squirrel"
+      ],
+      "icon": "public/favicon.ico"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "snap",
+        "deb",
+        "rpm",
+        "freebsd",
+        "pacman"
+      ],
+      "category": "Utility",
+      "icon": "favicon.ico"
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        "dmg"
+      ]
+    }
+  },
+  "homepage": "./"
 }
