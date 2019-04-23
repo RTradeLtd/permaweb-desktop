@@ -69,10 +69,9 @@
     "win": {
       "target": [
         "nsis",
-        "msi",
-        "squirrel"
+        "msi"
       ],
-      "icon": "public/favicon.ico"
+      "icon": "public/Favicon.png"
     },
     "linux": {
       "target": [
