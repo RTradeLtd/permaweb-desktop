@@ -1,3 +1,7 @@
+os:
+  - linux
+  - windows
+
 dist: xenial
 
 addons:
