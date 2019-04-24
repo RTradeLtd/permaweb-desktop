@@ -93,10 +93,9 @@
       ]
     },
     "publish": {
-      "github": {
-        "repo": "Epona-js",
-        "owner": "GetEpona"
-      }
+      "provider": "github",
+      "repo": "Epona-js",
+      "owner": "GetEpona"
     }
   },
   "homepage": "./"
