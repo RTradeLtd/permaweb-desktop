@@ -2,35 +2,22 @@ import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
 import { Card, Icon, Button } from 'semantic-ui-react'
 import Moment from 'react-moment'
-import FileList from './FileList'
 import ArticleForm from './ArticleForm'
-import Markdown from 'react-markdown-it'
+import FileList from './FileList'
 
 @inject('store') @observer
 class Profile extends Component {
-  clearFile() {
-    this.props.store.clearFile()
+  createEmptyFile() {
+    this.props.store.setFile("<h1>Title</h1><p>Create your article here...</p>")
   }
   render () {
-    const { profile, files, file, fileTitle } = this.props.store
-    let fileCount = files && files.length ? files.length : 0
+    const { profile, files, file } = this.props.store
+    let fileCount = files ? Object.keys(files).length : 0
 
     if (file) {
       return (
         <div>
-          <Card style={{ width: '100%' }}>
-            <Card.Content>
-              <Card.Header><h3>{fileTitle}</h3></Card.Header>
-              <hr></hr>
-              <br></br>
-              <Card.Description>
-                <Markdown source={file}></Markdown>
-              </Card.Description>
-            </Card.Content>
-            <Card.Content extra>
-            <Button onClick={() => { this.clearFile() }} primary>Back</Button>
-            </Card.Content>
-          </Card>
+          <ArticleForm />
         </div>
       )
     }
@@ -41,9 +28,11 @@ class Profile extends Component {
             <Card.Header><h2>Epona Editor</h2></Card.Header>     
           </Card.Content>
           <Card.Content>     
-            <ArticleForm />
-            <br></br>
-            <hr></hr>
+            <Card.Description>
+              <Button onClick={() => { this.createEmptyFile() }}>Create New</Button>
+            </Card.Description>
+          </Card.Content>
+          <Card.Content>     
             <Card.Description>
               <p title='folder'>
                 <Icon name='folder' />{fileCount} files

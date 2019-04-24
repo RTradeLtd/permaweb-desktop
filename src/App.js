@@ -4,6 +4,8 @@ import 'react-semantic-toasts/styles/react-semantic-alert.css';
 import Profile from './Profile'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import { SemanticToastContainer } from 'react-semantic-toasts'
+import 'medium-editor/dist/css/medium-editor.css';
+import 'medium-editor/dist/css/themes/default.css';
 
 @inject('store') @observer
 class App extends Component {

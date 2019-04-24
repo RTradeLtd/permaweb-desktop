@@ -1,34 +1,54 @@
 import React, { Component } from 'react'
-import { Form, Input } from 'semantic-ui-react';
+import { Button, Card, Form } from 'semantic-ui-react'
 import { observer, inject } from 'mobx-react'
-var MarkdownEditor = require('react-markdown-editor').MarkdownEditor;
+import Editor from 'react-medium-editor'
 
 @inject('store') @observer
 class ArticleForm extends Component {
   handleArticle = e => {
     e.preventDefault()
-    this.props.store.createArticle(this.titleRef.value)
+    this.props.store.createFile()
   }
   updateContent = content => {
-    this.props.store.setArticleText(content)
+    this.props.store.setFile(content)
+  }
+  clearFile = () => {
+    this.props.store.clearFile()
   }
   render() {
+    const { file } = this.props.store
     return (
-      <Form onSubmit={this.handleArticle}>
-        <Form.Field>
-        <Input defaultValue=''>
-          <input placeholder='Your Title' ref={c => { this.titleRef = c }} />
-        </Input>
-        <MarkdownEditor
-          onContentChange={ this.updateContent }
-          initialContent="Create your article here..."
-          iconsSet="font-awesome"/>
-        </Form.Field>
-        <Form.Button
-          content="Create"
-          type={'submit'}
+      <div>
+        <Card style={{ width: '100%' }}>
+          <Card.Content>
+            <Card.Description>
+              <Button onClick={() => { this.clearFile() }} primary>Back</Button>
+              <Form onSubmit={this.handleArticle} style={ {float: 'right'}}>
+                <Form.Button
+                  content="Save"
+                  type={'submit'}
+                />
+              </Form>
+            </Card.Description>
+          </Card.Content>
+        </Card>
+        <br></br>
+        <Editor
+          style={{
+            minHeight: '10vh',
+            fontSize: '16px',
+            border: 'none',
+            overflow: 'auto',
+            outline: 'none',
+            WebkitBoxShadow: 'none',
+            MozBoxShadow: 'none',
+            BoxShadow: 'none',
+            resize: 'none'
+          }}
+          onChange={ this.updateContent }
+          text={ file }
         />
-      </Form>
+      </div>
     );
   }
 }
