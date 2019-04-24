@@ -19,17 +19,28 @@ class Store {
   };
   @observable files = {};
   @observable file = null;
-  @observable fileTitle = null;
-  @observable articleText = "";
   @action async getFiles() {
     try {
       const files = await textile.files.list({
         limit: 10
       })
+      let threadFiles = {}
+      
+      if (files.items && files.items.length > 0) {
+        files.items.forEach(item => {
+          if (threadFiles[item.caption]) {
+            threadFiles[item.caption].push(item)
+          } else {
+            threadFiles[item.caption] = [item]
+          }
+        });
+      }
+
       runInAction('getFiles', () => {
         this.status = 'online'
-        this.files = files.items;
+        this.files = threadFiles
       });
+
     } catch(err) {
       runInAction('getStatus', () => {
         this.status = 'offline'
@@ -41,13 +52,13 @@ class Store {
       });
     }
   }
-  @action setArticleText (articleText) {
-    runInAction('setArticleText', () => {
-      this.articleText = articleText
+  @action setFile (file) {
+    runInAction('setFile', () => {
+      this.file = file
     });
   }
-  @action async createArticle(articleName) {
-    if (!this.articleText) {
+  @action async createFile() {
+    if (!this.file) {
       toast({
         title: 'Error!',
         description: 'Article text is required',
@@ -57,10 +68,18 @@ class Store {
       return;
     }
 
+    // get article name
+    let firstLine = this.file.split('</')[0]
+
+    // remove html
+    let temp = document.createElement("div")
+    temp.innerHTML = `${firstLine}`
+    let articleName = temp.textContent || temp.innerText || ""
+
     if (!articleName) {
       toast({
         title: 'Error!',
-        description: 'Article title is required',
+        description: 'Article title is required, it is the first line of your file',
         type: 'error',
         time: 0
       });
@@ -93,7 +112,7 @@ class Store {
       }
 
       const form = new FormData();
-      const blob = new Blob([this.articleText], { type: 'text/plain' })
+      const blob = new Blob([this.file], { type: 'text/plain' })
       blob.lastModifiedDate = new Date()
       blob.name = articleName
       form.append('file', blob, articleName)
@@ -104,8 +123,7 @@ class Store {
         description: 'Your file has been uploaded!'
       });
       runInAction('getFile', () => {
-        this.fileTitle = articleName
-        this.file = this.articleText
+        this.file = this.file
       }); 
       this.getFiles();
     } catch (ex) {
@@ -119,14 +137,13 @@ class Store {
       });
     }
   }
-  @action getFileFromThread(thread) {
-    if (thread.files &&
-      thread.files[0] &&
-      thread.files[0].file &&
-      thread.files[0].file.hash &&
-      thread.files[0].file.key) {
-        return thread.files[0].file
-    } else {
+  @action getFileFromName(filename) {
+    try {
+      let filethread = this.files[filename]
+      let latest = filethread[0]
+      let threadfile = latest.files[0]
+      return threadfile.file
+    } catch (err) {
       toast({
         title: 'Error!',
         description: 'No file found 😔',
@@ -136,16 +153,51 @@ class Store {
       return null
     }
   }
-  @action async getFile(title, hash, key) {
-    const bytes = await textile.ipfs.cat(hash, key)
-    runInAction('getFile', () => {
-      this.fileTitle = title
-      this.file = bytes
-    });
+  @action async getFileContent(hash, key) {
+    try {
+      const bytes = await textile.ipfs.cat(hash, key)
+      runInAction('getFile', () => {
+        this.file = bytes
+      });
+    } catch (err) {
+      toast({
+        title: 'Error!',
+        description: 'Failed to get file',
+        type: 'error',
+        time: 0
+      });
+      console.log(err)
+    }
+  }
+  @action async deleteLatestFile(filename) {
+    try {
+      let filethread = this.files[filename]
+      let latest = filethread.shift()
+
+      await textile.files.ignore(latest.block)
+
+      // no more files left
+      if (filethread.length <= 0) {
+        runInAction('clearFile', () => {
+          delete this.files[filename]
+        });
+      }
+      toast({
+        title: 'Success',
+        description: 'The latest version of your file has been deleted!'
+      });
+    } catch (err) {
+      toast({
+        title: 'Error!',
+        description: 'Failed to delete file',
+        type: 'error',
+        time: 0
+      });
+      console.log(err)
+    }
   }
   @action async clearFile() {
     runInAction('clearFile', () => {
-      this.fileTitle = null
       this.file = null
     });
   }

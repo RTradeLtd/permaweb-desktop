@@ -2,26 +2,30 @@ import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
 import { List, Button } from 'semantic-ui-react'
 import { toast } from "react-semantic-toasts"
+import DeleteButton from './DeleteButton'
 
 @inject('store') @observer
 class FileList extends Component {
-  showFile (thread) {
-    let file = this.props.store.getFileFromThread(thread)
-
+  showFile (filename) {
+    let file = this.props.store.getFileFromName(filename)
+    
     if (file) {
-      this.props.store.getFile(thread.caption, file.hash, file.key)
+      this.props.store.getFileContent(file.hash, file.key)
     }
   }
-  copyLinkToClipboard (thread) {
-    let file = this.props.store.getFileFromThread(thread)
-    this.linkRef.value = `www.getepona.com?hash=${file.hash}&key=${file.key}`
-    this.linkRef.select();
-    document.execCommand('copy');
-    
-    toast({
-      title: 'Success',
-      description: 'Copied link to clipboard'
-    });
+  copyLinkToClipboard (filename) {
+    let file = this.props.store.getFileFromName(filename)
+
+    if (file) {
+      this.linkRef.value = `https://getepona.herokuapp.com?hash=${file.hash}&key=${file.key}`
+      this.linkRef.select();
+      document.execCommand('copy');
+      
+      toast({
+        title: 'Success',
+        description: 'Copied link to clipboard'
+      });
+    }
   }
   render () {
     const linkStyle = {
@@ -37,7 +41,7 @@ class FileList extends Component {
       return null;
     }
   
-    if (!files.length) {
+    if (Object.keys(files).length <= 0) {
       return (
         <div>
           <p>There are no files in your folder.</p>
@@ -48,15 +52,18 @@ class FileList extends Component {
         <div>
           <input style={ {position: 'absolute', left: '-9999px'} } ref={c => { this.linkRef = c }} />
           <List>
-            {files.map(file => (
+            {Object.keys(files).map(filename => (
               <List.Item icon='file'
-                key={file.target}
+                key={filename}
                 content={
                   <div>
-                    <button style={linkStyle} onClick={() => this.showFile(file)}>
-                      {file.caption}
+                    <button style={linkStyle} onClick={() => this.showFile(filename)}>
+                      {filename}
                     </button>
-                    <Button size='mini' style={ {float: 'right'} } onClick={() => { this.copyLinkToClipboard(file) }}>Copy Link</Button>
+                    <div style={ {float: 'right'} }>
+                      <Button size='mini' onClick={() => { this.copyLinkToClipboard(filename) }}>Copy Link</Button>
+                      <DeleteButton filename={ filename } />
+                    </div>
                   <br></br>
                   </div>
                 } />
