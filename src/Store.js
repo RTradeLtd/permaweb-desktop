@@ -1,5 +1,5 @@
 import { runInAction, action, configure, observable } from "mobx"
-import { Textile } from "@textileio/js-http-client"
+import { Textile } from "@textile/js-http-client"
 import { toast } from "react-semantic-toasts"
 
 const textile = new Textile({
@@ -25,7 +25,7 @@ class Store {
         limit: 10
       })
       let threadFiles = {}
-      
+
       if (files.items && files.items.length > 0) {
         files.items.forEach(item => {
           if (threadFiles[item.caption]) {
@@ -41,7 +41,7 @@ class Store {
         this.files = threadFiles
       });
 
-    } catch(err) {
+    } catch (err) {
       runInAction('getStatus', () => {
         this.status = 'offline'
       });
@@ -52,7 +52,7 @@ class Store {
       });
     }
   }
-  @action setFile (file) {
+  @action setFile(file) {
     runInAction('setFile', () => {
       this.file = file
     });
@@ -124,7 +124,7 @@ class Store {
       });
       runInAction('getFile', () => {
         this.file = this.file
-      }); 
+      });
       this.getFiles();
     } catch (ex) {
       console.log('failed to add file')
