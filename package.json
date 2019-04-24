@@ -1,0 +1,103 @@
+{
+  "name": "epona-desktop",
+  "version": "0.1.0",
+  "description": "Epona Desktop Application",
+  "author": {
+    "name": "Epona Developers",
+    "email": "admin@getepona.com"
+  },
+  "private": true,
+  "dependencies": {
+    "@craco/craco": "^3.5.0",
+    "@textile/js-http-client": "^0.2.9",
+    "ed25519": "0.0.4",
+    "electron-is-dev": "^1.1.0",
+    "mobx": "^5.9.0",
+    "mobx-react": "^5.4.3",
+    "moment": "^2.24.0",
+    "react": "^16.8.3",
+    "react-dom": "^16.8.3",
+    "react-markdown-it": "^1.0.2",
+    "react-medium-editor": "^1.8.1",
+    "react-moment": "^0.8.4",
+    "react-scripts": "2.1.5",
+    "react-semantic-toasts": "^0.5.0",
+    "react-textarea-autosize": "^7.1.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.84.0",
+    "typescript": "^3.3.3333"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "react-scripts eject",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "preelectron-pack": "yarn build",
+    "electron-pack": "build --em.main=build/electron.js",
+    "release": "build"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "babel-preset-mobx": "^2.0.0",
+    "concurrently": "^4.1.0",
+    "electron": "^4.1.4",
+    "electron-builder": "^20.39.0",
+    "electron-builder-squirrel-windows": "^20.40.0",
+    "wait-on": "^3.2.0"
+  },
+  "main": "public/electron.js",
+  "build": {
+    "appId": "com.getepona.react",
+    "productName": "Epona",
+    "files": [
+      "build/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "msi"
+      ],
+      "icon": "public/Favicon.png"
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "snap",
+        "deb",
+        "rpm",
+        "freebsd",
+        "pacman"
+      ],
+      "category": "Utility",
+      "icon": "favicon.ico"
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        "dmg"
+      ]
+    },
+    "publish": {
+      "github": {
+        "repo": "Epona-js",
+        "owner": "GetEpona"
+      }
+    }
+  },
+  "homepage": "./"
+}
