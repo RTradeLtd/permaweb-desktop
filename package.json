@@ -36,7 +36,8 @@
     "dist": "electron-builder",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preelectron-pack": "yarn build",
-    "electron-pack": "build --em.main=build/electron.js"
+    "electron-pack": "build --em.main=build/electron.js",
+    "release": "build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -91,6 +92,12 @@
       "target": [
         "dmg"
       ]
+    },
+    "publish": {
+      "github": {
+        "repo": "Epona-js",
+        "owner": "GetEpona"
+      }
     }
   },
   "homepage": "./"
