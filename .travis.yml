@@ -1,0 +1,32 @@
+os:
+  - linux
+  - windows
+
+dist: xenial
+
+addons:
+  apt:
+    update: true
+    packages:
+      - bsdtar
+      - g++-multilib
+      - gcc-multilib
+      - libopenjp2-tools
+      - rpm
+      - snapcraft
+
+language: node_js
+node_js:
+  - "stable"
+
+cache:
+  yarn: true
+  directories:
+    - node_modules
+
+install:
+  - yarn install
+
+script:
+  - yarn build
+  - yarn dist
