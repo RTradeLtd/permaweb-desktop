@@ -9,9 +9,11 @@ addons:
     update: true
     packages:
       - bsdtar
+      - build-essential
       - g++-multilib
       - gcc-multilib
       - libopenjp2-tools
+      - python
       - rpm
       - snapcraft
 
