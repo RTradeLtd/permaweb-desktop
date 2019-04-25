@@ -19,7 +19,7 @@ addons:
 
 language: node_js
 node_js:
-  - "stable"
+  - "11"
 
 cache:
   yarn: true
