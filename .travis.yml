@@ -27,7 +27,7 @@ cache:
     - node_modules
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install openssl.light --params "/InstallDir:C:\OpenSSL-Win64\" ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install openssl.light --params "/InstallDir:C:\\OpenSSL-Win64\\" ; fi
 
 install:
   - yarn install
