@@ -42,7 +42,7 @@
     "test": "craco test",
     "eject": "react-scripts eject",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder",
+    "dist": "electron-builder --publish onTagOrDraft",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preelectron-pack": "yarn build",
     "electron-pack": "build --em.main=build/electron.js",
