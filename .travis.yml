@@ -27,7 +27,13 @@ cache:
     - node_modules
 
 before_install:
+  # Install
   - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install openssl.light --params "/InstallDir:C:\\OpenSSL-Win64\\" ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install -y vcbuildtools -ia "/Full" ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install python2 vcredist-all ; fi
+  # Configure
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then npm config set python python2.7 ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then npm config set msvs_version 2017 ; fi
 
 install:
   - yarn install
