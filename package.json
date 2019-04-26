@@ -95,7 +95,12 @@
     "publish": {
       "provider": "github",
       "repo": "Epona-js",
-      "owner": "GetEpona"
+      "owner": "GetEpona",
+      "releaseType": [
+        "draft",
+        "prerelease",
+        "release"
+      ]
     }
   },
   "homepage": "./"
