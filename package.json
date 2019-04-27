@@ -70,7 +70,11 @@
     "win": {
       "target": [
         "nsis",
-        "msi"
+        "nsis-web",
+        "portable",
+        "appx",
+        "msi",
+        "squirrel"
       ],
       "icon": "public/Favicon.png"
     },
@@ -81,7 +85,9 @@
         "deb",
         "rpm",
         "freebsd",
-        "pacman"
+        "pacman",
+        "p5p",
+        "apk"
       ],
       "category": "Utility",
       "icon": "favicon.ico"
@@ -89,7 +95,8 @@
     "mac": {
       "category": "public.app-category.utilities",
       "target": [
-        "dmg"
+        "dmg",
+        "mas"
       ]
     },
     "publish": {
