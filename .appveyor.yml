@@ -1,11 +1,13 @@
-environment:
-  nodejs_version: "11"
+stack: node 11
+
+cache:
+  - node_modules
 
 install:
-  - ps: Install-Product node $env:nodejs_version
-  - node -v
   - yarn install
 
 build_script:
-  - yarn build
+  - yarn install
+
+deploy_script:
   - yarn dist
