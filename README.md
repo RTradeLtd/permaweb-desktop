@@ -8,8 +8,8 @@
 
 ## Join the community:
 [![Discord](https://img.shields.io/badge/Chat-Discord-brightgreen.svg?style=flat)](https://discord.gg/DrPFqa2)
-[![Matrix/Riot chat](https://img.shields.io/badge/Community-Matrix%20Riot.svg?style=flat)](https://riot.im/app/#/room/#epona:getepona.com)
-[![IRC chat](https://img.shields.io/badge/IRC-Epona-Freenode.svg?style=flat)]
+[![Matrix](https://img.shields.io/badge/Chat-Matrix%20&%20Riot-brightgreen.svg?style=flat))](https://riot.im/app/#/room/#epona:getepona.com)
+[![IRC](https://img.shields.io/badge/IRC-#Epona%20Freenode.svg?style=flat)]
 
 ## Project
 
