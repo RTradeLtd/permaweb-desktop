@@ -1,7 +1,11 @@
 os:
   - linux
-#  - windows
   - osx
+  - windows
+
+allow_failures:
+  os:
+    - windows
 
 dist: xenial
 
