@@ -1,5 +1,7 @@
 environment:
   nodejs_version: "11"
+  GH_TOKEN:
+    secure: iF9O6+0EP1bpkx/6WURZbhtIRDQEzFw8F9Saim8lL22aNl3jUiS+MiQHTmkFvjh2
 
 init:
   - ps: Install-Product node $env:nodejs_version
