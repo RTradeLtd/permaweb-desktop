@@ -72,8 +72,7 @@
         "nsis",
         "nsis-web",
         "portable",
-        "msi",
-        "squirrel"
+        "msi"
       ],
       "icon": "public/Favicon.png"
     },
