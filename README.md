@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/GetEpona/Epona-js.svg?branch=master)](https://travis-ci.org/GetEpona/Epona-js)
 
-## Homepage [![Homepage](https://img.shields.io/badge/homepage-www%3F-brightgreen.svg?style=flat)](http://getepona.com)
+[![Homepage](https://img.shields.io/badge/homepage-www-brightgreen.svg?style=flat)](http://getepona.com)
 
 ## Project
 
