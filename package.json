@@ -95,8 +95,7 @@
     "mac": {
       "category": "public.app-category.utilities",
       "target": [
-        "dmg",
-        "mas"
+        "dmg"
       ]
     },
     "publish": {
