@@ -86,7 +86,6 @@
         "rpm",
         "freebsd",
         "pacman",
-        "p5p",
         "apk"
       ],
       "category": "Utility",
