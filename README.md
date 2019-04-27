@@ -1,6 +1,8 @@
 # Epona Js App
 
-# Project
+[![Build Status](https://travis-ci.org/GetEpona/Epona-js.svg?branch=master)](https://travis-ci.org/GetEpona/Epona-js)
+
+## Project
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), and then the build/run configuration was customized with a `craco.config.js` file.
 
