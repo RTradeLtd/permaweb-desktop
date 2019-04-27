@@ -9,7 +9,7 @@
 ## Join the community:
 [![Discord](https://img.shields.io/badge/Chat-Discord-brightgreen.svg?style=flat)](https://discord.gg/DrPFqa2)
 [![Matrix](https://img.shields.io/badge/Chat-Matrix%20&%20Riot-brightgreen.svg?style=flat)](https://riot.im/app/#/room/#epona:getepona.com)
-[![IRC](https://img.shields.io/badge/freenode-&#35epona-brightgreen.svg?style=flat)](https://mirc.com)
+[![IRC](https://img.shields.io/badge/freenode-#35epona-brightgreen.svg?style=flat)](https://mirc.com)
 
 
 ## Project
