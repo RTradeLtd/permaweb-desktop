@@ -7,9 +7,9 @@
 
 
 ## Join the community:
-[![Discord](https://badges.gitter.im/Join%20Chat.svg)](https://discord.gg/DrPFqa2)
-[![Matrix/Riot chat](https://badges.gitter.im/Join%20Chat.svg)](https://riot.im/app/#/room/#epona:getepona.com)
-[![IRC chat](https://badges.gitter.im/Join%20Chat.svg)](irc://freenode/epona)
+[![Discord](https://badges.gitter.im/Community-Discord.svg?style=flat)](https://discord.gg/DrPFqa2)
+[![Matrix/Riot chat](https://badges.gitter.im/Community-Matrix/Riot.svg?style=flat)](https://riot.im/app/#/room/#epona:getepona.com)
+[![IRC chat](https://badges.gitter.im/IRC-Epona-Freenode.svg?style=flat)]
 
 ## Project
 
