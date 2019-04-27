@@ -3,9 +3,9 @@ os:
   - osx
   - windows
 
-allow_failures:
-  os:
-    - windows
+matrix:
+  allow_failures:
+    - os: windows
 
 dist: xenial
 
