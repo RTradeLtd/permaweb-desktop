@@ -2,7 +2,14 @@
 
 [![Build Status](https://travis-ci.org/GetEpona/Epona-js.svg?branch=master)](https://travis-ci.org/GetEpona/Epona-js)
 
-[![Homepage](https://img.shields.io/badge/homepage-www-brightgreen.svg?style=flat)](http://getepona.com)
+## Homepage [![Homepage](https://img.shields.io/badge/homepage-www-brightgreen.svg?style=flat)](http://getepona.com)
+## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/GetEpona/Epona-js/issues)
+
+
+## Join the community:
+[![Discord](https://badges.gitter.im/Join%20Chat.svg)](https://discord.gg/DrPFqa2)
+[![Matrix/Riot chat](https://badges.gitter.im/Join%20Chat.svg)](https://riot.im/app/#/room/#epona:getepona.com)
+[![IRC chat](https://badges.gitter.im/Join%20Chat.svg)](irc://freenode/epona)
 
 ## Project
 
