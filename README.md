@@ -9,6 +9,7 @@ Epona is a super fast way to write with productivity shortcuts on IPFS.
 * Share a pastebin
 
 Everything you write is encrypted and you're in control of the keys.
+
 All your content is hosted on [Textile](https://textile.io)'s network of fully encrypted nodes, so there's no single point of failure.
 
 ## Technology
