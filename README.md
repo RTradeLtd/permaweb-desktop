@@ -1,6 +1,6 @@
-# Epona [![Build Status](https://travis-ci.org/GetEpona/Epona-js.svg?branch=master)](https://travis-ci.org/GetEpona/Epona-js) [![Homepage](https://img.shields.io/badge/homepage-www-brightgreen.svg?style=flat)](http://getepona.com)
-## Contributing [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/GetEpona/Epona-js/issues)[![feature requests](https://img.shields.io/badge/feature-requests-blue.svg?style=flat)](https://github.com/GetEpona/Epona-js/issues)
-## Join the community: [![Discord](https://img.shields.io/badge/Chat-Discord-purple.svg?style=flat)](https://discord.gg/DrPFqa2) [![Matrix](https://img.shields.io/badge/Chat-Matrix%20&%20Riot-blue.svg?style=flat)](https://riot.im/app/#/room/#epona:getepona.com) [![IRC](https://img.shields.io/badge/IRC-freenode%20%23epona-brightgreen.svg?style=flat)](https://mirc.com)
+# Epona [![Build Status](https://travis-ci.org/GetEpona/Epona-js.svg?branch=master)](https://travis-ci.org/GetEpona/Epona-js)[![Homepage](https://img.shields.io/badge/homepage-www-brightgreen.svg?style=flat)](http://getepona.com)
+## Contribute [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/GetEpona/Epona-js/issues)[![feature requests](https://img.shields.io/badge/feature-requests-blue.svg?style=flat)](https://github.com/GetEpona/Epona-js/issues)
+## Community [![Discord](https://img.shields.io/badge/Chat-Discord-purple.svg?style=flat)](https://discord.gg/DrPFqa2) [![Matrix](https://img.shields.io/badge/Chat-Matrix%20&%20Riot-blue.svg?style=flat)](https://riot.im/app/#/room/#epona:getepona.com) [![IRC](https://img.shields.io/badge/IRC-freenode%20%23epona-brightgreen.svg?style=flat)](https://mirc.com)
 
 ## Description
 Epona is a super fast way to write with productivity shortcuts on IPFS. Draft notes, create markdown files, or share a paste bin fully encrypted without any hassles.
