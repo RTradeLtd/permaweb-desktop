@@ -3,7 +3,10 @@
 ## Community [![Discord](https://img.shields.io/badge/Chat-Discord-purple.svg?style=flat)](https://discord.gg/DrPFqa2) [![Matrix](https://img.shields.io/badge/Chat-Matrix%20&%20Riot-blue.svg?style=flat)](https://riot.im/app/#/room/#epona:getepona.com) [![IRC](https://img.shields.io/badge/IRC-freenode%20%23epona-brightgreen.svg?style=flat)](http://webchat.freenode.net/?channels=%23epona)
 
 ## Description
-Epona is a super fast way to write with productivity shortcuts on IPFS. Draft notes, create markdown files, or share a paste bin fully encrypted without any hassles.
+Epona is a super fast way to write with productivity shortcuts on IPFS.
+* Draft notes
+* Create markdown documents
+* Share a pastebin
 
 Everything you write is encrypted and you're in control of the keys.
 Content can easily be shared to additional nodes so there's no single point of failure.
