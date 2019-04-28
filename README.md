@@ -14,6 +14,7 @@ Use cases:
 * Create markdown documents
 * Share a pastebin
 * A simple public blog
+![Epona](https://getepona.com/static/screenshot-d39a4278e6019e385e47c37f632a8677.png)
 
 ## Technology
 Epona runs on a series of self-hosted nodes. These are powered by [Textile.io](https://textile.io), which is acts as a digital wallet for fully encrypted, decentralized content. This makes Epona extremely resilient: we do not have your keys, and there is no single point of failure. *You are the platform*.
