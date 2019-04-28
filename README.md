@@ -10,7 +10,9 @@ Content can easily be shared to additional nodes so there's no single point of f
 
 ## Technology
 Epona runs on a series of self-hosted nodes. Anyone can be a server. *You are the platform*.
+
 Epona uses [IPFS](https://ipfs.io) for content addressable hashing to make mirroring and mesh networking easy.
+
 We use [Textile](https://textile.io), the best library for distributed web applications.
 
 
