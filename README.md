@@ -3,18 +3,20 @@
 ## Community [![Discord](https://img.shields.io/badge/Chat-Discord-purple.svg?style=flat)](https://discord.gg/DrPFqa2) [![Matrix](https://img.shields.io/badge/Chat-Matrix%20&%20Riot-blue.svg?style=flat)](https://riot.im/app/#/room/#epona:getepona.com) [![IRC](https://img.shields.io/badge/IRC-freenode%20%23epona-brightgreen.svg?style=flat)](http://webchat.freenode.net/?channels=%23epona)
 
 ## Description
-Epona is a super producting writing app for hackers.
+Epona is a super productive, privacy focused writing app.
+* Tons of shortcuts. Mouse-free navigation.
+* Super resilient. Everything you write is encrypted and decentralized.
 
-Quickly create:
+We want to be the best self-hosted tool to write and publish text.
+
+Use cases:
 * Draft notes
 * Create markdown documents
 * Share a pastebin
 * A simple public blog
 
-Epona is super resilient. Everything you write is encrypted and decentralized. *You are the platform*.
-
 ## Technology
-Epona runs on a series of self-hosted nodes. These are powered by [Textile.io](https://textile.io), which is acts as a digital wallet for fully encrypted, decentralized content. This makes Epona extremely resilient: we do not have your keys, and there is no single point of failure.
+Epona runs on a series of self-hosted nodes. These are powered by [Textile.io](https://textile.io), which is acts as a digital wallet for fully encrypted, decentralized content. This makes Epona extremely resilient: we do not have your keys, and there is no single point of failure. *You are the platform*.
 
 * Epona uses [IPFS](https://ipfs.io) for content addressable hashing to make mirroring and mesh networking easy.
 * We use [Textile](https://textile.io), the best library for distributed web applications.
