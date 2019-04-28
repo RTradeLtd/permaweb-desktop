@@ -5,6 +5,15 @@
 ## Description
 Epona is a super fast way to write with productivity shortcuts on IPFS. Draft notes, create markdown files, or share a paste bin fully encrypted without any hassles.
 
+Everything you write is encrypted and you're in control of the keys.
+Content can easily be shared to additional nodes so there's no single point of failure.
+
+## Technology
+Epona runs on a series of self-hosted nodes. Anyone can be a server. *You are the platform*.
+Epona uses [IPFS](https://ipfs.io) for content addressable hashing to make mirroring and mesh networking easy.
+We use [Textile](https://textile.io), the best library for distributed web applications.
+
+
 ## Project
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), and then the build/run configuration was customized with a `craco.config.js` file.
 
