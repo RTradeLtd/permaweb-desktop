@@ -7,7 +7,7 @@ Epona is a super productive, privacy focused writing app.
 * Tons of shortcuts. Mouse-free navigation.
 * Super resilient. Everything you write is encrypted and decentralized.
 
-We want to be the best self-hosted tool to write and publish text.
+We are building the best self-hosted tool to write and publish text.
 
 Use cases:
 * Draft notes
