@@ -1,46 +1,57 @@
-import React, { Component } from 'react'
-import { observer, inject } from 'mobx-react'
-import { List, Button } from 'semantic-ui-react'
-import { toast } from "react-semantic-toasts"
-import DeleteButton from './DeleteButton'
+import React, { Component } from "react";
+import { observer, inject } from "mobx-react";
+import { List, Button } from "semantic-ui-react";
+// @ts-ignore
+import { toast } from "react-semantic-toasts";
+import DeleteButton from "./DeleteButton";
+import Store from "./Store";
 
-@inject('store') @observer
-class FileList extends Component {
-  showFile (filename) {
-    let file = this.props.store.getFileFromName(filename)
-    
-    if (file) {
-      this.props.store.getFileContent(file.hash, file.key)
-    }
+interface FileListProps {
+  store: Store;
+}
+
+@inject("store")
+@observer
+class FileList extends Component<FileListProps> {
+  linkRef?: HTMLInputElement;
+  showFile(filename: string) {
+    let file = this.props.store.getFileFromName(filename);
+
+    // Content is now in file.stored.<whatever>
+    // if (file) {
+    //   this.props.store.getFileContent(file.hash, file.key);
+    // }
   }
-  copyLinkToClipboard (filename) {
-    let file = this.props.store.getFileFromName(filename)
+  copyLinkToClipboard = (filename: string) => {
+    let file = this.props.store.getFileFromName(filename);
 
-    if (file) {
-      this.linkRef.value = `https://getepona.herokuapp.com?hash=${file.hash}&key=${file.key}`
+    if (file && this.linkRef) {
+      this.linkRef.value = `https://getepona.herokuapp.com?hash=${
+        file.hash
+      }&key=${file.key}`;
       this.linkRef.select();
-      document.execCommand('copy');
-      
+      document.execCommand("copy");
+
       toast({
-        title: 'Success',
-        description: 'Copied link to clipboard'
+        title: "Success",
+        description: "Copied link to clipboard"
       });
     }
-  }
-  render () {
+  };
+  render() {
     const linkStyle = {
-      color: 'inherit',
-      border: 'none',
-      padding: '0',
-      font: 'inherit', 
-      cursor: 'pointer',
-      background: 'none',
-    }
-    const { files } = this.props.store
+      color: "inherit",
+      border: "none",
+      padding: "0",
+      font: "inherit",
+      cursor: "pointer",
+      background: "none"
+    };
+    const { files } = this.props.store;
     if (!files) {
       return null;
     }
-  
+
     if (Object.keys(files).length <= 0) {
       return (
         <div>
@@ -50,23 +61,40 @@ class FileList extends Component {
     } else {
       return (
         <div>
-          <input style={ {position: 'absolute', left: '-9999px'} } ref={c => { this.linkRef = c }} />
+          <input
+            style={{ position: "absolute", left: "-9999px" }}
+            ref={(c: HTMLInputElement) => {
+              this.linkRef = c || undefined;
+            }}
+          />
           <List>
             {Object.keys(files).map(filename => (
-              <List.Item icon='file'
+              <List.Item
+                icon="file"
                 key={filename}
                 content={
                   <div>
-                    <button style={linkStyle} onClick={() => this.showFile(filename)}>
+                    <button
+                      style={linkStyle}
+                      onClick={() => this.showFile(filename)}
+                    >
                       {filename}
                     </button>
-                    <div style={ {float: 'right'} }>
-                      <Button size='mini' onClick={() => { this.copyLinkToClipboard(filename) }}>Copy Link</Button>
-                      <DeleteButton filename={ filename } />
+                    <div style={{ float: "right" }}>
+                      <Button
+                        size="mini"
+                        onClick={() => {
+                          this.copyLinkToClipboard(filename);
+                        }}
+                      >
+                        Copy Link
+                      </Button>
+                      <DeleteButton filename={filename} />
                     </div>
-                  <br></br>
+                    <br />
                   </div>
-                } />
+                }
+              />
             ))}
           </List>
         </div>
@@ -75,4 +103,4 @@ class FileList extends Component {
   }
 }
 
-export default FileList
+export default FileList;

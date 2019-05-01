@@ -13,12 +13,17 @@ configure({
   enforceActions: "always"
 });
 
-interface FileSchema {
-  lastModifiedDate: number;
-  name: string; // appears to be same as caption in use below?
-  caption: string;
+interface StoredFileSchema {
   body: string;
-  block: string; // keeps track of what block is storing this file, you could enhance by using undefined to detect unstored
+  caption: string;
+  lastModifiedDate?: number;
+  name?: string; // appears to be same as caption in use below?
+}
+interface UIFile {
+  stored: StoredFileSchema; // this is what will go in and out of File API
+  hash?: string; // keeps reference for gateway linking
+  key?: string; // keeps reference for gateway linking
+  block?: string; // keeps track of what block is storing this file, you could enhance by using undefined to detect unstored
 }
 
 class Store {
@@ -28,34 +33,43 @@ class Store {
     username: undefined,
     avatar: undefined
   };
-  @observable files: { [key: string]: FileSchema[] } = {};
-  @observable file: FileSchema | undefined = undefined;
-  @action async getFiles(threadId: string) {
+  @observable files: { [key: string]: UIFile[] } = {};
+  @observable file: UIFile | undefined = undefined;
+
+  appThreadKey: string = "com.getepona.eponajs.articleFeed";
+
+  @action async getFiles() {
     try {
       const files: FilesList = await textile.files.list(
-        threadId,
+        appThreadKey,
         undefined,
         10
       );
-      const threadFiles: { [key: string]: FileSchema[] } = {};
+      console.log(appThreadKey, files);
+      const threadFiles: { [key: string]: UIFile[] } = {};
 
       for (const file of files.items) {
         if (!file.files.length) {
           // No files in the block, so ignore
           continue;
         }
-        const fileData = await textile.files.fileData(file.files[0].file.hash);
+        const { hash, key } = file.files[0].file;
+        const fileData = await textile.files.fileData(hash);
         if (!fileData || fileData === "") {
           // skip because no content
           continue;
         }
-        const item: FileSchema = JSON.parse(fileData);
-        // keep track of the block which owns the file
-        item.block = file.block;
+        const item: StoredFileSchema = JSON.parse(fileData);
+        const inMemFile = {
+          block: file.block,
+          hash,
+          key,
+          stored: item
+        };
         if (threadFiles[item.caption]) {
-          threadFiles[item.caption].push(item);
+          threadFiles[item.caption].push(inMemFile);
         } else {
-          threadFiles[item.caption] = [item];
+          threadFiles[item.caption] = [inMemFile];
         }
       }
 
@@ -64,6 +78,7 @@ class Store {
         this.files = threadFiles;
       });
     } catch (err) {
+      console.log(err);
       runInAction("getStatus", () => {
         this.status = "offline";
       });
@@ -74,9 +89,18 @@ class Store {
       });
     }
   }
-  @action setFile(file: FileSchema) {
+  @action setFile(content: string, title?: string) {
     runInAction("setFile", () => {
-      this.file = file;
+      if (this.file && this.file.stored.body) {
+        this.file.stored.body = content;
+      }
+      const caption = title || content.split("</")[0];
+      this.file = {
+        stored: {
+          body: content,
+          caption
+        }
+      };
     });
   }
   @action async createFile() {
@@ -91,7 +115,7 @@ class Store {
     }
 
     // get article name
-    let firstLine = this.file.body.split("</")[0];
+    let firstLine = this.file.stored.body.split("</")[0];
 
     // remove html
     let temp = document.createElement("div");
@@ -109,17 +133,17 @@ class Store {
       return;
     }
 
-    const THREAD_NAME = articleName;
-    const THREAD_KEY = articleName;
+    const THREAD_NAME = "Epona Articles";
 
     try {
       let blobThread;
       const threads = await textile.threads.list();
       for (const thread of threads.items) {
-        if (thread.key === THREAD_KEY) {
+        if (thread.key === this.appThreadKey) {
           blobThread = thread;
         }
       }
+      console.log(blobThread, threads);
       if (!blobThread) {
         const schemas = await textile.schemas.defaults();
         const blobSchema = schemas.blob;
@@ -129,7 +153,7 @@ class Store {
         blobThread = await textile.threads.add(
           THREAD_NAME,
           addedSchema.hash,
-          THREAD_KEY,
+          this.appThreadKey,
           "public",
           "not_shared"
         );
@@ -139,8 +163,8 @@ class Store {
       // const blob = new Blob([this.file], {
       //   type: 'text/plain'
       // })
-      this.file.lastModifiedDate = new Date().getTime();
-      this.file.name = articleName;
+      this.file.stored.lastModifiedDate = new Date().getTime();
+      this.file.stored.name = articleName;
       // form.append('file', blob, articleName)
 
       await textile.files.addFile(this.file, articleName, blobThread.id);
@@ -152,7 +176,7 @@ class Store {
       runInAction("getFile", () => {
         this.file = this.file;
       });
-      this.getFiles(blobThread.id);
+      // this.getFiles(blobThread.id);
     } catch (ex) {
       console.log("failed to add file");
       console.error(ex);
@@ -181,23 +205,24 @@ class Store {
       return undefined;
     }
   }
-  @action async getFileContent(hash: string) {
-    try {
-      const bytes = await textile.files.fileData(hash);
-      // const bytes = await textile.ipfs.cat(hash, key)
-      runInAction("getFile", () => {
-        this.file = JSON.parse(bytes);
-      });
-    } catch (err) {
-      toast({
-        title: "Error!",
-        description: "Failed to get file",
-        type: "error",
-        time: 0
-      });
-      console.log(err);
-    }
-  }
+  // Don't use anymore, as raw file data gathered at block parse time
+  // @action async getFileContent(hash: string) {
+  //   try {
+  //     const bytes = await textile.files.fileData(hash);
+  //     // const bytes = await textile.ipfs.cat(hash, key)
+  //     runInAction("getFile", () => {
+  //       this.file = JSON.parse(bytes);
+  //     });
+  //   } catch (err) {
+  //     toast({
+  //       title: "Error!",
+  //       description: "Failed to get file",
+  //       type: "error",
+  //       time: 0
+  //     });
+  //     console.log(err);
+  //   }
+  // }
   @action async deleteLatestFile(filename: string) {
     try {
       const filethread = this.files[filename];
@@ -206,7 +231,10 @@ class Store {
         return;
       }
 
-      await textile.files.ignore(latest.block);
+      if (latest.block) {
+        // if no block, it wasn't stored yet...
+        await textile.files.ignore(latest.block);
+      }
 
       // no more files left
       if (filethread.length <= 0) {
