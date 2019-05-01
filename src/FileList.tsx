@@ -15,8 +15,8 @@ interface FileListProps {
 class FileList extends Component<FileListProps> {
   linkRef?: HTMLInputElement;
   showFile(filename: string) {
-    let file = this.props.store.getFileFromName(filename);
-
+    // not really needed anymore as the file raw data is collected on init
+    // let file = this.props.store.getFileFromName(filename);
     // Content is now in file.stored.<whatever>
     // if (file) {
     //   this.props.store.getFileContent(file.hash, file.key);

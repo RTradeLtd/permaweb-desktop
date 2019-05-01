@@ -78,7 +78,7 @@ class Store {
       const files: FilesList = await textile.files.list(
         thread.id,
         undefined,
-        10
+        50
       );
       const threadFiles: { [key: string]: UIFile[] } = {};
 
