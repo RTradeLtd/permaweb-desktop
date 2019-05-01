@@ -1,7 +1,37 @@
 import { runInAction, action, configure, observable } from "mobx";
-import { Textile, FilesList, File, BlockList } from "@textile/js-http-client";
+import { Textile, FilesList, Thread } from "@textile/js-http-client";
 //@ts-ignore
 import { toast } from "react-semantic-toasts";
+
+const eponaSchemaV0 = {
+  name: "epona-v1",
+  mill: "/json",
+  json_schema: {
+    definitions: {},
+    $schema: "http://json-schema.org/draft-07/schema#",
+    $id: "http://example.com/root.json",
+    type: "object",
+    title: "",
+    required: ["key", "body", "caption", "lastModifiedDate"],
+    properties: {
+      key: {
+        type: "number"
+      },
+      body: {
+        type: "string"
+      },
+      caption: {
+        type: "string"
+      },
+      name: {
+        type: "string"
+      },
+      lastModifiedDate: {
+        type: "integer"
+      }
+    }
+  }
+};
 
 const textile = new Textile({
   url: "http://127.0.0.1",
@@ -14,6 +44,7 @@ configure({
 });
 
 interface StoredFileSchema {
+  key: number; // used to group all stored copies of file together
   body: string;
   caption: string;
   lastModifiedDate?: number;
@@ -36,16 +67,19 @@ class Store {
   @observable files: { [key: string]: UIFile[] } = {};
   @observable file: UIFile | undefined = undefined;
 
-  appThreadKey: string = "com.getepona.eponajs.articleFeed";
+  appThreadKey: string = "com.getepona.eponajs.articleFeed.v0.0.1";
+  appThreadName = "Epona Articles";
+
+  appThread?: Thread;
 
   @action async getFiles() {
     try {
+      const thread = await this.getThread();
       const files: FilesList = await textile.files.list(
-        appThreadKey,
+        thread.id,
         undefined,
         10
       );
-      console.log(appThreadKey, files);
       const threadFiles: { [key: string]: UIFile[] } = {};
 
       for (const file of files.items) {
@@ -66,6 +100,9 @@ class Store {
           key,
           stored: item
         };
+
+        // TODO: you could potentiall use key here instead, that way edits in the
+        // caption/title would still end up being part of the same history
         if (threadFiles[item.caption]) {
           threadFiles[item.caption].push(inMemFile);
         } else {
@@ -78,7 +115,6 @@ class Store {
         this.files = threadFiles;
       });
     } catch (err) {
-      console.log(err);
       runInAction("getStatus", () => {
         this.status = "offline";
       });
@@ -95,14 +131,59 @@ class Store {
         this.file.stored.body = content;
       }
       const caption = title || content.split("</")[0];
+      const key = this.createFileKey(content);
       this.file = {
         stored: {
           body: content,
-          caption
+          caption,
+          key
         }
       };
     });
   }
+
+  @action async createAppThread() {
+    const schemas = await textile.schemas.defaults();
+    const blobSchema = schemas.JSON;
+    // delete blobSchema.use
+    console.log("adding schmea");
+    const addedSchema = await textile.schemas.add(eponaSchemaV0);
+    console.log("adding schmea", addedSchema);
+
+    const blobThread = await textile.threads.add(
+      this.appThreadName,
+      addedSchema.hash,
+      this.appThreadKey,
+      "public",
+      "not_shared"
+    );
+    return blobThread;
+  }
+  @action async getOrCreateAppThread() {
+    let blobThread;
+    const threads = await textile.threads.list();
+    for (const thread of threads.items) {
+      if (thread.key === this.appThreadKey) {
+        blobThread = thread;
+      }
+    }
+    console.log(blobThread, threads);
+    if (!blobThread) {
+      blobThread = await this.createAppThread();
+    }
+    return blobThread;
+  }
+
+  @action async getThread() {
+    if (this.appThread) {
+      console.log("found");
+      return this.appThread;
+    }
+    const thread = await this.getOrCreateAppThread();
+    this.appThread = thread;
+    return thread;
+  }
+
   @action async createFile() {
     if (!this.file) {
       toast({
@@ -145,18 +226,7 @@ class Store {
       }
       console.log(blobThread, threads);
       if (!blobThread) {
-        const schemas = await textile.schemas.defaults();
-        const blobSchema = schemas.blob;
-        // delete blobSchema.use
-        const addedSchema = await textile.schemas.add(blobSchema);
-
-        blobThread = await textile.threads.add(
-          THREAD_NAME,
-          addedSchema.hash,
-          this.appThreadKey,
-          "public",
-          "not_shared"
-        );
+        blobThread = await this.createAppThread();
       }
 
       // const form = new FormData()
@@ -167,7 +237,11 @@ class Store {
       this.file.stored.name = articleName;
       // form.append('file', blob, articleName)
 
-      await textile.files.addFile(this.file, articleName, blobThread.id);
+      await textile.files.addFile(
+        JSON.stringify(this.file.stored),
+        articleName,
+        blobThread.id
+      );
 
       toast({
         title: "Success",
@@ -223,6 +297,20 @@ class Store {
   //     console.log(err);
   //   }
   // }
+
+  // Just create a simple key to group all blocks about same file together
+  createFileKey = (body: string): number => {
+    let hash = 0;
+    let i;
+    let chr;
+    const uniqueString = body + String(new Date().getTime());
+    for (i = 0; i < uniqueString.length; i++) {
+      chr = uniqueString.charCodeAt(i);
+      hash = (hash << 5) - hash + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
+  };
   @action async deleteLatestFile(filename: string) {
     try {
       const filethread = this.files[filename];
