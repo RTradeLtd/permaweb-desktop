@@ -1,6 +1,15 @@
-import { runInAction, action, configure, observable } from "mobx"
-import { Textile } from "@textile/js-http-client"
-import { toast } from "react-semantic-toasts"
+import {
+  runInAction,
+  action,
+  configure,
+  observable
+} from "mobx"
+import {
+  Textile
+} from "@textile/js-http-client"
+import {
+  toast
+} from "react-semantic-toasts"
 
 const textile = new Textile({
   url: 'http://127.0.0.1',
@@ -8,7 +17,9 @@ const textile = new Textile({
 });
 
 // don't allow state modifications outside actions
-configure({ enforceActions: 'always' });
+configure({
+  enforceActions: 'always'
+});
 
 class Store {
   gateway = 'http://127.0.0.1:5052'
@@ -21,9 +32,7 @@ class Store {
   @observable file = null;
   @action async getFiles() {
     try {
-      const files = await textile.files.list({
-        limit: 10
-      })
+      const files = await textile.files.list(undefined, undefined, 10)
       let threadFiles = {}
 
       if (files.items && files.items.length > 0) {
@@ -103,21 +112,25 @@ class Store {
         delete blobSchema.use
         const addedSchema = await textile.schemas.add(blobSchema)
 
-        blobThread = await textile.threads.add(THREAD_NAME, {
-          key: THREAD_KEY,
-          type: 'public',
-          sharing: 'notshared',
-          schema: addedSchema.hash
-        })
+        blobThread = await textile.threads.add(
+          THREAD_NAME,
+          addedSchema.hash,
+          THREAD_KEY,
+          'public',
+          'not_shared'
+        )
       }
 
       const form = new FormData();
-      const blob = new Blob([this.file], { type: 'text/plain' })
+      const blob = new Blob([this.file], {
+        type: 'text/plain'
+      })
       blob.lastModifiedDate = new Date()
       blob.name = articleName
       form.append('file', blob, articleName)
 
-      await textile.files.addFile(blobThread.id, form, articleName);
+      await textile.files.addFile(form, articleName, blobThread.id)
+
       toast({
         title: 'Success',
         description: 'Your file has been uploaded!'
