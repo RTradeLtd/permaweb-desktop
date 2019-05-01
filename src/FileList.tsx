@@ -4,7 +4,7 @@ import { List, Button } from "semantic-ui-react";
 // @ts-ignore
 import { toast } from "react-semantic-toasts";
 import DeleteButton from "./DeleteButton";
-import Store from "./Store";
+import Store, { UIFile } from "./Store";
 
 interface FileListProps {
   store: Store;
@@ -14,17 +14,18 @@ interface FileListProps {
 @observer
 class FileList extends Component<FileListProps> {
   linkRef?: HTMLInputElement;
-  showFile(filename: string) {
+  showFile = (key: string) => {
+    console.log("selecting", key);
+    console.log(this.props.store.files);
+    this.props.store.selectFile(key);
     // not really needed anymore as the file raw data is collected on init
     // let file = this.props.store.getFileFromName(filename);
     // Content is now in file.stored.<whatever>
     // if (file) {
     //   this.props.store.getFileContent(file.hash, file.key);
     // }
-  }
-  copyLinkToClipboard = (filename: string) => {
-    let file = this.props.store.getFileFromName(filename);
-
+  };
+  copyLinkToClipboard = (file: UIFile) => {
     if (file && this.linkRef) {
       this.linkRef.value = `https://getepona.herokuapp.com?hash=${
         file.hash
@@ -68,28 +69,25 @@ class FileList extends Component<FileListProps> {
             }}
           />
           <List>
-            {Object.keys(files).map(filename => (
+            {Object.keys(files).map(id => (
               <List.Item
                 icon="file"
-                key={filename}
+                key={id}
                 content={
                   <div>
-                    <button
-                      style={linkStyle}
-                      onClick={() => this.showFile(filename)}
-                    >
-                      {filename}
+                    <button style={linkStyle} onClick={() => this.showFile(id)}>
+                      {files[id][0].caption}
                     </button>
                     <div style={{ float: "right" }}>
                       <Button
                         size="mini"
                         onClick={() => {
-                          this.copyLinkToClipboard(filename);
+                          this.copyLinkToClipboard(files[id][0]);
                         }}
                       >
                         Copy Link
                       </Button>
-                      <DeleteButton filename={filename} />
+                      <DeleteButton id={id} />
                     </div>
                     <br />
                   </div>

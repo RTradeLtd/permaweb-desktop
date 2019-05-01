@@ -9,7 +9,7 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^3.5.0",
-    "@textile/js-http-client": "file:../js-http-client",
+    "@textile/js-http-client": "0.2.11",
     "ed25519": "0.0.4",
     "electron-is-dev": "^1.1.0",
     "mobx": "^5.9.0",

@@ -4,21 +4,21 @@ import { Button } from 'semantic-ui-react'
 
 @inject('store') @observer
 class DeleteButton extends Component {
-  deleteLatestFile (filename) {
-    this.props.store.deleteLatestFile(filename)
+  deleteLatestFile (id) {
+    this.props.store.deleteLatestFile(id)
   }
   render () {
-    const { filename } = this.props
+    const { id } = this.props
     const { files } = this.props.store
 
-    if (files[filename].length > 1) {
+    if (files[id].length > 1) {
       return (
-        <Button size='mini' onClick={() => { this.deleteLatestFile(filename) }}>Undo</Button>
+        <Button size='mini' onClick={() => { this.deleteLatestFile(id) }}>Undo</Button>
       );
     }
 
     return (
-      <Button size='mini' onClick={() => { this.deleteLatestFile(filename) }}>Delete</Button>
+      <Button size='mini' onClick={() => { this.deleteLatestFile(id) }}>Delete</Button>
     );
   }
 }

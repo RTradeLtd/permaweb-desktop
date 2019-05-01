@@ -4,7 +4,7 @@ import { Textile, FilesList, Thread } from "@textile/js-http-client";
 import { toast } from "react-semantic-toasts";
 
 const eponaSchemaV0 = {
-  name: "epona-v1",
+  name: "epona-v0.0.2",
   mill: "/json",
   json_schema: {
     definitions: {},
@@ -12,10 +12,10 @@ const eponaSchemaV0 = {
     $id: "http://example.com/root.json",
     type: "object",
     title: "",
-    required: ["key", "body", "caption", "lastModifiedDate"],
+    required: ["id", "body", "lastModifiedDate"],
     properties: {
-      key: {
-        type: "number"
+      id: {
+        type: "string"
       },
       body: {
         type: "string"
@@ -44,14 +44,14 @@ configure({
 });
 
 interface StoredFileSchema {
-  key: number; // used to group all stored copies of file together
+  id: string; // used to group all stored copies of file together
   body: string;
-  caption: string;
   lastModifiedDate?: number;
   name?: string; // appears to be same as caption in use below?
 }
-interface UIFile {
+export interface UIFile {
   stored: StoredFileSchema; // this is what will go in and out of File API
+  caption: string;
   hash?: string; // keeps reference for gateway linking
   key?: string; // keeps reference for gateway linking
   block?: string; // keeps track of what block is storing this file, you could enhance by using undefined to detect unstored
@@ -64,31 +64,47 @@ class Store {
     username: undefined,
     avatar: undefined
   };
-  @observable files: { [key: string]: UIFile[] } = {};
+  // TODO: instead of storing every edit as a new block, you could remove old blocks
+  // on each time of file storage, thus only keeping the latest copy
+  @observable files: { [id: string]: UIFile[] } = {};
   @observable file: UIFile | undefined = undefined;
 
-  appThreadKey: string = "com.getepona.eponajs.articleFeed.v0.0.1";
+  appThreadKey: string = "com.getepona.eponajs.articleFeed.v0.0.3";
   appThreadName = "Epona Articles";
 
   appThread?: Thread;
 
+  @action async selectFile(id: string) {
+    if (!this.files) {
+      return;
+    }
+    const editList: UIFile[] = this.files[id];
+    if (!editList) {
+      return;
+    }
+
+    runInAction("getFiles", () => {
+      this.file = editList[0];
+    });
+  }
   @action async getFiles() {
     try {
       const thread = await this.getThread();
-      const files: FilesList = await textile.files.list(
+      const fileList: FilesList = await textile.files.list(
         thread.id,
         undefined,
         50
       );
-      const threadFiles: { [key: string]: UIFile[] } = {};
+      const threadFiles: { [id: string]: UIFile[] } = {};
 
-      for (const file of files.items) {
+      for (const file of fileList.items) {
         if (!file.files.length) {
           // No files in the block, so ignore
           continue;
         }
+        const { caption } = file;
         const { hash, key } = file.files[0].file;
-        const fileData = await textile.files.fileData(hash);
+        const fileData = await textile.file.content(hash);
         if (!fileData || fileData === "") {
           // skip because no content
           continue;
@@ -98,15 +114,16 @@ class Store {
           block: file.block,
           hash,
           key,
+          caption,
           stored: item
         };
 
         // TODO: you could potentiall use key here instead, that way edits in the
         // caption/title would still end up being part of the same history
-        if (threadFiles[item.caption]) {
-          threadFiles[item.caption].push(inMemFile);
+        if (threadFiles[item.id]) {
+          threadFiles[item.id].push(inMemFile);
         } else {
-          threadFiles[item.caption] = [inMemFile];
+          threadFiles[item.id] = [inMemFile];
         }
       }
 
@@ -129,16 +146,17 @@ class Store {
     runInAction("setFile", () => {
       if (this.file && this.file.stored.body) {
         this.file.stored.body = content;
-      }
-      const caption = title || content.split("</")[0];
-      const key = this.createFileKey(content);
-      this.file = {
-        stored: {
-          body: content,
+      } else {
+        const caption = title || content.split("</")[0];
+        const id = this.createFileId(content);
+        this.file = {
           caption,
-          key
-        }
-      };
+          stored: {
+            body: content,
+            id
+          }
+        };
+      }
     });
   }
 
@@ -215,22 +233,25 @@ class Store {
     try {
       const blobThread = await this.getThread();
 
-      this.file.stored.lastModifiedDate = new Date().getTime();
-      this.file.stored.name = articleName;
+      const payload = {
+        ...this.file.stored,
+        lastModifiedDate: new Date().getTime(),
+        name: articleName
+      };
 
       // just store the JSON object (need to stringify over wire though)
       await textile.files.addFile(
-        JSON.stringify(this.file.stored),
+        JSON.stringify(payload),
         articleName,
         blobThread.id
       );
-
+      await this.getFiles();
+      runInAction("getFile", () => {
+        this.file = { ...this.file, caption: articleName, stored: payload };
+      });
       toast({
         title: "Success",
         description: "Your file has been uploaded!"
-      });
-      runInAction("getFile", () => {
-        this.file = this.file;
       });
     } catch (ex) {
       console.log("failed to add file");
@@ -245,7 +266,17 @@ class Store {
   }
   @action getFileFromName(filename: string) {
     try {
-      let filethread = this.files[filename];
+      const filethread = Object.keys(this.files)
+        .map((id: string) => {
+          return this.files[id];
+        })
+        .filter((file: UIFile[]) => {
+          if (!file) {
+            return false;
+          }
+          return file[0].caption === filename;
+        });
+      // let filethread = this.files[filename];
       let latest = filethread[0];
       return latest;
     } catch (err) {
@@ -278,7 +309,7 @@ class Store {
   // }
 
   // Just create a simple key to group all blocks about same file together
-  createFileKey = (body: string): number => {
+  createFileId = (body: string): string => {
     let hash = 0;
     let i;
     let chr;
@@ -288,11 +319,11 @@ class Store {
       hash = (hash << 5) - hash + chr;
       hash |= 0; // Convert to 32bit integer
     }
-    return hash;
+    return String(Math.abs(hash));
   };
-  @action async deleteLatestFile(filename: string) {
+  @action async deleteLatestFile(id: string) {
     try {
-      const filethread = this.files[filename];
+      const filethread = this.files[id];
       const latest = filethread.shift();
       if (!latest) {
         return;
@@ -306,7 +337,7 @@ class Store {
       // no more files left
       if (filethread.length <= 0) {
         runInAction("clearFile", () => {
-          delete this.files[filename];
+          delete this.files[id];
         });
       }
       toast({
