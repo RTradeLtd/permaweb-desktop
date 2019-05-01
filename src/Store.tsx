@@ -143,13 +143,10 @@ class Store {
   }
 
   @action async createAppThread() {
-    const schemas = await textile.schemas.defaults();
-    const blobSchema = schemas.JSON;
-    // delete blobSchema.use
-    console.log("adding schmea");
+    // you can used versioned json schema so you can run migrations in the future
     const addedSchema = await textile.schemas.add(eponaSchemaV0);
-    console.log("adding schmea", addedSchema);
-
+    // adds the new thread using a single ThreadKey shared by all files
+    // that key is also versioned to help with future migrations
     const blobThread = await textile.threads.add(
       this.appThreadName,
       addedSchema.hash,
@@ -167,7 +164,6 @@ class Store {
         blobThread = thread;
       }
     }
-    console.log(blobThread, threads);
     if (!blobThread) {
       blobThread = await this.createAppThread();
     }
@@ -175,8 +171,10 @@ class Store {
   }
 
   @action async getThread() {
+    // just ensure the thread is there whenever you need it.
+    // return it so you can reference its id etc.
+    // probabbly a cleaner way to handle this just using the param above
     if (this.appThread) {
-      console.log("found");
       return this.appThread;
     }
     const thread = await this.getOrCreateAppThread();
@@ -214,29 +212,13 @@ class Store {
       return;
     }
 
-    const THREAD_NAME = "Epona Articles";
-
     try {
-      let blobThread;
-      const threads = await textile.threads.list();
-      for (const thread of threads.items) {
-        if (thread.key === this.appThreadKey) {
-          blobThread = thread;
-        }
-      }
-      console.log(blobThread, threads);
-      if (!blobThread) {
-        blobThread = await this.createAppThread();
-      }
+      const blobThread = await this.getThread();
 
-      // const form = new FormData()
-      // const blob = new Blob([this.file], {
-      //   type: 'text/plain'
-      // })
       this.file.stored.lastModifiedDate = new Date().getTime();
       this.file.stored.name = articleName;
-      // form.append('file', blob, articleName)
 
+      // just store the JSON object (need to stringify over wire though)
       await textile.files.addFile(
         JSON.stringify(this.file.stored),
         articleName,
@@ -250,7 +232,6 @@ class Store {
       runInAction("getFile", () => {
         this.file = this.file;
       });
-      // this.getFiles(blobThread.id);
     } catch (ex) {
       console.log("failed to add file");
       console.error(ex);
@@ -266,8 +247,6 @@ class Store {
     try {
       let filethread = this.files[filename];
       let latest = filethread[0];
-      // let threadfile = latest.files[0]
-      // return threadfile.file
       return latest;
     } catch (err) {
       toast({
