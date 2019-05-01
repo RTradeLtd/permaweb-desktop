@@ -323,8 +323,11 @@ class Store {
   };
   @action async deleteLatestFile(id: string) {
     try {
-      const filethread = this.files[id];
-      const latest = filethread.shift();
+      const edits = this.files[id].length;
+      if (!edits) {
+        return;
+      }
+      const latest = this.files[id][0];
       if (!latest) {
         return;
       }
@@ -335,9 +338,13 @@ class Store {
       }
 
       // no more files left
-      if (filethread.length <= 0) {
+      if (edits === 1) {
         runInAction("clearFile", () => {
           delete this.files[id];
+        });
+      } else {
+        runInAction("clearFile", () => {
+          this.files[id].shift();
         });
       }
       toast({
