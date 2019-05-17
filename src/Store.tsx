@@ -55,6 +55,7 @@ export interface UIFile {
   hash?: string; // keeps reference for gateway linking
   key?: string; // keeps reference for gateway linking
   block?: string; // keeps track of what block is storing this file, you could enhance by using undefined to detect unstored
+  date?: string;
 }
 
 class Store {
@@ -62,17 +63,30 @@ class Store {
   @observable status = "offline";
   @observable profile = {
     username: undefined,
-    avatar: undefined
+    avatar: undefined,
+    updated: undefined
   };
   // TODO: instead of storing every edit as a new block, you could remove old blocks
   // on each time of file storage, thus only keeping the latest copy
   @observable files: { [id: string]: UIFile[] } = {};
+  @observable fileIds: string[] = [];
   @observable file: UIFile | undefined = undefined;
+  @observable selectedFileId: string = "";
 
   appThreadKey: string = "com.getepona.eponajs.articleFeed.v0.0.3";
   appThreadName = "Epona Articles";
 
   appThread?: Thread;
+
+  @action selectFileId(id: string) {
+    runInAction("selectFileId", () => {
+      this.selectedFileId = id
+    });
+  }
+
+  getCurrentFilePosition() {
+    return this.fileIds.indexOf(this.selectedFileId)
+  }
 
   @action async selectFile(id: string) {
     if (!this.files) {
@@ -115,7 +129,8 @@ class Store {
           hash,
           key,
           caption,
-          stored: item
+          stored: item,
+          date: file.date
         };
 
         // TODO: you could potentiall use key here instead, that way edits in the
@@ -130,6 +145,7 @@ class Store {
       runInAction("getFiles", () => {
         this.status = "online";
         this.files = threadFiles;
+        this.fileIds = Object.keys(threadFiles)
       });
     } catch (err) {
       runInAction("getStatus", () => {
@@ -289,24 +305,6 @@ class Store {
       return undefined;
     }
   }
-  // Don't use anymore, as raw file data gathered at block parse time
-  // @action async getFileContent(hash: string) {
-  //   try {
-  //     const bytes = await textile.files.fileData(hash);
-  //     // const bytes = await textile.ipfs.cat(hash, key)
-  //     runInAction("getFile", () => {
-  //       this.file = JSON.parse(bytes);
-  //     });
-  //   } catch (err) {
-  //     toast({
-  //       title: "Error!",
-  //       description: "Failed to get file",
-  //       type: "error",
-  //       time: 0
-  //     });
-  //     console.log(err);
-  //   }
-  // }
 
   // Just create a simple key to group all blocks about same file together
   createFileId = (body: string): string => {

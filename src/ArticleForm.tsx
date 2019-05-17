@@ -5,6 +5,8 @@ import Moment from 'react-moment';
 //@ts-ignore
 import Editor from "react-medium-editor";
 import Store from "./Store";
+// @ts-ignore
+import { Shortcuts } from 'react-shortcuts'
 
 interface ArticleForm {
   store: Store;
@@ -28,10 +30,22 @@ class ArticleForm extends Component<ArticleForm> {
   clearFile = () => {
     this.props.store.clearFile();
   };
+  _handleShortcuts = (action: any) => {
+    switch (action) {
+      case 'CANCEL':
+        this.clearFile();
+        break
+      default:
+        console.log('No shortcut action available')
+    }
+  };
   render() {
     const { file } = this.props.store;
     return (
-      <div>
+      <Shortcuts
+        name='EDITOR'
+        handler={this._handleShortcuts}
+      >
         <Card style={{ width: "100%" }}>
           <Card.Content>
             <Card.Description>
@@ -70,7 +84,7 @@ class ArticleForm extends Component<ArticleForm> {
           onChange={this.updateContent}
           text={(file && file.stored.body) || ""}
         />
-      </div>
+      </Shortcuts>
     );
   }
 }

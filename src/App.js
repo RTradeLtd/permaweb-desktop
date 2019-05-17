@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
 import 'react-semantic-toasts/styles/react-semantic-alert.css';
 import Profile from './Profile'
@@ -6,13 +7,23 @@ import { Dimmer, Loader } from 'semantic-ui-react'
 import { SemanticToastContainer } from 'react-semantic-toasts'
 import 'medium-editor/dist/css/medium-editor.css';
 import 'medium-editor/dist/css/themes/default.css';
+import keymap from './keymap'
+// @ts-ignore
+import { ShortcutManager } from 'react-shortcuts'
 
 @inject('store') @observer
 class App extends Component {
+  static childContextTypes = {
+    shortcuts: PropTypes.object.isRequired
+  }
   componentDidMount() {
     this.props.store.getFiles()
   }
-  render () {
+  getChildContext() {
+    const shortcutManager = new ShortcutManager(keymap)
+    return { shortcuts: shortcutManager }
+  }
+  render() {
     const { store } = this.props
     const view = (screen => {
       switch (screen) {
