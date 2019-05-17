@@ -1,6 +1,7 @@
 import React, { Component, FormEvent } from "react";
 import { Button, Card, Form } from "semantic-ui-react";
-import { observer, inject } from "mobx-react";
+import { inject } from "mobx-react";
+import Moment from 'react-moment';
 //@ts-ignore
 import Editor from "react-medium-editor";
 import Store from "./Store";
@@ -9,15 +10,20 @@ interface ArticleForm {
   store: Store;
 }
 @inject("store")
-@observer
 class ArticleForm extends Component<ArticleForm> {
+  state = {
+    fileContent: ""
+  };
+  shouldComponentUpdate() {
+    return false
+  };
   handleArticle = (e: FormEvent) => {
     e.preventDefault();
+    this.props.store.setFile(this.state.fileContent);
     this.props.store.createFile();
   };
   updateContent = (content: string) => {
-    // TODO
-    this.props.store.setFile(content);
+    this.setState({ fileContent: content })
   };
   clearFile = () => {
     this.props.store.clearFile();
@@ -37,13 +43,18 @@ class ArticleForm extends Component<ArticleForm> {
               >
                 Back
               </Button>
-              <Form onSubmit={this.handleArticle} style={{ float: "right" }}>
-                <Form.Button content="Save" type={"submit"} />
-              </Form>
+              <div style={{ float: "right" }}>
+                <Form onSubmit={this.handleArticle}>
+                  <Form.Button content="Save" type={"submit"} />
+                </Form>
+              </div>
             </Card.Description>
           </Card.Content>
         </Card>
         <br />
+        <p>
+          <Moment fromNow>{file && file.date}</Moment>
+        </p>
         <Editor
           style={{
             minHeight: "10vh",
