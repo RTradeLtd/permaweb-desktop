@@ -11,6 +11,7 @@ interface FileListItemProps {
   selectedFileId: string;
   key: string;
   id: string;
+  version: number;
   copyLink: (hash: string | undefined, key: string | undefined) => void;
 }
 
@@ -18,21 +19,26 @@ interface FileListItemProps {
 @observer
 class FileListItem extends Component<FileListItemProps> {
   showFile = () => {
-    this.props.store.selectFile(this.props.id);
+    this.props.store.selectFile(this.props.id, this.props.version);
   };
   isSelected = () => {
-    return (this.props.selectedFileId &&
-      this.props.selectedFileId === this.props.id);
+    const { selectedFileId, selectedFileVersion } = this.props.store
+    return (selectedFileId === this.props.id &&
+      selectedFileVersion === this.props.version);
   }
   copyLinkToClipboard = () => {
     let file = this.props.file[0]
     this.props.copyLink(file.hash, file.key)
   };
   selectFile = () => {
-    this.props.store.selectFileId(this.props.id)
+    this.props.store.selectFileId(this.props.id, this.props.version)
+  };
+  showHistory = () => {
+    this.props.store.toggleHistory(true)
   };
   render() {
     const file = this.props.file[0]
+    const { showHistory } = this.props.store
     const linkStyle = {
       color: "inherit",
       border: "none",
@@ -55,17 +61,26 @@ class FileListItem extends Component<FileListItemProps> {
         onClick={this.selectFile}
         content={
           <div>
-            <List.Content floated='right'>
-              <Button
-                size="mini"
-                onClick={() => {
-                  this.copyLinkToClipboard();
-                }}
-              >
-                Copy Link
-              </Button>
-              <DeleteButton id={file.key} />
-            </List.Content>
+            {
+              !showHistory &&
+              <List.Content floated='right'>
+                <Button
+                  size="mini"
+                  onClick={() => {
+                    this.copyLinkToClipboard();
+                  }}
+                >
+                  Copy Link
+                </Button>
+                <Button
+                  size="mini"
+                  onClick={() => { this.showHistory() }}
+                >
+                  Show History
+                </Button>
+                <DeleteButton id={this.props.id} />
+              </List.Content>
+            }
             <List.Content floated='right'>
               <Moment fromNow>{file.date}</Moment>
             </List.Content>
@@ -74,7 +89,7 @@ class FileListItem extends Component<FileListItemProps> {
                 {file.caption}
               </button>
             </List.Content>
-          </div>
+          </ div>
         }
       />
     );

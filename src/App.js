@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
 import 'react-semantic-toasts/styles/react-semantic-alert.css';
-import Profile from './Profile'
+import Editor from './Editor'
+import Files from './Files'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import { SemanticToastContainer } from 'react-semantic-toasts'
 import 'medium-editor/dist/css/medium-editor.css';
@@ -28,9 +29,21 @@ class App extends Component {
     const view = (screen => {
       switch (screen) {
         case 'online':
+          let innerView = {}
+          if (store.file) {
+            innerView = (
+              <div>
+                <Editor />
+              </div>
+            )
+          } else {
+            innerView = (
+              <Files />
+            )
+          }
           return (
             <div style={{ width: '80%', maxWidth: '800px', margin: '1em auto' }}>
-              <Profile />
+              {innerView}
             </div>
           )
         default:

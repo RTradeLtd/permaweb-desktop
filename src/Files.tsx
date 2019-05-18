@@ -15,19 +15,21 @@ interface FileListProps {
 
 @inject("store")
 @observer
-class FileList extends Component<FileListProps> {
+class Files extends Component<FileListProps> {
   linkRef?: HTMLInputElement;
   setSelectedFileByPosition(index: number) {
-    const { fileIds } = this.props.store
-    if (fileIds.length > 0 &&
+    const { fileIds, showHistory, selectedFileId } = this.props.store
+    if (showHistory) {
+      this.props.store.selectFileId(selectedFileId, index)
+    } else if (fileIds.length > 0 &&
       index >= 0 &&
       index < fileIds.length) {
-      this.props.store.selectFileId(fileIds[index])
+      this.props.store.selectFileId(fileIds[index], 0)
     }
   }
   _handleShortcuts = (action: any) => {
     const { files } = this.props.store;
-    let { selectedFileId } = this.props.store
+    let { selectedFileId, showHistory } = this.props.store
     switch (action) {
       case 'UP':
         let up = this.props.store.getCurrentFilePosition()
@@ -43,8 +45,13 @@ class FileList extends Component<FileListProps> {
         this.setSelectedFileByPosition(0)
         break
       case 'LAST_ITEM':
-        const fileKeys = Object.keys(files)
-        this.setSelectedFileByPosition(fileKeys.length - 1)
+        let length = 0
+        if (showHistory) {
+          length = files[selectedFileId].length
+        } else {
+          length = Object.keys(files).length
+        }
+        this.setSelectedFileByPosition(length - 1)
         break
       case 'COPY_LINK':
         let hash = files[selectedFileId][0].hash
@@ -52,10 +59,13 @@ class FileList extends Component<FileListProps> {
         this.copyLink(hash, key)
         break
       case 'OPEN':
-        this.props.store.selectFile(selectedFileId);
+        this.props.store.selectFile(selectedFileId, 0);
         break
       case 'DELETE':
         this.props.store.deleteLatestFile(selectedFileId);
+        break
+      case 'BACK':
+        this.props.store.toggleHistory(false);
         break
       case 'CREATE_PAGE':
         this.createEmptyFile();
@@ -81,7 +91,7 @@ class FileList extends Component<FileListProps> {
     this.props.store.setFile("<h1>Title</h1><p>Create your article here...</p>")
   }
   render() {
-    const { profile, files, selectedFileId } = this.props.store
+    const { profile, files, selectedFileId, showHistory } = this.props.store
     let fileCount = files ? Object.keys(files).length : 0
     if (!files) {
       return null;
@@ -94,12 +104,46 @@ class FileList extends Component<FileListProps> {
           <p>There are no files in your folder.</p>
         </div>
       );
+    } else if (showHistory) {
+      let selectedFile = files[selectedFileId]
+      view = (
+        <div>
+          <p title='folder'>
+            <Button size='mini' onClick={() => { this.props.store.toggleHistory(false) }}>Back</Button>
+            <Icon name='file' />Showing History: {selectedFile.length} versions
+          </p>
+          <hr></hr>
+          <input
+            style={{ position: "absolute", left: "-9999px" }}
+            ref={(c: HTMLInputElement) => {
+              this.linkRef = c || undefined;
+            }}
+          />
+          <List>
+            {Object.keys(selectedFile).map((_, index) => (
+              <FileListItem
+                key={`${index}`}
+                id={selectedFileId}
+                store={this.props.store}
+                selectedFileId={selectedFileId}
+                file={selectedFile}
+                version={index}
+                copyLink={(hash: string | undefined, key: string | undefined) => {
+                  this.copyLink(hash, key);
+                }}
+              >
+              </FileListItem>
+            ))}
+          </List>
+        </div>
+      );
     } else {
       view = (
-        <Shortcuts
-          name='FILE_LIST'
-          handler={this._handleShortcuts}
-        >
+        <div>
+          <p title='folder'>
+            <Icon name='folder' />{fileCount} files
+          </p>
+          <hr></hr>
           <input
             style={{ position: "absolute", left: "-9999px" }}
             ref={(c: HTMLInputElement) => {
@@ -114,6 +158,7 @@ class FileList extends Component<FileListProps> {
                 store={this.props.store}
                 selectedFileId={selectedFileId}
                 file={files[id]}
+                version={0}
                 copyLink={(hash: string | undefined, key: string | undefined) => {
                   this.copyLink(hash, key);
                 }}
@@ -121,7 +166,7 @@ class FileList extends Component<FileListProps> {
               </FileListItem>
             ))}
           </List>
-        </Shortcuts>
+        </div>
       );
     }
 
@@ -141,10 +186,6 @@ class FileList extends Component<FileListProps> {
           </Card.Content>
           <Card.Content>
             <Card.Description>
-              <p title='folder'>
-                <Icon name='folder' />{fileCount} files
-              </p>
-              <hr></hr>
               {view}
             </Card.Description>
           </Card.Content>
@@ -157,4 +198,4 @@ class FileList extends Component<FileListProps> {
   }
 }
 
-export default FileList;
+export default Files;

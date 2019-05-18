@@ -72,33 +72,47 @@ class Store {
   @observable fileIds: string[] = [];
   @observable file: UIFile | undefined = undefined;
   @observable selectedFileId: string = "";
+  @observable selectedFileVersion: number = 0;
+  @observable showHistory: boolean = false;
 
   appThreadKey: string = "com.getepona.eponajs.articleFeed.v0.0.3";
   appThreadName = "Epona Articles";
 
   appThread?: Thread;
 
-  @action selectFileId(id: string) {
+  @action selectFileId(id: string, version: number) {
     runInAction("selectFileId", () => {
       this.selectedFileId = id
+      this.selectedFileVersion = version
+    });
+  }
+
+  @action toggleHistory(show: boolean) {
+    runInAction("toggleHistory", () => {
+      this.showHistory = show
     });
   }
 
   getCurrentFilePosition() {
-    return this.fileIds.indexOf(this.selectedFileId)
+    if (this.showHistory) {
+      return this.selectedFileVersion
+    } else {
+      return this.fileIds.indexOf(this.selectedFileId)
+    }
   }
 
-  @action async selectFile(id: string) {
+  @action async selectFile(id: string, version: number) {
     if (!this.files) {
       return;
     }
+
     const editList: UIFile[] = this.files[id];
     if (!editList) {
       return;
     }
 
     runInAction("getFiles", () => {
-      this.file = editList[0];
+      this.file = editList[version];
     });
   }
   @action async getFiles() {
