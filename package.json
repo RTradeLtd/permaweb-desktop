@@ -30,8 +30,7 @@
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^0.84.0",
     "showdown": "^1.9.0",
-    "turndown": "^5.0.3",
-    "typescript": "^3.3.3333"
+    "turndown": "^5.0.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.4.3",
@@ -55,7 +54,7 @@
     "test": "craco test",
     "eject": "react-scripts eject",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder --publish always",
+    "dist": "electron-builder --publish never",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preelectron-pack": "yarn build",
     "electron-pack": "build --em.main=build/electron.js",
@@ -74,44 +73,33 @@
   "build": {
     "appId": "com.getepona.react",
     "productName": "Epona",
+    "compression": "normal",
     "files": [
-      "build/**/*"
+      "build/**/*",
+      "node_modules/**/*",
+      "public/electron.js"
     ],
     "directories": {
-      "buildResources": "assets"
-    },
-    "win": {
-      "target": [
-        "nsis",
-        "nsis-web",
-        "portable",
-        "msi"
-      ],
-      "icon": "public/Favicon.png"
-    },
-    "linux": {
-      "target": [
-        "AppImage",
-        "snap",
-        "deb",
-        "rpm",
-        "freebsd",
-        "pacman",
-        "apk"
-      ],
-      "category": "Utility",
-      "icon": "favicon.ico"
+      "buildResources": "public",
+      "output": "dist"
     },
     "mac": {
       "category": "public.app-category.utilities",
+      "type": "distribution",
       "target": [
+        "pkg",
         "dmg"
       ]
     },
-    "publish": {
-      "provider": "github",
-      "owner": "GetEpona",
-      "repo": "Epona-js"
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "category": "Network",
+      "target": [
+        "snap",
+        "AppImage"
+      ]
     }
   },
   "homepage": "./"
