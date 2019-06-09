@@ -86,8 +86,6 @@
   },
   "win": {
     "target": [
-      "nsis",
-      "nsis-web",
       "portable",
       "msi"
     ]
