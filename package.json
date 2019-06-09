@@ -54,7 +54,7 @@
     "test": "craco test",
     "eject": "react-scripts eject",
     "pack": "electron-builder --dir",
-    "dist": "build --x64 --c.extraMetadata.main=public/electron.js --macos --windows --linux",
+    "dist": "build --x64 --c.extraMetadata.main=public/electron.js --windows --linux",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preelectron-pack": "yarn build",
     "release": "build"
