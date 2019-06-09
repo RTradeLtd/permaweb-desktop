@@ -84,13 +84,6 @@
       "output": "dist"
     }
   },
-  "mac": {
-    "category": "public.app-category.utilities",
-    "type": "distribution",
-    "target": [
-      "dmg"
-    ]
-  },
   "win": {
     "target": [
       "nsis",
