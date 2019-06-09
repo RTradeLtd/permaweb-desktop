@@ -1,13 +1,12 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
 version: 2.1
 jobs:
   build:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:10.0
+    macos:
+      xcode: "10.1.0"
+    environment:
+      GOPATH: /Users/distiller/go
+      GOROOT: /usr/local/go
+      BREWBIN: /usr/local/opt/go/bin
 
     working_directory: ~/epona
 
@@ -49,10 +48,8 @@ jobs:
                 VERSION=${CIRCLE_TAG}
             fi
             OUT=~/output
-            
-            pwd
             mkdir -p ${OUT}
-            ls .
+            ls ./dist/*
             mv ~/epona/dist/Epona-${VERSION}.{AppImage,snap} ${OUT}/
       
       - persist_to_workspace:
@@ -90,6 +87,6 @@ workflows:
             - build
           filters:
             branches:
-              ignore: /.*/
+              only: master
             tags:
               only: /^v.*/
