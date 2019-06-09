@@ -32,3 +32,53 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run:
+          name: Collect Artifacts
+          command: |
+            VERSION=v$(node -p "require('./package.json').version")
+            if [ "${CIRCLE_TAG}" != "" ]; then
+                VERSION=${CIRCLE_TAG}
+            fi
+            OUT=~/output
+            mkdir -p ${OUT}
+            mv ~/project/dist/TextilePhotos-${VERSION}.{dmg,exe,AppImage,pkg,snap} ${OUT}/
+      
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output
+
+      - store_artifacts:
+          path: ~/output
+
+  release:
+    docker:
+      - image: cibuilds/github:0.10
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - deploy:
+          name: Release Installers
+          command: |
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ~/output/
+
+workflows:
+  version: 2
+  photos-desktop:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /.*/
+      - release:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
