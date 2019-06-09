@@ -31,7 +31,6 @@ jobs:
             fi
             OUT=~/output
             mkdir -p ${OUT}
-            ls ./dist/*
             mv ~/epona/dist/Epona-${VERSION}.{AppImage,snap,exe} ${OUT}/
       - persist_to_workspace:
           root: ~/
