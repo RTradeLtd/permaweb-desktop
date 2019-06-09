@@ -26,7 +26,15 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: yarn install
+      - run:
+          name: Install Dependencies
+          command: |
+            yarn install
+
+      - run:
+          name: Build Installers
+          command: |
+            yarn dist
 
       - save_cache:
           paths:
@@ -72,7 +80,7 @@ jobs:
 
 workflows:
   version: 2
-  photos-desktop:
+  epona-desktop:
     jobs:
       - build:
           filters:
