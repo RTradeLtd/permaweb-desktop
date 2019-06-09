@@ -82,7 +82,7 @@
     "directories": {
       "buildResources": "public",
       "output": "dist"
-    },
+    }
   },
   "mac": {
     "category": "public.app-category.utilities",
