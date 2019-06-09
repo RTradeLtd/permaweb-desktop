@@ -32,6 +32,11 @@ jobs:
             yarn install
 
       - run:
+          name: Create build
+          command: |
+            yarn build
+
+      - run:
           name: Build Installers
           command: |
             yarn dist
