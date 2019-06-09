@@ -54,10 +54,9 @@
     "test": "craco test",
     "eject": "react-scripts eject",
     "pack": "electron-builder --dir",
-    "dist": "electron-builder --publish never",
+    "dist": "build --x64 --c.extraMetadata.main=public/electron.js --macos --windows --linux",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preelectron-pack": "yarn build",
-    "electron-pack": "build --em.main=build/electron.js",
     "release": "build"
   },
   "eslintConfig": {
@@ -84,24 +83,28 @@
       "buildResources": "public",
       "output": "dist"
     },
-    "mac": {
-      "category": "public.app-category.utilities",
-      "type": "distribution",
-      "target": [
-        "pkg",
-        "dmg"
-      ]
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "linux": {
-      "category": "Network",
-      "target": [
-        "snap",
-        "AppImage"
-      ]
-    }
+  },
+  "mac": {
+    "category": "public.app-category.utilities",
+    "type": "distribution",
+    "target": [
+      "dmg"
+    ]
+  },
+  "win": {
+    "target": [
+      "nsis",
+      "nsis-web",
+      "portable",
+      "msi"
+    ]
+  },
+  "linux": {
+    "category": "Network",
+    "target": [
+      "snap",
+      "AppImage"
+    ]
   },
   "homepage": "./"
 }
