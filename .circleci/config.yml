@@ -1,45 +1,27 @@
 version: 2.1
 jobs:
   build:
-    macos:
-      xcode: "10.1.0"
-    environment:
-      GOPATH: /Users/distiller/go
-      GOROOT: /usr/local/go
-      BREWBIN: /usr/local/opt/go/bin
-
+    docker:
+      - image: node:10.0.0
     working_directory: ~/epona
-
     steps:
       - checkout
-
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-
       - run:
           name: Install Dependencies
           command: |
             yarn install
-
       - run:
           name: Create build
           command: |
             yarn build
-
       - run:
           name: Build Installers
           command: |
             yarn dist
-
       - save_cache:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-
       - run:
           name: Collect Artifacts
           command: |
@@ -51,15 +33,12 @@ jobs:
             mkdir -p ${OUT}
             ls ./dist/*
             mv ~/epona/dist/Epona-${VERSION}.{AppImage,snap} ${OUT}/
-      
       - persist_to_workspace:
           root: ~/
           paths:
             - output
-
       - store_artifacts:
           path: ~/output
-
   release:
     docker:
       - image: cibuilds/github:0.10
