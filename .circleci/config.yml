@@ -41,9 +41,13 @@ jobs:
                 VERSION=${CIRCLE_TAG}
             fi
             OUT=~/output
-            mkdir -p ${OUT}
+            
             pwd
+            cd ..
+            pwd
+            mkdir -p ${OUT}
             ls .
+            ls ~/dist/*
             mv ~/dist/Epona-${VERSION}.{dmg,exe,AppImage,pkg,snap} ${OUT}/
       
       - persist_to_workspace:
