@@ -56,8 +56,6 @@ jobs:
             OUT=~/output
             
             pwd
-            cd ..
-            pwd
             mkdir -p ${OUT}
             ls .
             ls ~/dist/*
