@@ -74,6 +74,7 @@
     "appId": "com.getepona.react",
     "productName": "Epona",
     "compression": "normal",
+    "artifactName": "Epona-v${version}.${ext}",
     "files": [
       "build/**/*",
       "node_modules/**/*",

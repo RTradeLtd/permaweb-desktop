@@ -42,7 +42,7 @@ jobs:
             fi
             OUT=~/output
             mkdir -p ${OUT}
-            mv ~/project/dist/TextilePhotos-${VERSION}.{dmg,exe,AppImage,pkg,snap} ${OUT}/
+            mv ~/project/dist/Epona-${VERSION}.{dmg,exe,AppImage,pkg,snap} ${OUT}/
       
       - persist_to_workspace:
           root: ~/
