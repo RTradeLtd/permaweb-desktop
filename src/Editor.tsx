@@ -55,7 +55,8 @@ class ArticleForm extends Component<ArticleForm> {
   }
   handleArticle = (e: FormEvent) => {
     e.preventDefault();
-    this.props.store.setFile(this.editor.getContent());
+    let html = this.editor.getContent() || this.markdownConverter.makeHtml(this.state.fileMarkdown);
+    this.props.store.setFile(html);
     this.props.store.createFile();
   };
   updateFileContent = (content: string) => {
