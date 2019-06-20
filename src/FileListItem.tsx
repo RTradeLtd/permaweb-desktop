@@ -38,7 +38,7 @@ class FileListItem extends Component<FileListItemProps> {
     this.props.store.toggleHistory(true)
   };
   render() {
-    const file = this.props.file[0]
+    const file = this.props.file[this.props.version]
     const { showHistory } = this.props.store
     const linkStyle = {
       color: "inherit",
