@@ -20,6 +20,8 @@ require('codemirror/lib/codemirror.css');
 import Showdown from 'showdown'
 // @ts-ignore
 import TurndownService from 'turndown'
+//@ts-ignore
+import { toast } from "react-semantic-toasts";
 
 interface ArticleForm {
   store: Store;
@@ -32,6 +34,7 @@ class ArticleForm extends Component<ArticleForm> {
   markdownConverter: any;
   htmlConverter: any;
   state = {
+    savedFileContent: "",
     fileContent: "",
     fileMarkdown: "",
     showEmoji: false,
@@ -48,20 +51,27 @@ class ArticleForm extends Component<ArticleForm> {
     this.editor = MediumEditor.getEditorFromElement(el);
 
     const { file } = this.props.store;
-    const newContent = (file && file.stored.body) || ""
-    this.setState({ fileContent: newContent })
-    this.updateFileContent(newContent)
-    this.updateMarkdownFromContent(newContent)
+    const fileContent = (file && file.stored.body) || ""
+    this.setState({ savedFileContent: fileContent })
+    this.updateFileContent(fileContent)
+    this.updateMarkdownFromContent(fileContent)
   }
   handleArticle = (e: FormEvent) => {
     e.preventDefault();
     let html = this.editor.getContent() || this.markdownConverter.makeHtml(this.state.fileMarkdown);
+    if (html === this.state.savedFileContent) {
+      toast({
+        title: "Success",
+        description: "This is already saved."
+      });
+      return;
+    }
     this.props.store.setFile(html);
     this.props.store.createFile();
   };
   updateFileContent = (content: string) => {
     this.setState({ fileContent: content, showEmoji: false })
-    this.editor.setContent(content);
+    this.editor.setContent(content); // force editor to update
   }
   updateMarkdownFromContent = (content: string) => {
     let markdown = this.htmlConverter.turndown(content)
