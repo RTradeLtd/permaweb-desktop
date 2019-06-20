@@ -4,6 +4,7 @@ import { List, Button } from "semantic-ui-react";
 import Moment from 'react-moment';
 import DeleteButton from "./DeleteButton";
 import Store, { UIFile } from "./Store";
+import { LeftProperty } from "csstype";
 
 interface FileListItemProps {
   store: Store;
@@ -45,7 +46,9 @@ class FileListItem extends Component<FileListItemProps> {
       padding: "0",
       font: "inherit",
       cursor: "pointer",
-      background: "none"
+      background: "none",
+      width: "270px",
+      textAlign: "left" as LeftProperty<any>
     };
     let backgroundStyle = {
       padding: "5px",
@@ -81,10 +84,10 @@ class FileListItem extends Component<FileListItemProps> {
                 <DeleteButton id={this.props.id} />
               </List.Content>
             }
-            <List.Content floated='right'>
+            <List.Content floated='right' width="110px">
               <Moment fromNow>{file.date}</Moment>
             </List.Content>
-            <List.Content>
+            <List.Content style={{ overflow: "hidden", maxWidth: "270px" }}>
               <button style={linkStyle} onClick={() => this.showFile()}>
                 {file.caption}
               </button>

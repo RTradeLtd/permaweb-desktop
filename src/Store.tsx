@@ -261,6 +261,8 @@ class Store {
       return;
     }
 
+    articleName = articleName.substr(0, 140)
+
     try {
       const blobThread = await this.getThread();
 

@@ -88,7 +88,7 @@ class Files extends Component<FileListProps> {
     }
   }
   createEmptyFile() {
-    this.props.store.setFile("<h1>Title</h1><p>Create your article here...</p>")
+    this.props.store.setFile("<p>Create your article here...</p>")
   }
   render() {
     const { profile, files, selectedFileId, showHistory } = this.props.store
