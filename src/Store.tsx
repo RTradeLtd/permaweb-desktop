@@ -74,6 +74,7 @@ class Store {
   @observable selectedFileId: string = "";
   @observable selectedFileVersion: number = 0;
   @observable showHistory: boolean = false;
+  @observable isLoading: boolean = false;
 
   appThreadKey: string = "com.getepona.eponajs.articleFeed.v0.0.3";
   appThreadName = "Epona Articles";
@@ -333,32 +334,28 @@ class Store {
     }
     return String(Math.abs(hash));
   };
-  @action async deleteLatestFile(id: string) {
+  @action async deleteFile(id: string) {
     try {
-      const edits = this.files[id].length;
-      if (!edits) {
-        return;
-      }
-      const latest = this.files[id][0];
-      if (!latest) {
+      if (!this.files[id] || this.files[id].length <= 0) {
         return;
       }
 
-      if (latest.block) {
-        // if no block, it wasn't stored yet...
-        await textile.files.ignore(latest.block);
+      this.setLoading(true);
+
+      for (let index = 0; index < this.files[id].length; index++) {
+        const file = this.files[id][index];
+        if (file.block) {
+          // if no block, it wasn't stored yet...
+          await textile.files.ignore(file.block);
+        }
       }
 
-      // no more files left
-      if (edits === 1) {
-        runInAction("clearFile", () => {
-          delete this.files[id];
-        });
-      } else {
-        runInAction("clearFile", () => {
-          this.files[id].shift();
-        });
-      }
+      runInAction("clearFile", () => {
+        delete this.files[id];
+      });
+
+      this.setLoading(false);
+
       toast({
         title: "Success",
         description: "The latest version of your file has been deleted!"
@@ -370,12 +367,16 @@ class Store {
         type: "error",
         time: 0
       });
-      console.log(err);
     }
   }
   @action async clearFile() {
     runInAction("clearFile", () => {
       this.file = undefined;
+    });
+  }
+  @action async setLoading(isLoading: boolean) {
+    runInAction("setLoading", () => {
+      this.isLoading = isLoading;
     });
   }
 }

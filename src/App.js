@@ -44,6 +44,9 @@ class App extends Component {
           return (
             <div style={{ width: '80%', maxWidth: '800px', margin: '1em auto' }}>
               {innerView}
+              <Dimmer active={store.isLoading} inverted>
+                <Loader size='massive'></Loader>
+              </Dimmer>
             </div>
           )
         default:

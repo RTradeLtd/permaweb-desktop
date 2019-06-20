@@ -62,7 +62,7 @@ class Files extends Component<FileListProps> {
         this.props.store.selectFile(selectedFileId, 0);
         break
       case 'DELETE':
-        this.props.store.deleteLatestFile(selectedFileId);
+        this.props.store.deleteFile(selectedFileId);
         break
       case 'BACK':
         this.props.store.toggleHistory(false);

@@ -62,7 +62,8 @@ class ArticleForm extends Component<ArticleForm> {
     if (html === this.state.savedFileContent) {
       toast({
         title: "Success",
-        description: "This is already saved."
+        description: "This is already saved.",
+        type: "warning"
       });
       return;
     }
