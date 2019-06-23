@@ -1,12 +1,12 @@
 export default {
   FILE_LIST: {
-    UP: ['j', 'up'],
-    DOWN: ['k', 'down'],
+    UP: ['j'],
+    DOWN: ['k'],
     FIRST_ITEM: 'home',
     LAST_ITEM: 'end',
-    BACK: ['esc', 'backspace'],
+    BACK: ['esc'],
     COPY_LINK: ['l', '.'],
-    DELETE: ['d', 'del'],
+    DELETE: ['d'],
     OPEN: ['o', 'enter'],
     CREATE_PAGE: 'c'
   },
