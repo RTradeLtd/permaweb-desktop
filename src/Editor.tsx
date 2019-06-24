@@ -93,10 +93,8 @@ class ArticleForm extends Component<ArticleForm> {
 
       if (results && results.length > 0) {
         let emoji = results[0]
-        let emojiHtml = renderToString(<span contentEditable={true} dangerouslySetInnerHTML={{ __html: Emoji({ html: true, emoji: emoji.colons, size: 24 }) }}></span>)
-
         let replaceText = new RegExp(colonText, "g")
-        content = content.replace(replaceText, `${emojiHtml}.`)
+        content = content.replace(replaceText, emoji.native)
         this.updateFileContent(content)
       }
     }
