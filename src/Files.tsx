@@ -74,7 +74,7 @@ class Files extends Component<FileListProps> {
         console.log('No shortcut action available')
     }
   };
-  copyLink(key: string | undefined, hash: string | undefined) {
+  copyLink(hash: string | undefined, key: string | undefined) {
     if (hash && this.linkRef) {
       const link = `https://gateway.textile.cafe/ipfs/${hash}?key=${key}`
       this.linkRef.value = link;
