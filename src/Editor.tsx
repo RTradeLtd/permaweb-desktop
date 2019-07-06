@@ -228,7 +228,7 @@ class ArticleForm extends Component<ArticleForm> {
             <CodeMirror
               value={this.state.fileMarkdown}
               onChange={this.updateMarkdownEvent}
-              options={{ lineNumbers: true }}
+              options={{ lineNumbers: true, lineWrapping: true }}
             />
             : <Editor
               id="epona-editor"
