@@ -37,6 +37,7 @@ class ArticleForm extends Component<ArticleForm> {
     savedFileContent: "",
     fileContent: "",
     fileMarkdown: "",
+    toggleToolbar: false,
     showEmoji: false,
     showMarkdown: false
   };
@@ -112,6 +113,41 @@ class ArticleForm extends Component<ArticleForm> {
   addEmoji = (emoji: any) => {
     this.editor.pasteHTML(emoji.colons);
     this.updateFileContent(this.editor.getContent())
+  };
+  customToolBarTrigger = () => {
+    const self = this
+    const Extension = MediumEditor.Extension.extend({
+      name: 'toolbar-trigger',
+      init: function () {
+        // @ts-ignore
+        const toggle = event => {
+          const toolbar = this.base.getExtensionByName('toolbar')
+          // todo: this is messing with the regular way the toolbar is displayed, make sure this isn't breaking something else
+          self.setState({ toggleToolbar: !self.state.toggleToolbar }, () => {
+            // state has been toggled, so the performed check is "backwards"
+            if (!self.state.toggleToolbar) {
+              toolbar.hideToolbar()
+              return
+            }
+            // hack: mocking the selection range from mouse click coordinates
+            // @ts-ignore
+            toolbar.positionToolbar({
+              getRangeAt: () => ({
+                // @ts-ignore
+                getBoundingClientRect: () => {
+                  const { bottom, height, right } = event.target.getBoundingClientRect()
+                  return { bottom, height, left: event.clientX, top: event.clientY - 10, right, width: 0 }
+                }
+              })
+            })
+            toolbar.showToolbar()
+          })
+        }
+        // need to figure why this is needed, nextTick (zero), should be enough but isn't
+        document.addEventListener('click', e => setTimeout(toggle, 10, e), true)
+      },
+    })
+    return new Extension()
   };
   emojiButton = () => {
     const handleButtonClick = () => {
@@ -215,7 +251,8 @@ class ArticleForm extends Component<ArticleForm> {
                 },
                 buttonLabels: 'fontawesome',
                 extensions: {
-                  'emoji': this.emojiButton()
+                  'emoji': this.emojiButton(),
+                  'toolbar-trigger': this.customToolBarTrigger()
                 }
               }}
             />
