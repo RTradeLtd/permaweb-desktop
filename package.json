@@ -9,6 +9,8 @@
   "private": true,
   "dependencies": {
     "@craco/craco": "^3.5.0",
+    "@material-ui/core": "^4.2.0",
+    "@material-ui/icons": "^4.2.1",
     "@textile/js-http-client": "0.2.11",
     "ed25519": "0.0.4",
     "electron-is-dev": "^1.1.0",
@@ -36,9 +38,14 @@
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/polyfill": "^7.4.3",
+    "@storybook/addon-actions": "^5.1.9",
+    "@storybook/addon-links": "^5.1.9",
+    "@storybook/addons": "^5.1.9",
+    "@storybook/react": "^5.1.9",
     "@textile/tslint-rules": "^1.0.3",
     "@types/react": "^16.8.14",
     "@types/react-dom": "^16.8.4",
+    "babel-loader": "^8.0.6",
     "babel-preset-mobx": "^2.0.0",
     "concurrently": "^4.1.0",
     "electron": "^4.1.4",
@@ -57,7 +64,9 @@
     "dist": "build --x64 --c.extraMetadata.main=public/electron.js --windows --linux",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preelectron-pack": "yarn build",
-    "release": "build"
+    "release": "build",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "eslintConfig": {
     "extends": "react-app"
