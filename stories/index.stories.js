@@ -12,6 +12,7 @@ import shokuninAvatarImage from './images/shokunin.png'
 import Sidebar from '../src/sidebar'
 import FolderListing from '../src/folderListing'
 import FileEntry from '../src/fileEntry'
+import Screen, { FileDescriptor } from '../src/screen'
 
 const theme = createMuiTheme({
   palette: {
@@ -19,45 +20,55 @@ const theme = createMuiTheme({
   },
 });
 
+const exampleCategories = [
+  { type: 'NOTES', label: 'Notes' },
+  { type: 'NOTES', label: 'Textile' },
+  { type: 'NOTES', label: 'Articles' },
+  { type: 'NOTES', label: 'To-dos' },
+  { type: 'TRASH', label: 'Trash' },
+]
+
+const exampleFiles = [
+  { id: '1', title: "A beginner's roadmap to Becoming a full stack developer", latestEventDescription: "Ashkay: I recommend this tutorial! Cheeck out this link https://example.com" },
+  { id: '2', title: "How our team uses Textile", latestEventDescription: "Ashkay: I recommend this tutorial! Cheeck out this link https://example.com" },
+  { id: '3', title: "Notes from the meeting 6/6", latestEventDescription: "Ashkay: I recommend this tutorial! Cheeck out this link https://example.com" },
+  { id: '4', title: "How to make products for the DWeb (draft)", latestEventDescription: "Ashkay: I recommend this tutorial! Cheeck out this link https://example.com" },
+]
+
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 
-storiesOf('Sidebar', module)
+storiesOf('Navigation', module)
+  .add('inside category', () => (
+    <div style={{ background: 'red', width: '100%', height: '100%' }}>
+      <ThemeProvider theme={theme}>
+        <Screen
+          avatarImage={shokuninAvatarImage}
+          categories={exampleCategories}
+          folderListing={exampleFiles}
+          onOpenGroup={action('Clicked open category')}
+          onCreateGroup={action('Clicked create group')} />
+      </ThemeProvider>
+    </div>
+  ))
+
+storiesOf('Components/Sidebar', module)
   .add('multiple categories', () => (
     <ThemeProvider theme={theme}>
       <Sidebar
         avatarImage={shokuninAvatarImage}
-        categories={[
-          { type: 'NOTES', label: 'Notes' },
-          { type: 'NOTES', label: 'Textile' },
-          { type: 'NOTES', label: 'Articles' },
-          { type: 'NOTES', label: 'To-dos' },
-          { type: 'TRASH', label: 'Trash' },
-        ]}
+        categories={exampleCategories}
         onOpenGroup={action('Clicked open category')}
         onCreateGroup={action('Clicked create group')} />
     </ThemeProvider>
   ))
 
-const exampleFiles = [
-
-]
-
-storiesOf('FolderListing', module)
+storiesOf('Components/FolderListing', module)
   .add('small list of files', () => (
     <ThemeProvider theme={theme}>
       <FolderListing>
-        <FileEntry
-          title="A beginner's roadmap to Becoming a full stack developer"
-          latestEventDescription="Ashkay: I recommend this tutorial! Cheeck out this link https://example.com" />
-        <FileEntry
-          title="How our team uses Textile"
-          latestEventDescription="Ashkay: I recommend this tutorial! Cheeck out this link https://example.com" />
-        <FileEntry
-          title="Notes from the meeting 6/6"
-          latestEventDescription="Ashkay: I recommend this tutorial! Cheeck out this link https://example.com" />
-        <FileEntry
-          title="How to make products for the DWeb (draft)"
-          latestEventDescription="Ashkay: I recommend this tutorial! Cheeck out this link https://example.com" />
+        {exampleFiles.map(f => (
+          <FileEntry {...f} />
+        ))}
       </FolderListing>
     </ThemeProvider>
   ))
