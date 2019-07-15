@@ -80,29 +80,23 @@ class ArticleForm extends Component<ArticleForm> {
     this.setState({ fileMarkdown: markdown })
   }
   checkFileContent = (content: string) => {
-    let matchColon = new RegExp(/[ >]:<\/[a-zA-Z0-9]+>$/)
-    let matchEmoji = new RegExp(/[ >:]:[a-zA-Z0-9\+_\-]+:/)
-    let emojiMatches = content.match(matchEmoji) || []
+    const matchColon = new RegExp(/[ >]:<\/[a-zA-Z0-9]+>$/)
+    const matchEmoji = new RegExp(/:[^:\s]*(?:::[^:\s]*)*:/)
+    const emojiMatches = content.match(matchEmoji) || []
 
-    for (let index = 0; index < emojiMatches.length; index++) {
-      const emojiMatch = emojiMatches[index];
-      let searchText = emojiMatch.substring(2, emojiMatch.length - 1)
-      let colonText = `:${searchText}:`
-      let results = emojiIndex.search(searchText).filter((emoji: any) => {
-        return emoji.colons && emoji.colons === colonText
-      })
-
-      if (results && results.length > 0) {
-        let emoji = results[0]
-        let replaceText = new RegExp(colonText, "g")
-        content = content.replace(replaceText, emoji.native)
-        this.updateFileContent(content)
-      }
-    }
-
-    if (matchColon.test(content)) {
+    if (!emojiMatches.length && matchColon.test(content)) {
       this.setState({ showEmoji: true })
+      return
     }
+
+    emojiMatches.forEach((emojiMatch: any) => {
+      const search = emojiIndex.search(emojiMatch.substr(1, emojiMatch.length - 2)) || []
+      if (!search.length) {
+        return
+      }
+      const [emoji] = search
+      this.updateFileContent(content.replace(emojiMatch, emoji.native))
+    })
 
     this.setState({ fileContent: content })
     this.updateMarkdownFromContent(content)
@@ -111,7 +105,7 @@ class ArticleForm extends Component<ArticleForm> {
     this.setState({ showMarkdown: !this.state.showMarkdown })
   };
   addEmoji = (emoji: any) => {
-    this.editor.pasteHTML(emoji.colons);
+    this.editor.pasteHTML(emoji.native);
     this.updateFileContent(this.editor.getContent())
   };
   customToolBarTrigger = () => {
