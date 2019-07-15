@@ -15,7 +15,7 @@ import { Emoji, Picker, emojiIndex } from 'emoji-mart'
 import { renderToString } from 'react-dom/server'
 // @ts-ignore
 import CodeMirror from 'react-codemirror'
-require('codemirror/lib/codemirror.css');
+import 'codemirror/lib/codemirror.css'
 // @ts-ignore
 import Showdown from 'showdown'
 // @ts-ignore
