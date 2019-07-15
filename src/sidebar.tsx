@@ -42,7 +42,7 @@ function assertNever(x: never): never {
 }
 
 const SidebarIcon = (props: { type: CategoryType }) => {
-  switch(props.type) {
+  switch (props.type) {
     case CategoryType.NOTES:
       return <QuestionAnswerIcon />
     case CategoryType.TRASH:
@@ -52,21 +52,26 @@ const SidebarIcon = (props: { type: CategoryType }) => {
   }
 }
 
-const useStyles = makeStyles(
+const useStyles = makeStyles(theme => (
   createStyles({
     avatar: {
       margin: 10,
       width: 60,
       height: 60,
+    },
+    sidebar: {
+      width: '100%',
+      backgroundColor: theme.palette.background.paper,
+      color: theme.palette.text.primary
     }
-  }),
-);
+  }))
+)
 
 const Sidebar = (props: SidebarProps) => {
   const classes = useStyles();
 
   return (
-    <div>
+    <div className={classes.sidebar}>
       <Grid container justify="flex-start" alignItems="center">
         <Avatar alt="Remy Sharp" src={props.avatarImage} className={classes.avatar} />
         <Typography>Shokunin</Typography>
@@ -85,11 +90,11 @@ const Sidebar = (props: SidebarProps) => {
       <Divider />
       <List>
         <ListItem button key={"create-a-group"} onClick={() => props.onCreateGroup()}>
-            <ListItemIcon>
-              <AddIcon />
-            </ListItemIcon>
-            <ListItemText primary={"Create a group"} />
-          </ListItem>
+          <ListItemIcon>
+            <AddIcon />
+          </ListItemIcon>
+          <ListItemText primary={"Create a group"} />
+        </ListItem>
       </List>
     </div>
   )
