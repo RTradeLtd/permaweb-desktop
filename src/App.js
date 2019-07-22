@@ -6,11 +6,23 @@ import Editor from './Editor'
 import Files from './Files'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import { SemanticToastContainer } from 'react-semantic-toasts'
+import { createMuiTheme } from '@material-ui/core/styles';
+import Screen from './screen'
+
 import 'medium-editor/dist/css/medium-editor.css';
 import 'medium-editor/dist/css/themes/default.css';
+
 import keymap from './keymap'
 // @ts-ignore
 import { ShortcutManager } from 'react-shortcuts'
+import { ThemeProvider } from '@material-ui/styles';
+import { CategoryType } from './sidebar';
+
+const theme = createMuiTheme({
+  palette: {
+    type: 'dark',
+  },
+});
 
 @inject('store') @observer
 class App extends Component {
@@ -37,8 +49,33 @@ class App extends Component {
               </div>
             )
           } else {
+            const files = store.files
+            const folderListing = Object.keys(files).map(fileId => {
+              const latestEntry = files[fileId][0]
+              return {
+                id: fileId,
+                version: 0,
+                title: latestEntry.stored.name
+              }
+            })
+
             innerView = (
-              <Files />
+              <Screen
+                avatarImage={undefined}
+                categories={[
+                  {
+                    label: 'Default',
+                    type: CategoryType.NOTES
+                  },
+                  {
+                    label: 'Trash',
+                    type: CategoryType.TRASH
+                  }
+                ]}
+                folderListing={folderListing}
+                onOpenGroup={() => { console.log('on open group') }}
+                onCreateGroup={() => { console.log('on create group') }}
+                onFileOpen={(fileId, version) => store.selectFile(fileId, version)} />
             )
           }
           return (
@@ -59,7 +96,9 @@ class App extends Component {
     })(store.status)
     return (
       <div className='App'>
-        {view}
+        <ThemeProvider theme={theme}>
+          {view}
+        </ThemeProvider>
         <SemanticToastContainer />
       </div>
     )

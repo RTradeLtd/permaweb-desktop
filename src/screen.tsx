@@ -7,6 +7,7 @@ import FileEntry from './fileEntry'
 
 export interface FileDescriptor {
   id: string
+  version: number
   title: string
   latestEventDescription?: string
 }
@@ -17,6 +18,7 @@ export interface IScreenProps {
   folderListing: FileDescriptor[]
   onOpenGroup: (group: string) => void
   onCreateGroup: () => void
+  onFileOpen: (fileId: string, version: number) => void
 }
 
 const drawerWidth = 240;
@@ -52,7 +54,7 @@ const Screen = (props: IScreenProps) => {
   const classes = useStyles();
 
   const fileEntries: any = props.folderListing.map(f => {
-    return (<FileEntry {...f} />) as any
+    return (<FileEntry key={f.id} {...f} onClick={props.onFileOpen} />) as any
   })
 
   return (

@@ -8,8 +8,10 @@ import Checkbox from '@material-ui/core/Checkbox'
 
 export interface IFileEntry {
   id: string
+  version: number
   title: string
   latestEventDescription?: string
+  onClick: (fileId: string, version: number) => void
 }
 
 const FileEntry = (props: IFileEntry) => {
@@ -20,7 +22,7 @@ const FileEntry = (props: IFileEntry) => {
   }
 
   return (
-    <ListItem key={props.id} role={undefined} dense button >
+    <ListItem key={props.id} role={undefined} dense button onClick={() => props.onClick(props.id, props.version)}>
       <ListItemIcon>
         <Checkbox
           edge="start"
