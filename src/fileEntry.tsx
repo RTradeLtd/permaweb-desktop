@@ -1,8 +1,6 @@
 import React from 'react'
-import { makeStyles } from '@material-ui/core/styles'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import ListItemText from '@material-ui/core/ListItemText'
 import Checkbox from '@material-ui/core/Checkbox'
 
@@ -14,7 +12,7 @@ export interface IFileEntry {
   onClick: (fileId: string, version: number) => void
 }
 
-const FileEntry = (props: IFileEntry) => {
+const FileEntry = ({ id, version, title, onClick }: IFileEntry) => {
   const [checked, setChecked] = React.useState(false)
 
   const handleToggle = (event: React.MouseEvent) => {
@@ -22,7 +20,7 @@ const FileEntry = (props: IFileEntry) => {
   }
 
   return (
-    <ListItem key={props.id} role={undefined} dense button onClick={() => props.onClick(props.id, props.version)}>
+    <ListItem key={id} role={undefined} dense button onClick={() => onClick(id, version)}>
       <ListItemIcon>
         <Checkbox
           edge="start"
@@ -32,12 +30,7 @@ const FileEntry = (props: IFileEntry) => {
           onClick={handleToggle}
         />
       </ListItemIcon>
-      <ListItemText id={`text-${props.id}`} primary={props.title} />
-      {/* <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="Comments">
-          <CommentIcon />
-        </IconButton>
-      </ListItemSecondaryAction> */}
+      <ListItemText id={`text-${id}`} primary={title} />
     </ListItem>
   )
 }

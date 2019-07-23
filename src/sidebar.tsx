@@ -7,15 +7,9 @@ import Divider from '@material-ui/core/Divider'
 import Avatar from '@material-ui/core/Avatar'
 import Grid from '@material-ui/core/Grid'
 
-import IconButton from '@material-ui/core/IconButton'
-import MenuIcon from '@material-ui/icons/Menu'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
-import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import InboxIcon from '@material-ui/icons/MoveToInbox'
-import MailIcon from '@material-ui/icons/Mail'
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer'
 import DeleteIcon from '@material-ui/icons/Delete'
 import AddIcon from '@material-ui/icons/Add'
@@ -67,19 +61,19 @@ const useStyles = makeStyles(theme => (
   }))
 )
 
-const Sidebar = (props: SidebarProps) => {
+const Sidebar = ({ avatarImage, categories, onOpenGroup, onCreateGroup }: SidebarProps) => {
   const classes = useStyles();
 
   return (
     <div className={classes.sidebar}>
       <Grid container justify="flex-start" alignItems="center">
-        <Avatar alt="Remy Sharp" src={props.avatarImage} className={classes.avatar} />
+        <Avatar alt="Remy Sharp" src={avatarImage} className={classes.avatar} />
         <Typography>Shokunin</Typography>
       </Grid>
       <Divider />
       <List>
-        {props.categories.map((c: Category, i: number) => (
-          <ListItem button key={c.label} disabled={c.label === 'Trash'} onClick={() => props.onOpenGroup(c.label)}>
+        {categories.map((c: Category, i: number) => (
+          <ListItem button key={c.label} disabled={c.label === 'Trash'} onClick={() => onOpenGroup(c.label)}>
             <ListItemIcon>
               <SidebarIcon type={c.type} />
             </ListItemIcon>
@@ -89,7 +83,7 @@ const Sidebar = (props: SidebarProps) => {
       </List>
       <Divider />
       <List>
-        <ListItem button disabled key={"create-a-group"} onClick={() => props.onCreateGroup()}>
+        <ListItem button disabled key={"create-a-group"} onClick={() => onCreateGroup()}>
           <ListItemIcon>
             <AddIcon />
           </ListItemIcon>
