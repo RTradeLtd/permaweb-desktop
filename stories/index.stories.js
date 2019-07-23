@@ -46,7 +46,9 @@ storiesOf('Navigation', module)
           categories={exampleCategories}
           folderListing={exampleFiles}
           onOpenGroup={action('Clicked open category')}
-          onCreateGroup={action('Clicked create group')} />
+          onCreateGroup={action('Clicked create group')}
+          onFileOpen={action('Clicked file open')}
+          onAddFile={action('Add new file clicked')} />
       </ThemeProvider>
     </div>
   ))

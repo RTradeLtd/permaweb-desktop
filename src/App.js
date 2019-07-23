@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
-import 'react-semantic-toasts/styles/react-semantic-alert.css';
 import Editor from './Editor'
-import Files from './Files'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import { SemanticToastContainer } from 'react-semantic-toasts'
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles'
 import Screen from './screen'
 
+import 'react-semantic-toasts/styles/react-semantic-alert.css'
 import 'medium-editor/dist/css/medium-editor.css';
 import 'medium-editor/dist/css/themes/default.css';
 
@@ -64,7 +63,7 @@ class App extends Component {
                 avatarImage={undefined}
                 categories={[
                   {
-                    label: 'Default',
+                    label: 'Home',
                     type: CategoryType.NOTES
                   },
                   {
@@ -75,7 +74,8 @@ class App extends Component {
                 folderListing={folderListing}
                 onOpenGroup={() => { console.log('on open group') }}
                 onCreateGroup={() => { console.log('on create group') }}
-                onFileOpen={(fileId, version) => store.selectFile(fileId, version)} />
+                onFileOpen={(fileId, version) => store.selectFile(fileId, version)}
+                onAddFile={() => store.setFile("<p>Create your article here...</p>")} />
             )
           }
           return (

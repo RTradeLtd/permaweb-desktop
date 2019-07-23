@@ -79,7 +79,7 @@ const Sidebar = (props: SidebarProps) => {
       <Divider />
       <List>
         {props.categories.map((c: Category, i: number) => (
-          <ListItem button key={c.label} onClick={() => props.onOpenGroup(c.label)}>
+          <ListItem button key={c.label} disabled={c.label === 'Trash'} onClick={() => props.onOpenGroup(c.label)}>
             <ListItemIcon>
               <SidebarIcon type={c.type} />
             </ListItemIcon>
@@ -89,7 +89,7 @@ const Sidebar = (props: SidebarProps) => {
       </List>
       <Divider />
       <List>
-        <ListItem button key={"create-a-group"} onClick={() => props.onCreateGroup()}>
+        <ListItem button disabled key={"create-a-group"} onClick={() => props.onCreateGroup()}>
           <ListItemIcon>
             <AddIcon />
           </ListItemIcon>
