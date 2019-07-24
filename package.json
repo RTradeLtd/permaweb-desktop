@@ -54,7 +54,8 @@
     "test": "craco test",
     "eject": "react-scripts eject",
     "pack": "electron-builder --dir",
-    "dist": "build --x64 --c.extraMetadata.main=public/electron.js --windows --linux",
+    "dist-win-linux": "build --x64 --c.extraMetadata.main=public/electron.js --windows --linux",
+    "dist-mac": "build --x64 --c.extraMetadata.main=public/electron.js --mac",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preelectron-pack": "yarn build",
     "release": "build"
@@ -88,6 +89,13 @@
     "target": [
       "portable",
       "msi"
+    ]
+  },
+  "mac": {
+    "category": "public.app-category.utilities",
+    "type": "distribution",
+    "target": [
+      "dmg"
     ]
   },
   "linux": {
