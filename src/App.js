@@ -6,6 +6,8 @@ import { Dimmer, Loader } from 'semantic-ui-react'
 import { SemanticToastContainer } from 'react-semantic-toasts'
 import { createMuiTheme } from '@material-ui/core/styles'
 import Screen from './screen'
+import FolderListing from './folderListing'
+import FileEntry from './fileEntry'
 
 import 'react-semantic-toasts/styles/react-semantic-alert.css'
 import 'medium-editor/dist/css/medium-editor.css';
@@ -40,9 +42,12 @@ class App extends Component {
     const view = (screen => {
       switch (screen) {
         case 'online':
+          const onFileOpen = (fileId, version) => store.selectFile(fileId, version)
+
           let innerView = {}
+          let mainContent
           if (store.file) {
-            innerView = (
+            mainContent = (
               <div>
                 <Editor />
               </div>
@@ -58,26 +63,38 @@ class App extends Component {
               }
             })
 
-            innerView = (
-              <Screen
-                avatarImage={undefined}
-                categories={[
-                  {
-                    label: 'Home',
-                    type: CategoryType.NOTES
-                  },
-                  {
-                    label: 'Trash',
-                    type: CategoryType.TRASH
-                  }
-                ]}
-                folderListing={folderListing}
-                onOpenGroup={() => { console.log('on open group') }}
-                onCreateGroup={() => { console.log('on create group') }}
-                onFileOpen={(fileId, version) => store.selectFile(fileId, version)}
-                onAddFile={() => store.setFile("<p>Create your article here...</p>")} />
+            const fileEntries = folderListing.map(f => {
+              return (<FileEntry key={f.id} {...f} onClick={onFileOpen} />)
+            })
+
+            mainContent = (
+              <FolderListing>
+                {fileEntries}
+              </FolderListing>
             )
           }
+
+          innerView = (
+            <Screen
+              avatarImage={undefined}
+              categories={[
+                {
+                  label: 'Home',
+                  type: CategoryType.NOTES
+                },
+                {
+                  label: 'Trash',
+                  type: CategoryType.TRASH
+                }
+              ]}
+              onOpenGroup={() => store.clearFile()}
+              onCreateGroup={() => { console.log('on create group') }}
+              onFileOpen={onFileOpen}
+              onAddFile={() => store.setFile("<p>Create your article here...</p>")}>
+              {mainContent}
+            </Screen>
+          )
+
           return (
             <div style={{ width: '80%', maxWidth: '800px', margin: '1em auto' }}>
               {innerView}

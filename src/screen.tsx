@@ -2,8 +2,6 @@ import React from 'react'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import Sidebar, { Category } from './sidebar'
-import FolderListing from './folderListing'
-import FileEntry from './fileEntry'
 import AddIcon from '@material-ui/icons/Add'
 import { Fab, Zoom } from '@material-ui/core'
 
@@ -17,7 +15,7 @@ export interface FileDescriptor {
 export interface IScreenProps {
   avatarImage: string
   categories: Category[]
-  folderListing: FileDescriptor[]
+  children: JSX.Element[] | JSX.Element
   onOpenGroup: (group: string) => void
   onCreateGroup: () => void
   onFileOpen: (fileId: string, version: number) => void
@@ -33,8 +31,8 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper,
   },
   drawer: {
-    // width: drawerWidth,
-    // flexShrink: 0,
+    width: drawerWidth,
+    flexShrink: 0
   },
   drawerPaper: {
     width: drawerWidth,
@@ -68,10 +66,6 @@ const Screen = (props: IScreenProps) => {
     exit: theme.transitions.duration.leavingScreen,
   };
 
-  const fileEntries: any = props.folderListing.map(f => {
-    return (<FileEntry key={f.id} {...f} onClick={props.onFileOpen} />) as any
-  })
-
   return (
     <div className={classes.root}>
       <Drawer
@@ -90,9 +84,7 @@ const Screen = (props: IScreenProps) => {
       </Drawer>
 
       <main className={classes.main}>
-        <FolderListing>
-          {fileEntries}
-        </FolderListing>
+        {props.children}
       </main>
 
       <Zoom

@@ -186,14 +186,13 @@ class ArticleForm extends Component<ArticleForm> {
         name='EDITOR'
         handler={this._handleShortcuts}
       >
-        <Card style={{ width: "100%" }}>
+        <Card className={"editor-top-controls"} style={{ width: "100%" }}>
           <Card.Content>
             <Card.Description>
               <Button
                 onClick={() => {
                   this.clearFile();
                 }}
-                primary
               >
                 Back
               </Button>
@@ -201,7 +200,6 @@ class ArticleForm extends Component<ArticleForm> {
                 onClick={() => {
                   this.toggleMarkdown();
                 }}
-                primary
               >
                 Toggle
               </Button>
@@ -214,7 +212,7 @@ class ArticleForm extends Component<ArticleForm> {
           </Card.Content>
         </Card>
         <br />
-        <p>
+        <p className="editor-last-saved-note">
           <Moment fromNow>{file && file.date}</Moment>
         </p>
         {

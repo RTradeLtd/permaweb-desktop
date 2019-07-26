@@ -21,3 +21,21 @@ code {
 .CodeMirror  {
   height: 100% !important;
 }
+
+.editor-last-saved-note {
+  color: gray;
+  text-align: right;
+}
+
+.medium-editor-element {
+  color: white;
+}
+
+.ui.card.editor-top-controls {
+  background: #424242;
+  box-shadow: none;
+}
+
+.ui.card.editor-top-controls .content {
+  border: none;
+}
