@@ -99,13 +99,17 @@ workflows:
       - build-win-linux:
           filters:
             branches:
-              only: master
+              only: 
+                - master
+                - develop
             tags:
               only: /.*/
       - build-macos:
           filters:
             branches:
-              only: master
+              only: 
+                - master
+                - develop
             tags:
               only: /.*/
       - release:
@@ -114,6 +118,8 @@ workflows:
             - build-macos
           filters:
             branches:
-              only: master
+              only: 
+                - master
+                - develop
             tags:
               only: /^v.*/

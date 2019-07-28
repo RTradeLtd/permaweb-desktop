@@ -1,9 +1,9 @@
 {
-  "name": "epona-desktop",
-  "version": "0.1.0",
-  "description": "Epona Desktop Application",
+  "name": "writer-desktop",
+  "version": "0.1.1",
+  "description": "Writer Desktop Application",
   "author": {
-    "name": "Epona Developers",
+    "name": "Writer Developers",
     "email": "admin@getepona.com"
   },
   "private": true,
@@ -72,9 +72,9 @@
   "main": "public/electron.js",
   "build": {
     "appId": "com.getepona.react",
-    "productName": "Epona",
+    "productName": "Writer",
     "compression": "normal",
-    "artifactName": "Epona-v${version}.${ext}",
+    "artifactName": "Writer-v${version}.${ext}",
     "files": [
       "build/**/*",
       "node_modules/**/*",
