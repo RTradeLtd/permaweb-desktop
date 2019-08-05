@@ -57,6 +57,7 @@
     "build": "craco build",
     "test": "craco test",
     "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "format": "prettier --write \"./src/**/*.{tsx,ts,js}\"",
     "eject": "react-scripts eject",
     "pack": "electron-builder --dir",
     "dist": "build --x64 --c.extraMetadata.main=public/electron.js --windows --linux",
