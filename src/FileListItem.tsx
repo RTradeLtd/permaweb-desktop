@@ -1,10 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component, CSSProperties } from 'react'
 import { observer, inject } from 'mobx-react'
 import { List, Button } from 'semantic-ui-react'
 import Moment from 'react-moment'
 import DeleteButton from './DeleteButton'
 import Store, { UIFile } from './Store'
-import { LeftProperty } from 'csstype'
 
 interface FileListItemProps {
   store: Store
@@ -50,8 +49,8 @@ class FileListItem extends Component<FileListItemProps> {
       cursor: 'pointer',
       background: 'none',
       width: '270px',
-      textAlign: 'left' as LeftProperty<any>
-    }
+      textAlign: 'left'
+    } as React.CSSProperties
     let backgroundStyle = {
       padding: '5px',
       background: 'none'

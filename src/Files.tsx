@@ -25,7 +25,7 @@ class Files extends Component<FileListProps> {
       this.props.store.selectFileId(fileIds[index], 0)
     }
   }
-  _handleShortcuts = (action: any) => {
+  _handleShortcuts = (action: string) => {
     const { files } = this.props.store
     let { selectedFileId, showHistory } = this.props.store
     switch (action) {

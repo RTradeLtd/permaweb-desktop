@@ -56,7 +56,7 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
-    "lint": "tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "lint": "tsc --noEmit && eslint 'src/**/*.{js,ts,tsx}' --fix",
     "format": "prettier --write \"./src/**/*.{tsx,ts,js}\"",
     "eject": "react-scripts eject",
     "pack": "electron-builder --dir",
@@ -64,9 +64,6 @@
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preelectron-pack": "yarn build",
     "release": "build"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": [
     ">0.2%",

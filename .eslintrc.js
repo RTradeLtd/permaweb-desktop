@@ -1,10 +1,13 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   extends: [
-    'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended'
+    'plugin:react/recommended',
+    'prettier',
+    'prettier/@typescript-eslint',
+    'prettier/react'
   ],
+  plugins: ['@typescript-eslint', 'prettier', 'react'],
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
@@ -13,20 +16,7 @@ module.exports = {
     }
   },
   rules: {
-    '@typescript-eslint/indent': ['error', 2],
-    '@typescript-eslint/member-delimiter-style': [
-      'error',
-      {
-        multiline: {
-          delimiter: 'none',
-          requireLast: false
-        },
-        singleline: {
-          delimiter: 'comma',
-          requireLast: false
-        }
-      }
-    ],
+    '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-member-accessibility': [
       'error',
       { accessibility: 'no-public' }
