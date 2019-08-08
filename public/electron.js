@@ -1,10 +1,10 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 const electron = require('electron')
-const app = electron.app
-const BrowserWindow = electron.BrowserWindow
-
 const path = require('path')
+const url = require('url')
 const isDev = require('electron-is-dev')
+const { DaemonFactory } = require('@textile/go-daemon')
+
+const { app, BrowserWindow, ipcMain } = electron
 
 let mainWindow
 
@@ -18,7 +18,28 @@ function createWindow() {
   mainWindow.on('closed', () => (mainWindow = null))
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+  const df = new DaemonFactory()
+  df.spawn({ disposable: true })
+    .then(daemon => {
+      console.log('daemon ready now create window')
+      createWindow()
+      console.log('get profile')
+      daemon.api.profile
+        .get()
+        .then(profile => {
+          console.log('got profile address', profile.address)
+          console.log('message', JSON.stringify(profile, undefined, 2))
+          //daemon.stop()
+        })
+        .catch(err => {
+          console.log('error', err.toString())
+        })
+    })
+    .catch(err => {
+      console.log('error', err.toString())
+    })
+})
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
