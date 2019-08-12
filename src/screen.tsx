@@ -1,7 +1,7 @@
 import React from 'react'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
-import Sidebar, { Category } from './sidebar'
+import Sidebar, { Category } from './components/Sidebar'
 import AddIcon from '@material-ui/icons/Add'
 import { Fab, Zoom } from '@material-ui/core'
 

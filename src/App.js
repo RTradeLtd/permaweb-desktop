@@ -6,8 +6,8 @@ import { Dimmer, Loader } from 'semantic-ui-react'
 import { SemanticToastContainer } from 'react-semantic-toasts'
 import { createMuiTheme } from '@material-ui/core/styles'
 import Screen from './screen'
-import FolderListing from './folderListing'
-import FileEntry from './fileEntry'
+import FolderListing from './components/FolderListing'
+import FileEntry from './components/FileEntry'
 
 import 'react-semantic-toasts/styles/react-semantic-alert.css'
 import 'medium-editor/dist/css/medium-editor.css';
@@ -17,7 +17,7 @@ import keymap from './keymap'
 // @ts-ignore
 import { ShortcutManager } from 'react-shortcuts'
 import { ThemeProvider } from '@material-ui/styles';
-import { CategoryType } from './sidebar';
+import { CategoryType } from './components/Sidebar';
 
 const theme = createMuiTheme({
   palette: {
