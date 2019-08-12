@@ -50,7 +50,7 @@ class FileListItem extends Component<FileListItemProps> {
       background: 'none',
       width: '270px',
       textAlign: 'left'
-    } as React.CSSProperties
+    } as CSSProperties
     let backgroundStyle = {
       padding: '5px',
       background: 'none'
