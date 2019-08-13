@@ -78,7 +78,7 @@ class App extends Component {
           let mainContent
           if (store.file) {
             mainContent = (
-              <div>
+              <div style={{ width: '80%', maxWidth: '800px', margin: '1em auto' }}>
                 <Editor />
               </div>
             )
@@ -136,7 +136,7 @@ class App extends Component {
           )
 
           return (
-            <div style={{ width: '80%', maxWidth: '800px', margin: '1em auto' }}>
+            <div>
               {innerView}
               <Dimmer active={store.isLoading} inverted>
                 <Loader size='massive'></Loader>

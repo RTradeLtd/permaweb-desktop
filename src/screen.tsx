@@ -84,7 +84,9 @@ const Screen = (props: IScreenProps) => {
       </Drawer>
 
       <main className={classes.main}>
-        {props.children}
+        <div style={{ marginLeft: theme.spacing(5), marginRight: theme.spacing(5) }}>
+          {props.children}
+        </div>
       </main>
 
       <Zoom
