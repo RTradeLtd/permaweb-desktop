@@ -26,6 +26,7 @@ export interface Category {
 
 export interface SidebarProps {
   avatarImage: string
+  username: string
   categories: Category[]
   onOpenGroup: (group: string) => void
   onCreateGroup: () => void
@@ -61,14 +62,14 @@ const useStyles = makeStyles(theme => (
   }))
 )
 
-const Sidebar = ({ avatarImage, categories, onOpenGroup, onCreateGroup }: SidebarProps) => {
+const Sidebar = ({ username, avatarImage, categories, onOpenGroup, onCreateGroup }: SidebarProps) => {
   const classes = useStyles();
 
   return (
     <div className={classes.sidebar}>
       <Grid container justify="flex-start" alignItems="center">
         <Avatar alt="Remy Sharp" src={avatarImage} className={classes.avatar} />
-        <Typography>Shokunin</Typography>
+        <Typography>{username}</Typography>
       </Grid>
       <Divider />
       <List>

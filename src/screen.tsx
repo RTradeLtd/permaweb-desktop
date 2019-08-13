@@ -13,6 +13,7 @@ export interface FileDescriptor {
 }
 
 export interface IScreenProps {
+  username: string
   avatarImage: string
   categories: Category[]
   children: JSX.Element[] | JSX.Element
@@ -78,6 +79,7 @@ const Screen = (props: IScreenProps) => {
           paper: classes.drawerPaper,
         }}>
         <Sidebar
+          username={props.username}
           avatarImage={props.avatarImage}
           categories={props.categories}
           onOpenGroup={props.onOpenGroup}

@@ -116,6 +116,7 @@ class App extends Component {
 
           innerView = (
             <Screen
+              username={store.profile ? store.profile.username : 'Anon'}
               avatarImage={undefined}
               categories={[
                 {

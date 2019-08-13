@@ -61,8 +61,8 @@ export interface UIFile {
 class Store {
   gateway = "http://127.0.0.1:5052";
   @observable status = "offline";
-  @observable profile = {
-    username: undefined,
+  @observable profile: { username: string, avatar?: string, updated?: string } = {
+    username: 'Anon',
     avatar: undefined,
     updated: undefined
   };
@@ -228,6 +228,19 @@ class Store {
     }
     const thread = await this.getOrCreateAppThread();
     this.appThread = thread;
+
+    const profile = await textile.profile.get()
+
+    if (profile) {
+      runInAction("getFiles", () => {
+        this.profile = {
+          username: profile.name,
+          avatar: profile.avatar,
+          updated: profile.updated
+        }
+      });
+    }
+
     return thread;
   }
 
