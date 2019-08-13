@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles'
 import List from '@material-ui/core/List'
 
 export interface IFolderListingProps {
@@ -17,11 +17,7 @@ const useStyles = makeStyles(theme => ({
 const FolderListing = (props: IFolderListingProps) => {
   const classes = useStyles()
 
-  return (
-    <List className={classes.root}>
-      {props.children}
-    </List>
-  )
+  return <List className={classes.root}>{props.children}</List>
 }
 
 export default FolderListing

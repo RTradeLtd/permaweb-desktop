@@ -20,7 +20,7 @@ export enum CategoryType {
 }
 
 export interface Category {
-  type: CategoryType,
+  type: CategoryType
   label: string
 }
 
@@ -33,7 +33,7 @@ export interface SidebarProps {
 }
 
 function assertNever(x: never): never {
-  throw new Error("Unexpected object: " + x);
+  throw new Error('Unexpected object: ' + x)
 }
 
 const SidebarIcon = (props: { type: CategoryType }) => {
@@ -47,23 +47,29 @@ const SidebarIcon = (props: { type: CategoryType }) => {
   }
 }
 
-const useStyles = makeStyles(theme => (
+const useStyles = makeStyles(theme =>
   createStyles({
     avatar: {
       margin: 10,
       width: 60,
-      height: 60,
+      height: 60
     },
     sidebar: {
       width: '100%',
       backgroundColor: theme.palette.background.paper,
       color: theme.palette.text.primary
     }
-  }))
+  })
 )
 
-const Sidebar = ({ username, avatarImage, categories, onOpenGroup, onCreateGroup }: SidebarProps) => {
-  const classes = useStyles();
+const Sidebar = ({
+  username,
+  avatarImage,
+  categories,
+  onOpenGroup,
+  onCreateGroup
+}: SidebarProps) => {
+  const classes = useStyles()
 
   return (
     <div className={classes.sidebar}>
@@ -74,7 +80,12 @@ const Sidebar = ({ username, avatarImage, categories, onOpenGroup, onCreateGroup
       <Divider />
       <List>
         {categories.map((c: Category, i: number) => (
-          <ListItem button key={c.label} disabled={c.label === 'Trash'} onClick={() => onOpenGroup(c.label)}>
+          <ListItem
+            button
+            key={c.label}
+            disabled={c.label === 'Trash'}
+            onClick={() => onOpenGroup(c.label)}
+          >
             <ListItemIcon>
               <SidebarIcon type={c.type} />
             </ListItemIcon>
@@ -84,11 +95,16 @@ const Sidebar = ({ username, avatarImage, categories, onOpenGroup, onCreateGroup
       </List>
       <Divider />
       <List>
-        <ListItem button disabled key={"create-a-group"} onClick={() => onCreateGroup()}>
+        <ListItem
+          button
+          disabled
+          key={'create-a-group'}
+          onClick={() => onCreateGroup()}
+        >
           <ListItemIcon>
             <AddIcon />
           </ListItemIcon>
-          <ListItemText primary={"Create a group"} />
+          <ListItemText primary={'Create a group'} />
         </ListItem>
       </List>
     </div>

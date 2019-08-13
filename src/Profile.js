@@ -2,9 +2,14 @@ import React, { Component } from 'react'
 import { observer, inject } from 'mobx-react'
 import ArticleForm from './ArticleForm'
 import FileList from './FileList'
+import PropTypes from 'prop-types'
 
-@inject('store') @observer
+@inject('store')
+@observer
 class Profile extends Component {
+  static propTypes = {
+    store: PropTypes.object.isRequired
+  }
   render() {
     const { file } = this.props.store
 
@@ -15,9 +20,7 @@ class Profile extends Component {
         </div>
       )
     }
-    return (
-      <FileList />
-    )
+    return <FileList />
   }
 }
 

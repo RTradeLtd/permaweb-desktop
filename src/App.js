@@ -19,15 +19,16 @@ import { ShortcutManager } from 'react-shortcuts'
 import { ThemeProvider } from '@material-ui/styles'
 import { CategoryType } from './components/Sidebar'
 // @ts-ignore
-import { toast } from "react-semantic-toasts"
+import { toast } from 'react-semantic-toasts'
 
 const theme = createMuiTheme({
   palette: {
-    type: 'dark',
-  },
-});
+    type: 'dark'
+  }
+})
 
-@inject('store') @observer
+@inject('store')
+@observer
 class App extends Component {
   static childContextTypes = {
     shortcuts: PropTypes.object.isRequired
@@ -56,9 +57,9 @@ class App extends Component {
       navigator.clipboard.writeText(link)
 
       toast({
-        title: "Success",
-        description: "Copied link to clipboard"
-      });
+        title: 'Success',
+        description: 'Copied link to clipboard'
+      })
     }
   }
   onDeleteFile(id) {
@@ -78,7 +79,9 @@ class App extends Component {
           let mainContent
           if (store.file) {
             mainContent = (
-              <div style={{ width: '80%', maxWidth: '800px', margin: '1em auto' }}>
+              <div
+                style={{ width: '80%', maxWidth: '800px', margin: '1em auto' }}
+              >
                 <Editor />
               </div>
             )
@@ -103,15 +106,12 @@ class App extends Component {
                   onClick={this.onFileOpen}
                   onCopyLink={this.onCopyLink}
                   onShowHistory={this.onShowHistory}
-                  onDelete={this.onDeleteFile} />
+                  onDelete={this.onDeleteFile}
+                />
               )
             })
 
-            mainContent = (
-              <FolderListing>
-                {fileEntries}
-              </FolderListing>
-            )
+            mainContent = <FolderListing>{fileEntries}</FolderListing>
           }
 
           innerView = (
@@ -130,9 +130,14 @@ class App extends Component {
               ]}
               showAddFab={!store.file}
               onOpenGroup={() => store.clearFile()}
-              onCreateGroup={() => { console.log('on create group') }}
+              onCreateGroup={() => {
+                console.log('on create group')
+              }}
               onFileOpen={this.onFileOpen}
-              onAddFile={() => store.setFile("<p>Create your article here...</p>")}>
+              onAddFile={() =>
+                store.setFile('<p>Create your article here...</p>')
+              }
+            >
               {mainContent}
             </Screen>
           )
@@ -141,23 +146,21 @@ class App extends Component {
             <div>
               {innerView}
               <Dimmer active={store.isLoading} inverted>
-                <Loader size='massive'></Loader>
+                <Loader size="massive" />
               </Dimmer>
             </div>
           )
         default:
           return (
             <Dimmer active={store.status === 'offline'}>
-              <Loader size='massive'></Loader>
+              <Loader size="massive" />
             </Dimmer>
           )
       }
     })(store.status)
     return (
-      <div className='App'>
-        <ThemeProvider theme={theme}>
-          {view}
-        </ThemeProvider>
+      <div className="App">
+        <ThemeProvider theme={theme}>{view}</ThemeProvider>
         <SemanticToastContainer />
       </div>
     )

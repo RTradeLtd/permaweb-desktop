@@ -24,27 +24,27 @@ export interface IScreenProps {
   onAddFile: () => void
 }
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
     height: '100%',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: theme.palette.background.paper
   },
   drawer: {
     width: drawerWidth,
     flexShrink: 0
   },
   drawerPaper: {
-    width: drawerWidth,
+    width: drawerWidth
   },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
     padding: '0 8px',
     ...theme.mixins.toolbar,
-    justifyContent: 'flex-end',
+    justifyContent: 'flex-end'
   },
   main: {
     width: '100%',
@@ -55,9 +55,9 @@ const useStyles = makeStyles(theme => ({
   fab: {
     position: 'absolute',
     bottom: theme.spacing(2),
-    right: theme.spacing(2),
+    right: theme.spacing(2)
   }
-}));
+}))
 
 const Screen = (props: IScreenProps) => {
   const classes = useStyles()
@@ -65,8 +65,8 @@ const Screen = (props: IScreenProps) => {
 
   const transitionDuration = {
     enter: theme.transitions.duration.enteringScreen,
-    exit: theme.transitions.duration.leavingScreen,
-  };
+    exit: theme.transitions.duration.leavingScreen
+  }
 
   return (
     <div className={classes.root}>
@@ -76,40 +76,49 @@ const Screen = (props: IScreenProps) => {
         anchor="left"
         open={true}
         classes={{
-          paper: classes.drawerPaper,
-        }}>
+          paper: classes.drawerPaper
+        }}
+      >
         <Sidebar
           username={props.username}
           avatarImage={props.avatarImage}
           categories={props.categories}
           onOpenGroup={props.onOpenGroup}
-          onCreateGroup={props.onCreateGroup} />
+          onCreateGroup={props.onCreateGroup}
+        />
       </Drawer>
 
       <main className={classes.main}>
-        <div style={{ marginLeft: theme.spacing(5), marginRight: theme.spacing(5) }}>
+        <div
+          style={{
+            marginLeft: theme.spacing(5),
+            marginRight: theme.spacing(5)
+          }}
+        >
           {props.children}
         </div>
       </main>
 
-      {props.showAddFab && (<Zoom
-        in={true}
-        timeout={transitionDuration}
-        style={{
-          transitionDelay: `${transitionDuration.exit}ms`,
-        }}
-        unmountOnExit
-      >
-        <Fab
-          aria-label={"Add Note"}
-          className={classes.fab}
-          color={"secondary"}
-          size={'large'}
-          onClick={() => props.onAddFile()}>
-          <AddIcon />
-        </Fab>
-      </Zoom>)
-      }
+      {props.showAddFab && (
+        <Zoom
+          in={true}
+          timeout={transitionDuration}
+          style={{
+            transitionDelay: `${transitionDuration.exit}ms`
+          }}
+          unmountOnExit
+        >
+          <Fab
+            aria-label={'Add Note'}
+            className={classes.fab}
+            color={'secondary'}
+            size={'large'}
+            onClick={() => props.onAddFile()}
+          >
+            <AddIcon />
+          </Fab>
+        </Zoom>
+      )}
     </div>
   )
 }

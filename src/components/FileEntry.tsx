@@ -3,7 +3,12 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import Checkbox from '@material-ui/core/Checkbox'
-import { ListItemSecondaryAction, Button, makeStyles, createStyles } from '@material-ui/core'
+import {
+  ListItemSecondaryAction,
+  Button,
+  makeStyles,
+  createStyles
+} from '@material-ui/core'
 
 export interface IFileEntry {
   id: string
@@ -18,18 +23,28 @@ export interface IFileEntry {
   onDelete: (fileId: string) => void
 }
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles(theme =>
   createStyles({
     button: {
-      margin: theme.spacing(1),
+      margin: theme.spacing(1)
     },
     input: {
-      display: 'none',
-    },
-  }),
-);
+      display: 'none'
+    }
+  })
+)
 
-const FileEntry = ({ id, version, hash, fileKey, title, onClick, onCopyLink, onShowHistory, onDelete }: IFileEntry) => {
+const FileEntry = ({
+  id,
+  version,
+  hash,
+  fileKey,
+  title,
+  onClick,
+  onCopyLink,
+  onShowHistory,
+  onDelete
+}: IFileEntry) => {
   const classes = useStyles()
   const [checked, setChecked] = React.useState(false)
 
@@ -37,9 +52,20 @@ const FileEntry = ({ id, version, hash, fileKey, title, onClick, onCopyLink, onS
     setChecked(!checked)
   }
 
-  const onEntryClick = useCallback(() => onClick(id, version), [onClick, id, version])
-  const onEntryCopyLink = useCallback(() => onCopyLink(hash, fileKey), [onCopyLink, hash, fileKey])
-  const onEntryShowHistory = useCallback(() => onShowHistory(id, version), [onShowHistory, id])
+  const onEntryClick = useCallback(() => onClick(id, version), [
+    onClick,
+    id,
+    version
+  ])
+  const onEntryCopyLink = useCallback(() => onCopyLink(hash, fileKey), [
+    onCopyLink,
+    hash,
+    fileKey
+  ])
+  const onEntryShowHistory = useCallback(() => onShowHistory(id, version), [
+    onShowHistory,
+    id
+  ])
   const onEntryDelete = useCallback(() => onDelete(id), [onDelete, id])
 
   return (
@@ -56,13 +82,22 @@ const FileEntry = ({ id, version, hash, fileKey, title, onClick, onCopyLink, onS
       </ListItemIcon>
       <ListItemText id={`text-${id}`} primary={title} />
       <ListItemSecondaryAction>
-        <Button variant="outlined" className={classes.button} onClick={onEntryCopyLink} >
+        <Button
+          variant="outlined"
+          className={classes.button}
+          onClick={onEntryCopyLink}
+        >
           Copy Link
         </Button>
         {/* <Button variant="outlined" className={classes.button} onClick={onEntryShowHistory} >
           Show History
         </Button> */}
-        <Button variant="outlined" color="secondary" className={classes.button} onClick={onEntryDelete}>
+        <Button
+          variant="outlined"
+          color="secondary"
+          className={classes.button}
+          onClick={onEntryDelete}
+        >
           Delete
         </Button>
       </ListItemSecondaryAction>
