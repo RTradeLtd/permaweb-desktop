@@ -10,14 +10,16 @@ import FolderListing from './components/FolderListing'
 import FileEntry from './components/FileEntry'
 
 import 'react-semantic-toasts/styles/react-semantic-alert.css'
-import 'medium-editor/dist/css/medium-editor.css';
-import 'medium-editor/dist/css/themes/default.css';
+import 'medium-editor/dist/css/medium-editor.css'
+import 'medium-editor/dist/css/themes/default.css'
 
 import keymap from './keymap'
 // @ts-ignore
 import { ShortcutManager } from 'react-shortcuts'
-import { ThemeProvider } from '@material-ui/styles';
-import { CategoryType } from './components/Sidebar';
+import { ThemeProvider } from '@material-ui/styles'
+import { CategoryType } from './components/Sidebar'
+// @ts-ignore
+import { toast } from "react-semantic-toasts"
 
 const theme = createMuiTheme({
   palette: {
@@ -30,6 +32,14 @@ class App extends Component {
   static childContextTypes = {
     shortcuts: PropTypes.object.isRequired
   }
+  constructor(props) {
+    super(props)
+
+    this.onFileOpen = this.onFileOpen.bind(this)
+    this.onCopyLink = this.onCopyLink.bind(this)
+    this.onShowHistory = this.onShowHistory.bind(this)
+    this.onDeleteFile = this.onDeleteFile.bind(this)
+  }
   componentDidMount() {
     this.props.store.getFiles()
   }
@@ -37,13 +47,33 @@ class App extends Component {
     const shortcutManager = new ShortcutManager(keymap)
     return { shortcuts: shortcutManager }
   }
+  onFileOpen(fileId, version) {
+    this.props.store.selectFile(fileId, version)
+  }
+  onCopyLink(hash, key) {
+    if (hash) {
+      const link = `https://gateway.textile.cafe/ipfs/${hash}?key=${key}`
+      navigator.clipboard.writeText(link)
+
+      toast({
+        title: "Success",
+        description: "Copied link to clipboard"
+      });
+    }
+  }
+  onDeleteFile(id) {
+    this.props.store.deleteFile(id)
+  }
+  onShowHistory(fileId, version) {
+    console.log(fileId, version)
+    this.props.store.selectFileId(fileId, version)
+    this.props.store.toggleHistory(true)
+  }
   render() {
     const { store } = this.props
     const view = (screen => {
       switch (screen) {
         case 'online':
-          const onFileOpen = (fileId, version) => store.selectFile(fileId, version)
-
           let innerView = {}
           let mainContent
           if (store.file) {
@@ -59,12 +89,22 @@ class App extends Component {
               return {
                 id: fileId,
                 version: 0,
+                hash: latestEntry.hash,
+                fileKey: latestEntry.key,
                 title: latestEntry.stored.name
               }
             })
 
             const fileEntries = folderListing.map(f => {
-              return (<FileEntry key={f.id} {...f} onClick={onFileOpen} />)
+              return (
+                <FileEntry
+                  key={f.id}
+                  {...f}
+                  onClick={this.onFileOpen}
+                  onCopyLink={this.onCopyLink}
+                  onShowHistory={this.onShowHistory}
+                  onDelete={this.onDeleteFile} />
+              )
             })
 
             mainContent = (
@@ -89,7 +129,7 @@ class App extends Component {
               ]}
               onOpenGroup={() => store.clearFile()}
               onCreateGroup={() => { console.log('on create group') }}
-              onFileOpen={onFileOpen}
+              onFileOpen={this.onFileOpen}
               onAddFile={() => store.setFile("<p>Create your article here...</p>")}>
               {mainContent}
             </Screen>

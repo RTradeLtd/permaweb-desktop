@@ -7,12 +7,12 @@ import { linkTo } from '@storybook/addon-links';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 
-import { Button, Welcome } from '@storybook/react/demo';
+import { Welcome } from '@storybook/react/demo';
 import shokuninAvatarImage from './images/shokunin.png'
-import Sidebar from '../src/sidebar'
-import FolderListing from '../src/folderListing'
-import FileEntry from '../src/fileEntry'
-import Screen, { FileDescriptor } from '../src/screen'
+import Sidebar from '../src/components/Sidebar'
+import FolderListing from '../src/components/FolderListing'
+import FileEntry from '../src/components/FileEntry'
+import Screen from '../src/screen'
 
 const theme = createMuiTheme({
   palette: {
@@ -69,7 +69,13 @@ storiesOf('Components/FolderListing', module)
     <ThemeProvider theme={theme}>
       <FolderListing>
         {exampleFiles.map(f => (
-          <FileEntry {...f} />
+          <FileEntry
+            {...f}
+            onClick={action('Clicked entry')}
+            onCopyLink={action('Clicked Copy Link')}
+            onShowHistory={action('Clicked Show History')}
+            onDelete={action('Clicked Delete')}
+          />
         ))}
       </FolderListing>
     </ThemeProvider>
