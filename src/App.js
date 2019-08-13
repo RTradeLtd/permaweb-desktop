@@ -127,6 +127,7 @@ class App extends Component {
                   type: CategoryType.TRASH
                 }
               ]}
+              showAddFab={!store.file}
               onOpenGroup={() => store.clearFile()}
               onCreateGroup={() => { console.log('on create group') }}
               onFileOpen={this.onFileOpen}

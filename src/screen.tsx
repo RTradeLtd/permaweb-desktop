@@ -16,6 +16,7 @@ export interface IScreenProps {
   avatarImage: string
   categories: Category[]
   children: JSX.Element[] | JSX.Element
+  showAddFab: boolean
   onOpenGroup: (group: string) => void
   onCreateGroup: () => void
   onFileOpen: (fileId: string, version: number) => void
@@ -89,7 +90,7 @@ const Screen = (props: IScreenProps) => {
         </div>
       </main>
 
-      <Zoom
+      {props.showAddFab && (<Zoom
         in={true}
         timeout={transitionDuration}
         style={{
@@ -105,7 +106,8 @@ const Screen = (props: IScreenProps) => {
           onClick={() => props.onAddFile()}>
           <AddIcon />
         </Fab>
-      </Zoom>
+      </Zoom>)
+      }
     </div>
   )
 }
