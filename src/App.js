@@ -47,15 +47,17 @@ class App extends Component {
     this.props.store.selectFile(fileId, version)
   }
   handleCopyLink = (hash, key) => {
-    if (hash) {
-      const link = `https://gateway.textile.cafe/ipfs/${hash}?key=${key}`
-      navigator.clipboard.writeText(link)
-
-      toast({
-        title: 'Success',
-        description: 'Copied link to clipboard'
-      })
+    if (!hash || !key) {
+      return
     }
+
+    const link = `https://gateway.textile.cafe/ipfs/${hash}?key=${key}`
+    navigator.clipboard.writeText(link)
+
+    toast({
+      title: 'Success',
+      description: 'Copied link to clipboard'
+    })
   }
   handleShowHistory = (fileId, version) => {
     this.props.store.selectFileId(fileId, version)
