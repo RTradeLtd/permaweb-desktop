@@ -59,7 +59,7 @@ export interface UIFile {
   date?: string
 }
 
-class Store {
+export class Store {
   gateway = 'http://127.0.0.1:5052'
   @observable status = 'offline'
   @observable profile: {

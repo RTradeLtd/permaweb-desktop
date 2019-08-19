@@ -30,16 +30,11 @@ const theme = createMuiTheme({
 @inject('store')
 @observer
 class App extends Component {
+  static propTypes = {
+    store: PropTypes.object.isRequired
+  }
   static childContextTypes = {
     shortcuts: PropTypes.object.isRequired
-  }
-  constructor(props) {
-    super(props)
-
-    this.onFileOpen = this.onFileOpen.bind(this)
-    this.onCopyLink = this.onCopyLink.bind(this)
-    this.onShowHistory = this.onShowHistory.bind(this)
-    this.onDeleteFile = this.onDeleteFile.bind(this)
   }
   componentDidMount() {
     this.props.store.getFiles()
@@ -48,10 +43,10 @@ class App extends Component {
     const shortcutManager = new ShortcutManager(keymap)
     return { shortcuts: shortcutManager }
   }
-  onFileOpen(fileId, version) {
+  handleFileOpen = (fileId, version) => {
     this.props.store.selectFile(fileId, version)
   }
-  onCopyLink(hash, key) {
+  handleCopyLink = (hash, key) => {
     if (hash) {
       const link = `https://gateway.textile.cafe/ipfs/${hash}?key=${key}`
       navigator.clipboard.writeText(link)
@@ -62,13 +57,12 @@ class App extends Component {
       })
     }
   }
-  onDeleteFile(id) {
-    this.props.store.deleteFile(id)
-  }
-  onShowHistory(fileId, version) {
-    console.log(fileId, version)
+  handleShowHistory = (fileId, version) => {
     this.props.store.selectFileId(fileId, version)
     this.props.store.toggleHistory(true)
+  }
+  handleDeleteFile = id => {
+    this.props.store.deleteFile(id)
   }
   render() {
     const { store } = this.props
@@ -103,10 +97,10 @@ class App extends Component {
                 <FileEntry
                   key={f.id}
                   {...f}
-                  onClick={this.onFileOpen}
-                  onCopyLink={this.onCopyLink}
-                  onShowHistory={this.onShowHistory}
-                  onDelete={this.onDeleteFile}
+                  onClick={this.handleFileOpen}
+                  onCopyLink={this.handleCopyLink}
+                  onShowHistory={this.handleShowHistory}
+                  onDelete={this.handleDeleteFile}
                 />
               )
             })
