@@ -68,9 +68,9 @@ storiesOf('Components/FolderListing', module)
   .add('small list of files', () => (
     <ThemeProvider theme={theme}>
       <FolderListing>
-        {exampleFiles.map(f => (
+        {exampleFiles.map(file => (
           <FileEntry
-            {...f}
+            {...file}
             onClick={action('Clicked entry')}
             onCopyLink={action('Clicked Copy Link')}
             onShowHistory={action('Clicked Show History')}
