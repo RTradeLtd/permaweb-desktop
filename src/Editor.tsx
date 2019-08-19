@@ -11,8 +11,7 @@ import Store from './Store'
 import { Shortcuts } from 'react-shortcuts'
 import 'emoji-mart/css/emoji-mart.css'
 // @ts-ignore
-import { Emoji, Picker, emojiIndex } from 'emoji-mart'
-import { renderToString } from 'react-dom/server'
+import { Picker, emojiIndex } from 'emoji-mart'
 // @ts-ignore
 import CodeMirror from 'react-codemirror'
 import 'codemirror/lib/codemirror.css'
@@ -23,16 +22,27 @@ import TurndownService from 'turndown'
 //@ts-ignore
 import { toast } from 'react-semantic-toasts'
 
-interface ArticleForm {
+interface ArticleFormProps {
   store: Store
 }
 
+interface ArticleFormState {
+  savedFileContent: string
+  fileContent: string
+  fileMarkdown: string
+  toggleToolbar: boolean
+  showEmoji: boolean
+  showMarkdown: boolean
+}
+
 @inject('store')
-class ArticleForm extends Component<ArticleForm> {
+class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
   emojiRef?: HTMLElement
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   editor: any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   markdownConverter: any
-  htmlConverter: any
+  htmlConverter: TurndownService
   state = {
     savedFileContent: '',
     fileContent: '',
@@ -41,7 +51,10 @@ class ArticleForm extends Component<ArticleForm> {
     showEmoji: false,
     showMarkdown: false
   }
-  shouldComponentUpdate(_nextProps: any, nextState: any) {
+  shouldComponentUpdate(
+    _nextProps: ArticleFormProps,
+    nextState: ArticleFormState
+  ) {
     return (
       this.state.showEmoji !== nextState.showEmoji ||
       this.state.showMarkdown !== nextState.showMarkdown
@@ -94,7 +107,7 @@ class ArticleForm extends Component<ArticleForm> {
       return
     }
 
-    emojiMatches.forEach((emojiMatch: any) => {
+    emojiMatches.forEach(emojiMatch => {
       const search =
         emojiIndex.search(emojiMatch.substr(1, emojiMatch.length - 2)) || []
       if (!search.length) {
@@ -110,7 +123,7 @@ class ArticleForm extends Component<ArticleForm> {
   toggleMarkdown = () => {
     this.setState({ showMarkdown: !this.state.showMarkdown })
   }
-  addEmoji = (emoji: any) => {
+  addEmoji = (emoji: { native: string }) => {
     this.editor.pasteHTML(emoji.native)
     this.updateFileContent(this.editor.getContent())
   }
@@ -179,7 +192,7 @@ class ArticleForm extends Component<ArticleForm> {
     })
     return new EmojiButton()
   }
-  updateMarkdownEvent = (markdown: any) => {
+  updateMarkdownEvent = (markdown: string) => {
     let html = this.markdownConverter.makeHtml(markdown)
     this.updateFileContent(html)
     this.setState({ fileMarkdown: markdown })
@@ -187,7 +200,7 @@ class ArticleForm extends Component<ArticleForm> {
   clearFile = () => {
     this.props.store.clearFile()
   }
-  _handleShortcuts = (action: any) => {
+  _handleShortcuts = (action: string) => {
     switch (action) {
       case 'CANCEL':
         this.clearFile()
