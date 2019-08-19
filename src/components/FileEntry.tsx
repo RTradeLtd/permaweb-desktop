@@ -10,7 +10,7 @@ import {
   createStyles
 } from '@material-ui/core'
 
-export interface IFileEntry {
+export interface FileEntry {
   id: string
   version: number
   hash: string
@@ -44,11 +44,11 @@ const FileEntry = ({
   onCopyLink,
   onShowHistory,
   onDelete
-}: IFileEntry) => {
+}: FileEntry) => {
   const classes = useStyles()
   const [checked, setChecked] = React.useState(false)
 
-  const handleToggle = (event: React.MouseEvent) => {
+  const handleToggle = () => {
     setChecked(!checked)
   }
 
@@ -62,6 +62,7 @@ const FileEntry = ({
     hash,
     fileKey
   ])
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onEntryShowHistory = useCallback(() => onShowHistory(id, version), [
     onShowHistory,
     id

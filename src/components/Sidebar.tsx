@@ -79,17 +79,17 @@ const Sidebar = ({
       </Grid>
       <Divider />
       <List>
-        {categories.map((c: Category, i: number) => (
+        {categories.map(({ label, type }: Category) => (
           <ListItem
             button
-            key={c.label}
-            disabled={c.label === 'Trash'}
-            onClick={() => onOpenGroup(c.label)}
+            key={label}
+            disabled={label === 'Trash'}
+            onClick={() => onOpenGroup(label)}
           >
             <ListItemIcon>
-              <SidebarIcon type={c.type} />
+              <SidebarIcon type={type} />
             </ListItemIcon>
-            <ListItemText primary={c.label} />
+            <ListItemText primary={label} />
           </ListItem>
         ))}
       </List>

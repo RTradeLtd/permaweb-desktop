@@ -12,7 +12,7 @@ export interface FileDescriptor {
   latestEventDescription?: string
 }
 
-export interface IScreenProps {
+export interface ScreenProps {
   username: string
   avatarImage: string
   categories: Category[]
@@ -59,7 +59,7 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const Screen = (props: IScreenProps) => {
+const Screen = (props: ScreenProps) => {
   const classes = useStyles()
   const theme = useTheme()
 
