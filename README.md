@@ -3,7 +3,7 @@
 ## Community [![Discord](https://img.shields.io/badge/Chat-Discord-purple.svg?style=flat)](https://discord.gg/DrPFqa2) [![Matrix](https://img.shields.io/badge/Chat-Matrix%20&%20Riot-blue.svg?style=flat)](https://riot.im/app/#/room/#epona:getepona.com) [![IRC](https://img.shields.io/badge/IRC-freenode%20%23epona-brightgreen.svg?style=flat)](http://webchat.freenode.net/?channels=%23epona)
 
 ## Description
-Epona is a super productive, privacy focused writing app.
+Permaweb is a super productive, privacy focused writing app.
 * Tons of shortcuts. Mouse-free navigation.
 * Super resilient. Everything you write is encrypted and decentralized.
 
@@ -15,12 +15,10 @@ Use cases:
 * Share a pastebin
 * A simple public blog
 
-![Epona](https://getepona.com/static/screenshot-d39a4278e6019e385e47c37f632a8677.png)
-
 ## Technology
-Epona runs on a series of self-hosted nodes. These are powered by [Textile.io](https://textile.io), which is acts as a digital wallet for fully encrypted, decentralized content. Content is stored using the [IPFS](https://ipfs.io) protocol, which makes Epona links unique and permanent.  This makes Epona extremely resilient: we do not have your keys, and there is no single point of failure. *You are the platform*.
+Permaweb runs on a series of self-hosted nodes. These are powered by [Textile.io](https://textile.io), which is acts as a digital wallet for fully encrypted, decentralized content. Content is stored using the [IPFS](https://ipfs.io) protocol, which makes Permaweb links unique and permanent.  This makes Permaweb extremely resilient: we do not have your keys, and there is no single point of failure. *You are the platform*.
 
-* Epona uses [IPFS](https://ipfs.io) for content addressable hashing to make mirroring and mesh networking easy.
+* Permaweb uses [IPFS](https://ipfs.io) for content addressable hashing to make mirroring and mesh networking easy.
 * We use [Textile](https://textile.io), the best library for distributed web applications.
 
 
