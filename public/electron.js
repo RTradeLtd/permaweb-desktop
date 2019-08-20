@@ -1,10 +1,8 @@
-const electron = require('electron')
+const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const url = require('url')
 const isDev = require('electron-is-dev')
 const { DaemonFactory } = require('@textile/go-daemon')
-
-const { app, BrowserWindow, ipcMain } = electron
 
 let mainWindow
 
