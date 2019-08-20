@@ -1,10 +1,10 @@
 {
-  "name": "epona-desktop",
+  "name": "permaweb-desktop",
   "version": "0.1.0",
-  "description": "Epona Desktop Application",
+  "description": "Permaweb Desktop Application",
   "author": {
-    "name": "Epona Developers",
-    "email": "admin@getepona.com"
+    "name": "Permaweb Developers",
+    "email": "hello@permaweb.io"
   },
   "private": true,
   "dependencies": {
@@ -73,10 +73,10 @@
   ],
   "main": "public/electron.js",
   "build": {
-    "appId": "com.getepona.react",
-    "productName": "Epona",
+    "appId": "io.permaweb",
+    "productName": "Permaweb",
     "compression": "normal",
-    "artifactName": "Epona-v${version}.${ext}",
+    "artifactName": "Permaweb-v${version}.${ext}",
     "files": [
       "build/**/*",
       "node_modules/**/*",
