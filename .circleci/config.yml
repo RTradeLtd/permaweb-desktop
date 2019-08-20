@@ -3,7 +3,7 @@ jobs:
   build-win-linux:
     docker:
       - image: electronuserland/builder:wine
-    working_directory: ~/writer
+    working_directory: ~/permaweb
     steps:
       - checkout
       - run:
@@ -31,7 +31,7 @@ jobs:
             fi
             OUT=~/output
             mkdir -p ${OUT}
-            mv ~/writer/dist/Writer-${VERSION}.{AppImage,snap,exe} ${OUT}/
+            mv ~/permaweb/dist/Permaweb-${VERSION}.{AppImage,snap,exe} ${OUT}/
       - persist_to_workspace:
           root: ~/
           paths:
@@ -41,7 +41,7 @@ jobs:
   build-macos:
     macos:
       xcode: "10.0.0"
-    working_directory: ~/writer
+    working_directory: ~/permaweb
     steps:
       - checkout
       - run:
@@ -73,7 +73,7 @@ jobs:
             fi
             OUT=~/output
             mkdir -p ${OUT}
-            mv ~/writer/dist/Writer-${VERSION}.dmg ${OUT}/
+            mv ~/permaweb/dist/Permaweb-${VERSION}.dmg ${OUT}/
       - persist_to_workspace:
           root: ~/
           paths:
@@ -94,7 +94,7 @@ jobs:
 
 workflows:
   version: 2
-  writer-desktop:
+  permaweb-desktop:
     jobs:
       - build-win-linux:
           filters:
