@@ -1,10 +1,10 @@
 {
-  "name": "writer-desktop",
-  "version": "0.1.1",
-  "description": "Writer Desktop Application",
+  "name": "permaweb-desktop",
+  "version": "0.1.0",
+  "description": "Permaweb Desktop Application",
   "author": {
-    "name": "Writer Developers",
-    "email": "admin@getepona.com"
+    "name": "Permaweb Developers",
+    "email": "hello@permaweb.io"
   },
   "private": true,
   "dependencies": {
@@ -36,15 +36,19 @@
     "@babel/cli": "^7.4.3",
     "@babel/core": "^7.4.3",
     "@babel/polyfill": "^7.4.3",
-    "@textile/tslint-rules": "^1.0.3",
     "@types/react": "^16.8.14",
     "@types/react-dom": "^16.8.4",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
     "babel-preset-mobx": "^2.0.0",
     "concurrently": "^4.1.0",
     "electron": "^4.1.4",
     "electron-builder": "^20.39.0",
     "electron-builder-squirrel-windows": "^20.40.0",
-    "tslint": "^5.16.0",
+    "eslint-config-prettier": "^6.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
+    "prettier": "^1.18.2",
     "typescript": "^3.4.5",
     "wait-on": "^3.2.0"
   },
@@ -52,6 +56,8 @@
     "start": "craco start",
     "build": "craco build",
     "test": "craco test",
+    "lint": "tsc --noEmit && eslint 'src/**/*.{js,ts,tsx}' --fix",
+    "format": "prettier --write \"./src/**/*.{tsx,ts,js}\"",
     "eject": "react-scripts eject",
     "pack": "electron-builder --dir",
     "dist-win-linux": "build --x64 --c.extraMetadata.main=public/electron.js --windows --linux",
@@ -59,9 +65,6 @@
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preelectron-pack": "yarn build",
     "release": "build"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
   },
   "browserslist": [
     ">0.2%",
@@ -71,10 +74,10 @@
   ],
   "main": "public/electron.js",
   "build": {
-    "appId": "com.getepona.react",
-    "productName": "Writer",
+    "appId": "io.permaweb",
+    "productName": "Permaweb",
     "compression": "normal",
-    "artifactName": "Writer-v${version}.${ext}",
+    "artifactName": "Permaweb-v${version}.${ext}",
     "files": [
       "build/**/*",
       "node_modules/**/*",
