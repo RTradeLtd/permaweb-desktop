@@ -64,7 +64,7 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
     this.markdownConverter = new Showdown.Converter()
     this.htmlConverter = new TurndownService({ headingStyle: 'atx' })
 
-    const el = document.getElementById('epona-editor')
+    const el = document.getElementById('editor')
     this.editor = MediumEditor.getEditorFromElement(el)
 
     const { file } = this.props.store
@@ -250,7 +250,7 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
           />
         ) : (
           <Editor
-            id="epona-editor"
+            id="editor"
             style={{
               minHeight: '10vh',
               fontSize: '16px',

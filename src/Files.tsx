@@ -186,7 +186,7 @@ class Files extends Component<FileListProps> {
         <Card style={{ width: '100%' }}>
           <Card.Content>
             <Card.Header>
-              <h2>Epona Editor</h2>
+              <h2>Permaweb Editor</h2>
             </Card.Header>
           </Card.Content>
           <Card.Content>

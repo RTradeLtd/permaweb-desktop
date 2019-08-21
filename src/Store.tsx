@@ -3,8 +3,8 @@ import { Textile, FilesList, Thread } from '@textile/js-http-client'
 //@ts-ignore
 import { toast } from 'react-semantic-toasts'
 
-const eponaSchemaV0 = {
-  name: 'epona-v0.0.2',
+const schemaV0 = {
+  name: 'permaweb-v0.0.2',
   mill: '/json',
   // eslint-disable-next-line @typescript-eslint/camelcase
   json_schema: {
@@ -81,8 +81,8 @@ export class Store {
   @observable showHistory: boolean = false
   @observable isLoading: boolean = false
 
-  appThreadKey: string = 'com.getepona.eponajs.articleFeed.v0.0.3'
-  appThreadName = 'Epona Articles'
+  appThreadKey: string = 'io.permaweb.articleFeed.v0.0.3'
+  appThreadName = 'Permaweb Articles'
 
   appThread?: Thread
 
@@ -198,7 +198,7 @@ export class Store {
 
   @action async createAppThread() {
     // you can used versioned json schema so you can run migrations in the future
-    const addedSchema = await textile.schemas.add(eponaSchemaV0)
+    const addedSchema = await textile.schemas.add(schemaV0)
     // adds the new thread using a single ThreadKey shared by all files
     // that key is also versioned to help with future migrations
     const blobThread = await textile.threads.add(
