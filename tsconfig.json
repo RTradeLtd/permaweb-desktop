@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "lib": [
-      "es6",
-      "dom",
-      "esnext"
-    ],
+    "lib": ["es6", "dom", "esnext"],
     "jsx": "preserve",
     "module": "esnext",
     "moduleResolution": "node",
@@ -21,9 +17,7 @@
     "noEmit": true,
     "experimentalDecorators": true
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   "exclude": [
     "scripts",
     "node_modules",
