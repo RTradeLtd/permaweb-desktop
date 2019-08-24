@@ -41,7 +41,7 @@ class FileListItem extends Component<FileListItemProps> {
   render() {
     const file = this.props.file[this.props.version]
     const { showHistory } = this.props.store
-    const linkStyle = {
+    const linkStyle: CSSProperties = {
       color: 'inherit',
       border: 'none',
       padding: '0',
@@ -50,7 +50,7 @@ class FileListItem extends Component<FileListItemProps> {
       background: 'none',
       width: '270px',
       textAlign: 'left'
-    } as CSSProperties
+    }
     let backgroundStyle = {
       padding: '5px',
       background: 'none'

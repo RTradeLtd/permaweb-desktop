@@ -21,6 +21,7 @@ import Showdown from 'showdown'
 import TurndownService from 'turndown'
 //@ts-ignore
 import { toast } from 'react-semantic-toasts'
+import './Editor.css'
 
 interface ArticleFormProps {
   store: Store
@@ -123,8 +124,7 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
   toggleMarkdown = () => {
     this.setState({ showMarkdown: !this.state.showMarkdown })
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  addEmoji = (emoji: any) => {
+  addEmoji = (emoji: { native: string }) => {
     this.editor.pasteHTML(emoji.native)
     this.updateFileContent(this.editor.getContent())
   }
@@ -214,14 +214,13 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
     const { file } = this.props.store
     return (
       <Shortcuts name="EDITOR" handler={this._handleShortcuts}>
-        <Card style={{ width: '100%' }}>
+        <Card className={'editor-top-controls'} style={{ width: '100%' }}>
           <Card.Content>
             <Card.Description>
               <Button
                 onClick={() => {
                   this.clearFile()
                 }}
-                primary
               >
                 Back
               </Button>
@@ -229,7 +228,6 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
                 onClick={() => {
                   this.toggleMarkdown()
                 }}
-                primary
               >
                 Toggle
               </Button>
@@ -242,7 +240,7 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
           </Card.Content>
         </Card>
         <br />
-        <p>
+        <p className="editor-last-saved-note">
           <Moment fromNow>{file && file.date}</Moment>
         </p>
         {this.state.showMarkdown ? (
