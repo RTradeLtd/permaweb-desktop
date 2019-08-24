@@ -7,7 +7,7 @@ export interface FolderListingProps {
 }
 
 const useStyles = makeStyles(theme => ({
-  root: {
+  folderlist: {
     width: '100%',
     backgroundColor: theme.palette.background.paper,
     color: theme.palette.text.primary
@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
 const FolderListing = (props: FolderListingProps) => {
   const classes = useStyles()
 
-  return <List className={classes.root}>{props.children}</List>
+  return <List className={classes.folderlist}>{props.children}</List>
 }
 
 export default FolderListing
