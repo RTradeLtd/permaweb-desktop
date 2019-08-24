@@ -1,8 +1,6 @@
 import React, { useCallback } from 'react'
 import ListItem from '@material-ui/core/ListItem'
-import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import Checkbox from '@material-ui/core/Checkbox'
 import {
   ListItemSecondaryAction,
   Button,
@@ -46,17 +44,13 @@ const FileEntry = ({
   onDelete
 }: FileEntry) => {
   const classes = useStyles()
-  const [checked, setChecked] = React.useState(false)
-
-  const handleToggle = () => {
-    setChecked(!checked)
-  }
 
   const onEntryClick = useCallback(() => onClick(id, version), [
     onClick,
     id,
     version
   ])
+
   const onEntryCopyLink = useCallback(() => onCopyLink(hash, fileKey), [
     onCopyLink,
     hash,
@@ -71,16 +65,6 @@ const FileEntry = ({
 
   return (
     <ListItem key={id} role={undefined} dense button onClick={onEntryClick}>
-      <ListItemIcon>
-        <Checkbox
-          edge="start"
-          checked={checked}
-          tabIndex={-1}
-          disableRipple
-          onClick={handleToggle}
-          disabled
-        />
-      </ListItemIcon>
       <ListItemText id={`text-${id}`} primary={title} />
       <ListItemSecondaryAction>
         <Button
