@@ -21,6 +21,7 @@ import Showdown from 'showdown'
 import TurndownService from 'turndown'
 //@ts-ignore
 import { toast } from 'react-semantic-toasts'
+import './Editor.css'
 
 interface ArticleFormProps {
   store: Store
