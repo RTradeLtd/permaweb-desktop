@@ -20,6 +20,7 @@ import { ThemeProvider } from '@material-ui/styles'
 import { CategoryType } from './components/Sidebar'
 // @ts-ignore
 import { toast } from 'react-semantic-toasts'
+import SlateEditor from './components/SlateEditor'
 
 const theme = createMuiTheme({
   palette: {
@@ -78,7 +79,8 @@ class App extends Component {
               <div
                 style={{ width: '80%', maxWidth: '800px', margin: '1em auto' }}
               >
-                <Editor />
+                {/*<Editor />*/}
+                <SlateEditor />
               </div>
             )
           } else {
