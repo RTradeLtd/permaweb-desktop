@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
-import { Editor } from 'slate-react'
-import { Value } from 'slate'
+import { Editor, RenderBlockProps } from 'slate-react'
+import { Value, Editor as EditorParam } from 'slate'
+import './SlateEditor.css'
 
 const initialValue = Value.fromJSON({
   document: {
@@ -19,6 +20,23 @@ const initialValue = Value.fromJSON({
   }
 })
 
+const renderBlock = (
+  props: RenderBlockProps,
+  _editor: EditorParam,
+  next: () => JSX.Element
+): JSX.Element => {
+  switch (props.node.type) {
+    case 'paragraph':
+      return (
+        <div className="editor-paragraph" {...props.attributes}>
+          {props.children}
+        </div>
+      )
+    default:
+      return next()
+  }
+}
+
 const SlateEditor = () => {
   const [editorState, setEditorState] = useState(initialValue)
   const handleEditorChange = useCallback(
@@ -30,8 +48,11 @@ const SlateEditor = () => {
 
   return (
     <div>
-      <h2>Editor</h2>
-      <Editor value={editorState} onChange={handleEditorChange} />
+      <Editor
+        value={editorState}
+        onChange={handleEditorChange}
+        renderBlock={renderBlock}
+      />
     </div>
   )
 }

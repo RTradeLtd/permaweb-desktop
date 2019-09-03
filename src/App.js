@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
-import Editor from './Editor'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import { SemanticToastContainer } from 'react-semantic-toasts'
 import { createMuiTheme } from '@material-ui/core/styles'
@@ -79,7 +78,6 @@ class App extends Component {
               <div
                 style={{ width: '80%', maxWidth: '800px', margin: '1em auto' }}
               >
-                {/*<Editor />*/}
                 <SlateEditor />
               </div>
             )
