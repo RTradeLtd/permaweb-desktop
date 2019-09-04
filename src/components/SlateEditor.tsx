@@ -37,13 +37,19 @@ const renderBlock = (
   }
 }
 
-const SlateEditor = () => {
+export interface SlateEditorProps {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onChange: (editorState: any) => void
+}
+
+const SlateEditor = ({ onChange }: SlateEditorProps) => {
   const [editorState, setEditorState] = useState(initialValue)
   const handleEditorChange = useCallback(
     ({ value }) => {
-      return setEditorState(value)
+      setEditorState(value)
+      onChange(value)
     },
-    [setEditorState]
+    [setEditorState, onChange]
   )
 
   return (

@@ -20,6 +20,7 @@ import { CategoryType } from './components/Sidebar'
 // @ts-ignore
 import { toast } from 'react-semantic-toasts'
 import SlateEditor from './components/SlateEditor'
+import ArticleTopMenu from './components/ArticleTopMenu'
 
 const theme = createMuiTheme({
   palette: {
@@ -66,6 +67,9 @@ class App extends Component {
   handleDeleteFile = id => {
     this.props.store.deleteFile(id)
   }
+  handleChangeToEditorState = updatedState => {
+    this.props.store.setEditorState(updatedState)
+  }
   render() {
     const { store } = this.props
     const view = (screen => {
@@ -75,10 +79,17 @@ class App extends Component {
           let mainContent
           if (store.file) {
             mainContent = (
-              <div
-                style={{ width: '80%', maxWidth: '800px', margin: '1em auto' }}
-              >
-                <SlateEditor />
+              <div>
+                <ArticleTopMenu />
+                <div
+                  style={{
+                    width: '80%',
+                    maxWidth: '800px',
+                    margin: '1em auto'
+                  }}
+                >
+                  <SlateEditor onChange={this.handleChangeToEditorState} />
+                </div>
               </div>
             )
           } else {

@@ -80,6 +80,8 @@ export class Store {
   @observable selectedFileVersion: number = 0
   @observable showHistory: boolean = false
   @observable isLoading: boolean = false
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @observable editorState: any = null
 
   appThreadKey: string = 'io.permaweb.articleFeed.v0.0.3'
   appThreadName = 'Permaweb Articles'
@@ -247,6 +249,31 @@ export class Store {
     }
 
     return thread
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @action async setEditorState(updatedState: any) {
+    runInAction('updateEditorState', () => {
+      this.editorState = updatedState
+    })
+  }
+
+  @action async saveEditorStateToThread() {
+    if (!this.editorState) {
+      if (!this.file) {
+        toast({
+          title: 'Error!',
+          description: 'Article text is required',
+          type: 'error',
+          time: 0
+        })
+        return
+      }
+    }
+
+    const content = JSON.stringify(this.editorState.toJSON())
+
+    console.log(content)
   }
 
   @action async createFile() {

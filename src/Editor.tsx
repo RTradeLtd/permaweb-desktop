@@ -34,6 +34,8 @@ interface ArticleFormState {
   toggleToolbar: boolean
   showEmoji: boolean
   showMarkdown: boolean
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  editorState: any | null
 }
 
 @inject('store')
@@ -50,7 +52,8 @@ class ArticleForm extends Component<ArticleFormProps, ArticleFormState> {
     fileMarkdown: '',
     toggleToolbar: false,
     showEmoji: false,
-    showMarkdown: false
+    showMarkdown: false,
+    editorState: null
   }
   shouldComponentUpdate(
     _nextProps: ArticleFormProps,

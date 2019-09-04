@@ -88,16 +88,7 @@ const Screen = (props: ScreenProps) => {
         />
       </Drawer>
 
-      <main className={classes.main}>
-        <div
-          style={{
-            marginLeft: theme.spacing(5),
-            marginRight: theme.spacing(5)
-          }}
-        >
-          {props.children}
-        </div>
-      </main>
+      <main className={classes.main}>{props.children}</main>
 
       {props.showAddFab && (
         <Zoom
