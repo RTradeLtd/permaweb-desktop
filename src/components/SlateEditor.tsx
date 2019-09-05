@@ -3,7 +3,7 @@ import { Editor, RenderBlockProps } from 'slate-react'
 import { Value, Editor as EditorParam } from 'slate'
 import './SlateEditor.css'
 
-const initialValue = Value.fromJSON({
+export const defaultEditorValue = {
   document: {
     nodes: [
       {
@@ -12,13 +12,13 @@ const initialValue = Value.fromJSON({
         nodes: [
           {
             object: 'text',
-            text: 'Create your article here...'
+            text: ''
           }
         ]
       }
     ]
   }
-})
+}
 
 const renderBlock = (
   props: RenderBlockProps,
@@ -40,10 +40,14 @@ const renderBlock = (
 export interface SlateEditorProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange: (editorState: any) => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  initialValue: any
 }
 
-const SlateEditor = ({ onChange }: SlateEditorProps) => {
-  const [editorState, setEditorState] = useState(initialValue)
+const SlateEditor = ({ onChange, initialValue }: SlateEditorProps) => {
+  const [editorState, setEditorState] = useState(
+    Value.fromJSON(initialValue || defaultEditorValue)
+  )
   const handleEditorChange = useCallback(
     ({ value }) => {
       setEditorState(value)
@@ -56,6 +60,7 @@ const SlateEditor = ({ onChange }: SlateEditorProps) => {
     <div>
       <Editor
         value={editorState}
+        placeholder={'Create your article here...'}
         onChange={handleEditorChange}
         renderBlock={renderBlock}
       />

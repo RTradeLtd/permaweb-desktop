@@ -19,7 +19,7 @@ import { ThemeProvider } from '@material-ui/styles'
 import { CategoryType } from './components/Sidebar'
 // @ts-ignore
 import { toast } from 'react-semantic-toasts'
-import SlateEditor from './components/SlateEditor'
+import SlateEditor, { defaultEditorValue } from './components/SlateEditor'
 import ArticleTopMenu from './components/ArticleTopMenu'
 
 const theme = createMuiTheme({
@@ -70,6 +70,8 @@ class App extends Component {
   handleChangeToEditorState = updatedState => {
     this.props.store.setEditorState(updatedState)
   }
+  handleClearFile = () => this.props.store.clearFile()
+  handleCreateFile = () => this.props.store.setFile(defaultEditorValue)
   render() {
     const { store } = this.props
     const view = (screen => {
@@ -78,6 +80,8 @@ class App extends Component {
           let innerView = {}
           let mainContent
           if (store.file) {
+            const editorValue = JSON.parse(store.file.stored.body)
+
             mainContent = (
               <div>
                 <ArticleTopMenu />
@@ -88,7 +92,10 @@ class App extends Component {
                     margin: '1em auto'
                   }}
                 >
-                  <SlateEditor onChange={this.handleChangeToEditorState} />
+                  <SlateEditor
+                    initialValue={editorValue}
+                    onChange={this.handleChangeToEditorState}
+                  />
                 </div>
               </div>
             )
@@ -136,14 +143,12 @@ class App extends Component {
                 }
               ]}
               showAddFab={!store.file}
-              onOpenGroup={() => store.clearFile()}
+              onOpenGroup={this.handleClearFile}
               onCreateGroup={() => {
                 console.log('on create group')
               }}
               onFileOpen={this.onFileOpen}
-              onAddFile={() =>
-                store.setFile('<p>Create your article here...</p>')
-              }
+              onAddFile={this.handleCreateFile}
             >
               {mainContent}
             </Screen>

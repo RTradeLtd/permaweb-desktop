@@ -8,6 +8,7 @@ import FileListItem from './FileListItem'
 import { Shortcuts } from 'react-shortcuts'
 // @ts-ignore
 import { toast } from 'react-semantic-toasts'
+import { defaultEditorValue } from './components/SlateEditor'
 
 interface FileListProps {
   store: Store
@@ -86,7 +87,7 @@ class Files extends Component<FileListProps> {
     }
   }
   createEmptyFile() {
-    this.props.store.setFile('<p>Create your article here...</p>')
+    this.props.store.setFile(defaultEditorValue)
   }
   render() {
     const { profile, files, selectedFileId, showHistory } = this.props.store
