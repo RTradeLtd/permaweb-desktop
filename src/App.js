@@ -72,6 +72,7 @@ class App extends Component {
   }
   handleClearFile = () => this.props.store.clearFile()
   handleCreateFile = () => this.props.store.setFile(defaultEditorValue)
+  handleSaveFile = () => this.props.store.saveEditorStateToThread()
   render() {
     const { store } = this.props
     const view = (screen => {
@@ -143,12 +144,14 @@ class App extends Component {
                 }
               ]}
               showAddFab={!store.file}
+              showSaveFab={!!store.file}
               onOpenGroup={this.handleClearFile}
               onCreateGroup={() => {
                 console.log('on create group')
               }}
               onFileOpen={this.onFileOpen}
               onAddFile={this.handleCreateFile}
+              onSaveFile={this.handleSaveFile}
             >
               {mainContent}
             </Screen>

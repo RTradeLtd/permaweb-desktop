@@ -3,6 +3,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles'
 import Drawer from '@material-ui/core/Drawer'
 import Sidebar, { Category } from './components/Sidebar'
 import AddIcon from '@material-ui/icons/Add'
+import SaveIcon from '@material-ui/icons/Save'
 import { Fab, Zoom } from '@material-ui/core'
 
 export interface FileDescriptor {
@@ -18,10 +19,12 @@ export interface ScreenProps {
   categories: Category[]
   children: JSX.Element[] | JSX.Element
   showAddFab: boolean
+  showSaveFab: boolean
   onOpenGroup: (group: string) => void
   onCreateGroup: () => void
   onFileOpen: (fileId: string, version: number) => void
   onAddFile: () => void
+  onSaveFile: () => void
 }
 
 const drawerWidth = 240
@@ -100,13 +103,34 @@ const Screen = (props: ScreenProps) => {
           unmountOnExit
         >
           <Fab
-            aria-label={'Add Note'}
+            aria-label={'Add Article'}
             className={classes.fab}
             color={'secondary'}
             size={'large'}
             onClick={() => props.onAddFile()}
           >
             <AddIcon />
+          </Fab>
+        </Zoom>
+      )}
+
+      {props.showSaveFab && (
+        <Zoom
+          in={true}
+          timeout={transitionDuration}
+          style={{
+            transitionDelay: `${transitionDuration.exit}ms`
+          }}
+          unmountOnExit
+        >
+          <Fab
+            aria-label={'Save Article'}
+            className={classes.fab}
+            color={'secondary'}
+            size={'large'}
+            onClick={() => props.onSaveFile()}
+          >
+            <SaveIcon />
           </Fab>
         </Zoom>
       )}

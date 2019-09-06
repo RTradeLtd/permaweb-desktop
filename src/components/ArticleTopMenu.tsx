@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import Container from '@material-ui/core/Container'
 import { makeStyles, Theme, createStyles, IconButton } from '@material-ui/core'
-import Button from '@material-ui/core/Button'
 import BackIcon from '@material-ui/icons/ArrowBack'
 import Store from '../Store'
 import { inject } from 'mobx-react'
@@ -17,7 +16,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface ArticleTopMenuProps {
   onBackClicked: () => void
-  onSaveClicked: () => void
 }
 
 const ArticleTopMenu = (props: ArticleTopMenuProps) => {
@@ -32,15 +30,6 @@ const ArticleTopMenu = (props: ArticleTopMenuProps) => {
       >
         <BackIcon />
       </IconButton>
-
-      <Button
-        variant="outlined"
-        size="medium"
-        className={classes.saveButton}
-        onClick={props.onSaveClicked}
-      >
-        SAVE
-      </Button>
     </Container>
   )
 }
@@ -48,20 +37,11 @@ const ArticleTopMenu = (props: ArticleTopMenuProps) => {
 @inject('store')
 class ArticleTopMenuStoreWrapper extends Component<{ store: Store }> {
   render() {
-    return (
-      <ArticleTopMenu
-        onBackClicked={this._handleClearFile}
-        onSaveClicked={this._handleSave}
-      />
-    )
+    return <ArticleTopMenu onBackClicked={this._handleClearFile} />
   }
 
   private _handleClearFile = () => {
     this.props.store.clearFile()
-  }
-
-  private _handleSave = () => {
-    this.props.store.saveEditorStateToThread()
   }
 }
 
