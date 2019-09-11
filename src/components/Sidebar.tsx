@@ -16,6 +16,7 @@ import AddIcon from '@material-ui/icons/Add'
 
 export enum CategoryType {
   NOTES = 'NOTES',
+  MYPOSTS = 'MY POSTS',
   TRASH = 'TRASH'
 }
 
@@ -42,6 +43,8 @@ const SidebarIcon = (props: { type: CategoryType }) => {
       return <QuestionAnswerIcon />
     case CategoryType.TRASH:
       return <DeleteIcon />
+    case CategoryType.MYPOSTS:
+      return <QuestionAnswerIcon />
     default:
       return assertNever(props.type)
   }
@@ -70,7 +73,6 @@ const Sidebar = ({
   onCreateGroup
 }: SidebarProps) => {
   const classes = useStyles()
-
   return (
     <div className={classes.sidebar}>
       <Grid container justify="flex-start" alignItems="center">

@@ -141,6 +141,10 @@ class App extends Component {
                 {
                   label: 'Trash',
                   type: CategoryType.TRASH
+                },
+                {
+                  label: 'Posts',
+                  type: CategoryType.MYPOSTS
                 }
               ]}
               showAddFab={!store.file}
