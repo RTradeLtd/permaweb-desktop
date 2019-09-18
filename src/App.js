@@ -78,7 +78,6 @@ class App extends Component {
     this.props.store.setEditorState(updatedState)
   }
   handleClearFile = label => {
-    console.log(this.state.view, 'label')
     this.setState({
       view: label
     })
@@ -95,7 +94,6 @@ class App extends Component {
           let mainContent
           if (store.file) {
             const editorValue = JSON.parse(store.file.stored.body)
-
             mainContent = (
               <div>
                 <ArticleTopMenu />
@@ -109,6 +107,7 @@ class App extends Component {
                   <SlateEditor
                     initialValue={editorValue}
                     onChange={this.handleChangeToEditorState}
+                    isReadOnly={this.state.view === 'Posts'}
                   />
                 </div>
               </div>
@@ -154,7 +153,6 @@ class App extends Component {
             })
 
             const posts = folderListing.map(f => {
-              console.log(f, 'f')
               return (
                 <Posts
                   key={f.id}
@@ -201,7 +199,6 @@ class App extends Component {
               {mainContent}
             </Screen>
           )
-          if (this.props.store) console.log(this.props.store.file, 'file')
           return (
             <div>
               {innerView}
