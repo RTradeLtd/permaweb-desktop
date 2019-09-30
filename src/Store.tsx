@@ -50,6 +50,7 @@ interface StoredFileSchema {
   lastModifiedDate?: number
   name?: string // appears to be same as caption in use below?
 }
+
 export interface UIFile {
   stored: StoredFileSchema // this is what will go in and out of File API
   caption: string
@@ -57,6 +58,16 @@ export interface UIFile {
   key?: string // keeps reference for gateway linking
   block?: string // keeps track of what block is storing this file, you could enhance by using undefined to detect unstored
   date?: string
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const resolveArticleNameFrom = (editorValue: any) => {
+  const firstBlock = editorValue.document.nodes[0]
+  const firstLine = firstBlock.nodes[0].text
+
+  const articleName = (firstLine || '').trim().substr(0, 140)
+
+  return articleName
 }
 
 export class Store {
@@ -80,6 +91,8 @@ export class Store {
   @observable selectedFileVersion: number = 0
   @observable showHistory: boolean = false
   @observable isLoading: boolean = false
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @observable editorState: any = null
 
   appThreadKey: string = 'io.permaweb.articleFeed.v0.0.3'
   appThreadName = 'Permaweb Articles'
@@ -121,6 +134,7 @@ export class Store {
       this.file = editList[version]
     })
   }
+
   @action async getFiles() {
     try {
       const thread = await this.getThread()
@@ -178,17 +192,22 @@ export class Store {
       })
     }
   }
-  @action setFile(content: string, title?: string) {
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @action setFile(editorValue: any, title?: string) {
     runInAction('setFile', () => {
       if (this.file && this.file.stored.body) {
-        this.file.stored.body = content
+        this.file.stored.body = editorValue
       } else {
-        const caption = title || content.split('</')[0]
-        const id = this.createFileId(content)
+        const articleName = resolveArticleNameFrom(editorValue)
+        const caption = title || articleName
+        const editorValueAsString = JSON.stringify(editorValue)
+        const id = this.createFileId(editorValueAsString)
+
         this.file = {
           caption,
           stored: {
-            body: content,
+            body: editorValueAsString,
             id
           }
         }
@@ -210,6 +229,7 @@ export class Store {
     )
     return blobThread
   }
+
   @action async getOrCreateAppThread() {
     let blobThread
     const threads = await textile.threads.list()
@@ -249,8 +269,15 @@ export class Store {
     return thread
   }
 
-  @action async createFile() {
-    if (!this.file) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  @action async setEditorState(updatedState: any) {
+    runInAction('updateEditorState', () => {
+      this.editorState = updatedState
+    })
+  }
+
+  @action async saveEditorStateToThread() {
+    if (!this.editorState || !this.file) {
       toast({
         title: 'Error!',
         description: 'Article text is required',
@@ -260,15 +287,11 @@ export class Store {
       return
     }
 
-    // get article name
-    let firstLine = this.file.stored.body.split('</')[0]
+    const editorValue = this.editorState.toJSON()
 
-    // remove html
-    let temp = document.createElement('div')
-    temp.innerHTML = `${firstLine}`
-    let articleName = temp.textContent || temp.innerText || ''
+    const articleName = resolveArticleNameFrom(editorValue)
 
-    if (!articleName) {
+    if (articleName === '') {
       toast({
         title: 'Error!',
         description:
@@ -279,13 +302,13 @@ export class Store {
       return
     }
 
-    articleName = articleName.substr(0, 140)
-
     try {
       const blobThread = await this.getThread()
+      const editorValueAsString = JSON.stringify(editorValue)
 
       const payload = {
         ...this.file.stored,
+        body: editorValueAsString,
         lastModifiedDate: new Date().getTime(),
         name: articleName
       }
@@ -296,10 +319,13 @@ export class Store {
         articleName,
         blobThread.id
       )
+
       await this.getFiles()
-      runInAction('getFile', () => {
-        this.file = { ...this.file, caption: articleName, stored: payload }
-      })
+
+      // runInAction('getFile', () => {
+      //   this.file = { ...this.file, caption: articleName, stored: payload }
+      // })
+
       toast({
         title: 'Success',
         description: 'Your file has been uploaded!'
@@ -315,6 +341,7 @@ export class Store {
       })
     }
   }
+
   @action getFileFromName(filename: string) {
     try {
       const filethread = Object.keys(this.files)
@@ -354,6 +381,7 @@ export class Store {
     }
     return String(Math.abs(hash))
   }
+
   @action async deleteFile(id: string) {
     try {
       if (!this.files[id] || this.files[id].length <= 0) {
@@ -389,11 +417,13 @@ export class Store {
       })
     }
   }
+
   @action async clearFile() {
     runInAction('clearFile', () => {
       this.file = undefined
     })
   }
+
   @action async setLoading(isLoading: boolean) {
     runInAction('setLoading', () => {
       this.isLoading = isLoading

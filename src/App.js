@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
-import Editor from './Editor'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import { SemanticToastContainer } from 'react-semantic-toasts'
 import { createMuiTheme } from '@material-ui/core/styles'
@@ -20,6 +19,8 @@ import { ThemeProvider } from '@material-ui/styles'
 import { CategoryType } from './components/Sidebar'
 // @ts-ignore
 import { toast } from 'react-semantic-toasts'
+import SlateEditor, { defaultEditorValue } from './components/SlateEditor'
+import ArticleTopMenu from './components/ArticleTopMenu'
 
 const theme = createMuiTheme({
   palette: {
@@ -66,6 +67,12 @@ class App extends Component {
   handleDeleteFile = id => {
     this.props.store.deleteFile(id)
   }
+  handleChangeToEditorState = updatedState => {
+    this.props.store.setEditorState(updatedState)
+  }
+  handleClearFile = () => this.props.store.clearFile()
+  handleCreateFile = () => this.props.store.setFile(defaultEditorValue)
+  handleSaveFile = () => this.props.store.saveEditorStateToThread()
   render() {
     const { store } = this.props
     const view = (screen => {
@@ -74,11 +81,23 @@ class App extends Component {
           let innerView = {}
           let mainContent
           if (store.file) {
+            const editorValue = JSON.parse(store.file.stored.body)
+
             mainContent = (
-              <div
-                style={{ width: '80%', maxWidth: '800px', margin: '1em auto' }}
-              >
-                <Editor />
+              <div>
+                <ArticleTopMenu />
+                <div
+                  style={{
+                    width: '80%',
+                    maxWidth: '800px',
+                    margin: '1em auto'
+                  }}
+                >
+                  <SlateEditor
+                    initialValue={editorValue}
+                    onChange={this.handleChangeToEditorState}
+                  />
+                </div>
               </div>
             )
           } else {
@@ -125,14 +144,14 @@ class App extends Component {
                 }
               ]}
               showAddFab={!store.file}
-              onOpenGroup={() => store.clearFile()}
+              showSaveFab={!!store.file}
+              onOpenGroup={this.handleClearFile}
               onCreateGroup={() => {
                 console.log('on create group')
               }}
               onFileOpen={this.onFileOpen}
-              onAddFile={() =>
-                store.setFile('<p>Create your article here...</p>')
-              }
+              onAddFile={this.handleCreateFile}
+              onSaveFile={this.handleSaveFile}
             >
               {mainContent}
             </Screen>
