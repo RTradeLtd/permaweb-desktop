@@ -42,9 +42,14 @@ export interface SlateEditorProps {
   onChange: (editorState: any) => void
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialValue: any
+  isReadOnly: boolean
 }
 
-const SlateEditor = ({ onChange, initialValue }: SlateEditorProps) => {
+const SlateEditor = ({
+  onChange,
+  initialValue,
+  isReadOnly
+}: SlateEditorProps) => {
   const [editorState, setEditorState] = useState(
     Value.fromJSON(initialValue || defaultEditorValue)
   )
@@ -59,6 +64,7 @@ const SlateEditor = ({ onChange, initialValue }: SlateEditorProps) => {
   return (
     <div>
       <Editor
+        readOnly={isReadOnly}
         value={editorState}
         placeholder={'Create your article here...'}
         onChange={handleEditorChange}

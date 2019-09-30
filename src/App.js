@@ -7,6 +7,7 @@ import { createMuiTheme } from '@material-ui/core/styles'
 import Screen from './screen'
 import FolderListing from './components/FolderListing'
 import FileEntry from './components/FileEntry'
+import Posts from './components/Posts'
 
 import 'react-semantic-toasts/styles/react-semantic-alert.css'
 import 'medium-editor/dist/css/medium-editor.css'
@@ -31,6 +32,12 @@ const theme = createMuiTheme({
 @inject('store')
 @observer
 class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      view: 'Home'
+    }
+  }
   static propTypes = {
     store: PropTypes.object.isRequired
   }
@@ -70,7 +77,12 @@ class App extends Component {
   handleChangeToEditorState = updatedState => {
     this.props.store.setEditorState(updatedState)
   }
-  handleClearFile = () => this.props.store.clearFile()
+  handleClearFile = label => {
+    this.setState({
+      view: label
+    })
+    return this.props.store.clearFile()
+  }
   handleCreateFile = () => this.props.store.setFile(defaultEditorValue)
   handleSaveFile = () => this.props.store.saveEditorStateToThread()
   render() {
@@ -82,7 +94,6 @@ class App extends Component {
           let mainContent
           if (store.file) {
             const editorValue = JSON.parse(store.file.stored.body)
-
             mainContent = (
               <div>
                 <ArticleTopMenu />
@@ -96,11 +107,12 @@ class App extends Component {
                   <SlateEditor
                     initialValue={editorValue}
                     onChange={this.handleChangeToEditorState}
+                    isReadOnly={this.state.view === 'Posts'}
                   />
                 </div>
               </div>
             )
-          } else {
+          } else if (this.state.view === 'Home') {
             const files = store.files
             const folderListing = Object.keys(files).map(fileId => {
               const latestEntry = files[fileId][0]
@@ -127,6 +139,33 @@ class App extends Component {
             })
 
             mainContent = <FolderListing>{fileEntries}</FolderListing>
+          } else if (this.state.view === 'Posts') {
+            const files = store.files
+            const folderListing = Object.keys(files).map(fileId => {
+              const latestEntry = files[fileId][0]
+              return {
+                id: fileId,
+                version: 0,
+                hash: latestEntry.hash,
+                fileKey: latestEntry.key,
+                title: latestEntry.stored.name
+              }
+            })
+
+            const posts = folderListing.map(f => {
+              return (
+                <Posts
+                  key={f.id}
+                  {...f}
+                  onClick={this.handleFileOpen}
+                  onCopyLink={this.handleCopyLink}
+                  onShowHistory={this.handleShowHistory}
+                  onDelete={this.handleDeleteFile}
+                />
+              )
+            })
+
+            mainContent = <FolderListing>{posts}</FolderListing>
           }
 
           innerView = (
@@ -141,6 +180,10 @@ class App extends Component {
                 {
                   label: 'Trash',
                   type: CategoryType.TRASH
+                },
+                {
+                  label: 'Posts',
+                  type: CategoryType.MYPOSTS
                 }
               ]}
               showAddFab={!store.file}
@@ -156,7 +199,6 @@ class App extends Component {
               {mainContent}
             </Screen>
           )
-
           return (
             <div>
               {innerView}
