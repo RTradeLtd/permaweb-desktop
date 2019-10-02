@@ -1,56 +1,13 @@
 import React from 'react'
+import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
-import {
-  AppBar,
-  ListItemText,
-  Divider,
-  List,
-  ListItem
-} from '@material-ui/core'
+import { ListItemText, List, ListItem } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
 const DRAWER_WIDTH = 240
-const APPBAR_HEIGHT = 90
+const APPBAR_HEIGHT = 80
 const BACKGROUND = '#3fb55e'
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex'
-  },
-  title: {
-    height: APPBAR_HEIGHT,
-    background: BACKGROUND
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: DRAWER_WIDTH,
-      flexShrink: 0
-    }
-  },
-  appBar: {
-    background: BACKGROUND,
-    height: APPBAR_HEIGHT,
-    marginLeft: DRAWER_WIDTH,
-    [theme.breakpoints.up('sm')]: {
-      width: `calc(100% - ${DRAWER_WIDTH}px)`
-    }
-  },
-  menuButton: {
-    marginRight: theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      display: 'none'
-    }
-  },
-  drawerPaper: {
-    width: DRAWER_WIDTH
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
-    paddingTop: APPBAR_HEIGHT
-  }
-}))
 
 function useLayout({ history }) {
   const navigateHome = () => history.push('/')
@@ -84,57 +41,142 @@ const Layout = ({ store, children, history }) => {
   } = useLayout({
     history
   })
-  const classes = useStyles()
 
   return (
-    <div className={classes.root}>
-      <AppBar position="fixed" className={classes.appBar}>
-        <div>Group name</div>
-        <div>
-          <div>90</div>
-          <div>
-            {members.map((member, i) => {
-              return <img src="" alt="" key={i} />
-            })}
-          </div>
-          <div>Share</div>
-          <div>Edit</div>
-        </div>
+    <Section>
+      <AppBar>
+        <Title>
+          <Img
+            src="https://picsum.photos/seed/picsum/50/50"
+            alt="Permaweb logo"
+          />{' '}
+          Permaweb
+        </Title>
+        <Bar>
+          <h2>Group name</h2>
+          <Info>
+            <div>90</div>
+            <Members maxCount={5}>
+              {members.map((member, i) => {
+                return (
+                  <Img
+                    src="https://picsum.photos/seed/picsum/30/30"
+                    alt=""
+                    key={i}
+                  />
+                )
+              })}
+            </Members>
+            <div>Share</div>
+            <div>Edit</div>
+          </Info>
+        </Bar>
       </AppBar>
-      <nav className={classes.drawer} aria-label="mailbox folders">
-        <h1 className={classes.title}>Permaweb</h1>
-        <List>
-          <ListItem button key={'home'} onClick={navigateHome}>
-            <ListItemText primary={'Home'} />
-          </ListItem>
-          {groups.map(({ id, name }) => (
-            <ListItem button key={id} onClick={() => navigateToGroup(id)}>
-              <ListItemText primary={name} />
+      <Wrap>
+        <Nav>
+          <List>
+            <ListItem button key={'home'} onClick={navigateHome}>
+              <ListItemText primary={'Home'} />
             </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          <ListItem button key={'search'} onClick={navigateHome}>
-            <ListItemText primary={'Find people or groups'} />
-          </ListItem>
-          <ListItem button key={'create-group'} onClick={navigateHome}>
-            <ListItemText primary={'Create a groupt'} />
-          </ListItem>
-        </List>
-        <Divider />
-        <div>
-          <img src="" alt="avatar" />
-          <div>Shokunin</div>
-          <div>Edit</div>
-        </div>
-      </nav>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-        {children}
-      </main>
-    </div>
+            {groups.map(({ id, name }) => (
+              <ListItem button key={id} onClick={() => navigateToGroup(id)}>
+                <ListItemText primary={name} />
+              </ListItem>
+            ))}
+          </List>
+          <List>
+            <ListItem button key={'search'} onClick={navigateHome}>
+              <ListItemText primary={'Find people or groups'} />
+            </ListItem>
+            <ListItem button key={'create-group'} onClick={navigateHome}>
+              <ListItemText primary={'Create a groupt'} />
+            </ListItem>
+          </List>
+          <Profile>
+            <Img src="https://picsum.photos/seed/picsum/30/30" alt="avatar" />
+            <div>Shokunin</div>
+            <div>Edit</div>
+          </Profile>
+        </Nav>
+        <Main>{children}</Main>
+      </Wrap>
+    </Section>
   )
 }
+
+const AppBar = styled.header`
+  display: grid;
+  grid-template-columns: ${DRAWER_WIDTH}px 1fr;
+  height: ${APPBAR_HEIGHT}px;
+  background: ${BACKGROUND};
+`
+
+const Wrap = styled.div`
+  display: grid;
+  grid-template-columns: ${DRAWER_WIDTH}px 1fr;
+  min-height: 100%;
+`
+
+const Main = styled.main`
+  height: calc(100vh - ${APPBAR_HEIGHT}px);
+  overflow: auto;
+  padding: 20px;
+  background: #fefefe;
+`
+
+const Nav = styled.nav`
+  height: calc(100vh - ${APPBAR_HEIGHT}px);
+  display: grid;
+  grid-template-rows: 1fr auto 80px;
+  padding: 0 5px;
+`
+
+const Title = styled.h1`
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 10px;
+  align-items: center;
+  padding: 0 20px;
+`
+
+const Img = styled.img`
+  border-radius: 50%;
+`
+
+const Section = styled.section`
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+`
+
+const Bar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+`
+
+const Info = styled.div`
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  grid-gap: 5px;
+  align-items: center;
+`
+
+const Members = styled.div`
+  display: grid;
+  grid-template-columns: ${({ maxCount }) => `repeat(${maxCount}, auto)`};
+  grid-gap: 5px;
+`
+
+const Profile = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-gap: 10px;
+  align-items: center;
+  padding: 0 10px;
+`
 
 export default inject('store')(observer(withRouter(Layout)))

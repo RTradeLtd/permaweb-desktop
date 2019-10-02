@@ -43,6 +43,7 @@
     "showdown": "^1.9.0",
     "slate": "^0.47.8",
     "slate-react": "^0.22.8",
+    "styled-components": "^4.4.0",
     "turndown": "^5.0.3"
   },
   "devDependencies": {

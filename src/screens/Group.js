@@ -91,7 +91,7 @@ function Group({ groupId }) {
               <button>Send</button>
             </div>
             <ul>
-              {comments.map((comment, index) => {
+              {comments.map(({ author, content, lastModified }, index) => {
                 return (
                   <li key={index}>
                     <div>{author}</div>

@@ -20,8 +20,6 @@ import NotFound from './screens/NotFound'
 import StoreStatus from './components/StoreStatus'
 
 import 'react-semantic-toasts/styles/react-semantic-alert.css'
-import 'medium-editor/dist/css/medium-editor.css'
-import 'medium-editor/dist/css/themes/default.css'
 
 const theme = createMuiTheme({
   palette: {
