@@ -3,7 +3,6 @@ import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import { ListItemText, List, ListItem } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
 
 const DRAWER_WIDTH = 240
 const APPBAR_HEIGHT = 80
@@ -114,7 +113,6 @@ const AppBar = styled.header`
 const Wrap = styled.div`
   display: grid;
   grid-template-columns: ${DRAWER_WIDTH}px 1fr;
-  min-height: 100%;
 `
 
 const Main = styled.main`
