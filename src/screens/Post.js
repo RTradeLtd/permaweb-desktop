@@ -1,6 +1,6 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import { Card } from '@material-ui/core'
+import PostCard from '../components/PostCard'
 import MOCK_FILES from '../mocks/files'
 
 const POST_ENFORCE_INTERFACE = {
@@ -27,50 +27,8 @@ function usePost(postId) {
 
 function Post({ postId }) {
   const { post } = usePost(postId)
-  const {
-    groupId,
-    author,
-    lastModified,
-    title,
-    content,
-    comments,
-    shares,
-    reactions
-  } = post
-  return (
-    <Card key={postId}>
-      <div>{author}</div>
-      <div>{formatDate(lastModified)}</div>
-      <div>{title}</div>
-      <div>{content}</div>
-      <div>
-        <div key="comment-count">Comments {comments.length}</div>
-        <div key="share-count">Shares {shares.length}</div>
-        <ul key="reactions">
-          Reactions:{' '}
-          {reactions.map((reaction, index) => (
-            <span key={index}>{reaction}</span>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <div>Reply to {author}</div>
-        <textarea />
-        <button>Send</button>
-      </div>
-      <ul>
-        {comments.map(({ author, content, lastModified }, index) => {
-          return (
-            <li key={index}>
-              <div>{author}</div>
-              <div>{content}</div>
-              <div>{formatDate(lastModified)}</div>
-            </li>
-          )
-        })}
-      </ul>
-    </Card>
-  )
+
+  return <PostCard post={post} />
 }
 
 export default inject('store')(
