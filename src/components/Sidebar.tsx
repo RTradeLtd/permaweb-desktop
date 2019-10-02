@@ -23,13 +23,14 @@ export enum CategoryType {
 export interface Category {
   type: CategoryType
   label: string
+  id: string
 }
 
 export interface SidebarProps {
   avatarImage: string
   username: string
   categories: Category[]
-  onOpenGroup: (group: string) => void
+  onOpenGroup: (group: string, id: string) => void
   onCreateGroup: () => void
 }
 
@@ -81,12 +82,12 @@ const Sidebar = ({
       </Grid>
       <Divider />
       <List>
-        {categories.map(({ label, type }: Category) => (
+        {categories.map(({ label, type, id }: Category) => (
           <ListItem
             button
             key={label}
             disabled={label === 'Trash'}
-            onClick={() => onOpenGroup(label)}
+            onClick={() => onOpenGroup(label, id)}
           >
             <ListItemIcon>
               <SidebarIcon type={type} />

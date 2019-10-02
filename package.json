@@ -33,6 +33,7 @@
     "react-markdown-it": "^1.0.2",
     "react-medium-editor": "^1.8.1",
     "react-moment": "^0.8.4",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "2.1.5",
     "react-semantic-toasts": "^0.5.0",
     "react-shortcuts": "^2.0.1",
