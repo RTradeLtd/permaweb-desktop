@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import { Card, List } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
@@ -29,19 +30,21 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-function useGroup(id) {
+function useGroup(groupId) {
   // fetch group using id
   // fetch files contents and map to list
-  const list = MOCK_FILES.filter(({ groupId }) => groupId === id).map(post => ({
-    ...POST_ENFORCE_INTERFACE,
-    ...post
-  }))
+  const list = MOCK_FILES.filter(post => groupId === post.groupId).map(
+    post => ({
+      ...POST_ENFORCE_INTERFACE,
+      ...post
+    })
+  )
 
   return { list }
 }
 
-function Group({ id }) {
-  const { list } = useGroup(id)
+function Group({ groupId }) {
+  const { list } = useGroup(groupId)
   const classes = useStyles()
 
   const handleFileOpen = () => console.log('file open')
@@ -53,7 +56,7 @@ function Group({ id }) {
     <List className={classes.list}>
       {list.map(post => {
         const {
-          id,
+          postId,
           author,
           lastModified,
           title,
@@ -63,9 +66,13 @@ function Group({ id }) {
           reactions
         } = post
         return (
-          <Card key={id} className={classes.card}>
+          <Card key={postId} className={classes.card}>
             <div>{author}</div>
-            <div>{formatDate(lastModified)}</div>
+            <div>
+              <Link to={`/g/${groupId}/p/${postId}`}>
+                {formatDate(lastModified)}
+              </Link>
+            </div>
             <div>{title}</div>
             <div>{content}</div>
             <div>
@@ -103,6 +110,6 @@ function Group({ id }) {
 
 export default inject('store')(
   observer(({ store, match: { params: { groupId } } }) => (
-    <Group id={groupId} />
+    <Group groupId={groupId} />
   ))
 )

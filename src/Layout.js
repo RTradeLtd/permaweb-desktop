@@ -55,7 +55,6 @@ const useStyles = makeStyles(theme => ({
 function useLayout({ history }) {
   const navigateHome = () => history.push('/')
   const navigateToGroup = groupId => history.push(`/g/${groupId}`)
-  const navigateToPost = () => console.log('Layout: open file')
   const createFile = () => console.log('Layout: create file')
   const saveFile = () => console.log('Layout: save')
   const createGroup = () => console.log('Layout: create group')
@@ -69,7 +68,6 @@ function useLayout({ history }) {
     members,
     navigateHome,
     navigateToGroup,
-    navigateToPost,
     saveFile
   }
 }
@@ -82,7 +80,6 @@ const Layout = ({ store, children, history }) => {
     members,
     navigateHome,
     navigateToGroup,
-    navigateToPost,
     saveFile
   } = useLayout({
     history
