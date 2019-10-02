@@ -8,7 +8,7 @@ import {
   List,
   ListItem
 } from '@material-ui/core'
-import { makeStyles, useTheme } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 
 const DRAWER_WIDTH = 240
 const APPBAR_HEIGHT = 90
@@ -47,7 +47,8 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing(3)
+    padding: theme.spacing(3),
+    paddingTop: APPBAR_HEIGHT
   }
 }))
 
@@ -100,6 +101,7 @@ const Layout = ({ store, children, history }) => {
             })}
           </div>
           <div>Share</div>
+          <div>Edit</div>
         </div>
       </AppBar>
       <nav className={classes.drawer} aria-label="mailbox folders">

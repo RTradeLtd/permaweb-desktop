@@ -42,9 +42,9 @@ function App({ store }) {
             <Switch>
               <Route path="/404" component={NotFound} />
               <Route exact path="/" component={Home} />
-              <Route exact path="/g/:group" component={Group} />
-              <Route exact path="/g/:group/p/:post" component={Post} />
-              <Route exact path="/e/:group/:post" component={Edit} />
+              <Route exact path="/g/:groupId" component={Group} />
+              <Route exact path="/g/:groupId/p/:postId" component={Post} />
+              <Route exact path="/e/:groupId/:postId" component={Edit} />
               <Redirect from="*" to="/404" />
             </Switch>
           </Layout>

@@ -2,24 +2,18 @@ import React from 'react'
 import { observer, inject } from 'mobx-react'
 import FolderListing from '../components/FolderListing'
 import FileEntry from '../components/FileEntry'
+import MOCK_FILES from '../mocks/files'
 
-function useGroup(files) {
-  const folderListing = Object.keys(files).map(fileId => {
-    const latestEntry = files[fileId][0]
-    return {
-      id: fileId,
-      version: 0,
-      hash: latestEntry.hash,
-      fileKey: latestEntry.key,
-      title: latestEntry.stored.name
-    }
-  })
+function useGroup(id) {
+  // fetch group using id
+  // fetch files contents and map to list
+  const list = MOCK_FILES.filter(({ groupId }) => groupId === id)
 
-  return { folderListing }
+  return { list }
 }
 
-function Group({ files }) {
-  const { folderListing } = useGroup(files)
+function Group({ id }) {
+  const { list } = useGroup(id)
 
   const handleFileOpen = () => console.log('file open')
   const handleCopyLink = () => console.log('copy link')
@@ -28,7 +22,7 @@ function Group({ files }) {
 
   return (
     <FolderListing>
-      {folderListing.map(f => {
+      {list.map(f => {
         return (
           <FileEntry
             key={f.id}
@@ -45,5 +39,7 @@ function Group({ files }) {
 }
 
 export default inject('store')(
-  observer(({ store: { files } }) => <Group files={files} />)
+  observer(({ store, match: { params: { groupId } } }) => (
+    <Group id={groupId} />
+  ))
 )
