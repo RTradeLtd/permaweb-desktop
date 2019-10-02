@@ -5,11 +5,15 @@ const isDev = require('electron-is-dev')
 const { DaemonFactory } = require('@textile/go-daemon')
 const { default: Wallet, Keypair } = require('@textile/wallet')
 const bip39 = require('bip39')
-const keytar = require('keytar')
+const Store = require('electron-store')
 
-const PERMAWEB_SECRET = 'Permaweb secret'
-const PERMAWEB_APP_NAMESPACE = 'io.permaweb.desktop'
-const PERMAWEB_PINCODE = 1234
+const {
+  PERMAWEB_APP_NAMESPACE,
+  PERMAWEB_PINCODE,
+  PERMAWEB_IO_PEER_ID,
+  PERMAWEB_IO_CAFE_TOKEN
+} = process.env
+const store = new Store()
 
 let mainWindow
 
@@ -31,10 +35,7 @@ function generateSecret() {
 }
 
 async function getKeyPair() {
-  const potentialSecret = await keytar.getPassword(
-    PERMAWEB_APP_NAMESPACE,
-    PERMAWEB_SECRET
-  )
+  const potentialSecret = store.get(PERMAWEB_APP_NAMESPACE)
   const secret = potentialSecret || generateSecret()
   const keypair = Keypair.fromSecret(secret)
   return { keypair, secret }
@@ -42,8 +43,6 @@ async function getKeyPair() {
 
 function getRepoPath(address) {
   return path.join(app.getPath('userData'), address)
-  // should not need this when app gets installed
-  //.replace('Electron', 'Permaweb')
 }
 
 async function spawnDaemon({ secret, repoPath }) {
@@ -52,16 +51,31 @@ async function spawnDaemon({ secret, repoPath }) {
   // init if needed (first time user)
   if (!daemon.initialized) {
     await daemon.init(secret, { pincode: PERMAWEB_PINCODE })
-    await keytar.setPassword(PERMAWEB_APP_NAMESPACE, PERMAWEB_SECRET, secret)
+    store.set(PERMAWEB_APP_NAMESPACE, secret)
   }
   await daemon.start({ serveDocs: true, pincode: PERMAWEB_PINCODE })
+  return daemon
+}
+
+async function connectToCafe(daemon) {
+  try {
+    const { items: list } = await daemon.api.cafes.list()
+    if (list.find(({ id }) => id === PERMAWEB_IO_PEER_ID)) {
+      // already connected
+      return
+    }
+    await daemon.api.cafes.add(PERMAWEB_IO_PEER_ID, PERMAWEB_IO_CAFE_TOKEN)
+  } catch (err) {
+    console.log('Error connecting to cafe: ', err.toString())
+  }
 }
 
 app.on('ready', async () => {
   try {
     const { keypair, secret } = await getKeyPair()
     const repoPath = getRepoPath(keypair.publicKey())
-    await spawnDaemon({ secret, repoPath })
+    const daemon = await spawnDaemon({ secret, repoPath })
+    await connectToCafe(daemon)
     createWindow()
   } catch (err) {
     console.log('Error', err.toString())
