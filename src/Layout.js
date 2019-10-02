@@ -121,7 +121,7 @@ const Main = styled.main`
   height: calc(100vh - ${APPBAR_HEIGHT}px);
   overflow: auto;
   padding: 20px;
-  background: #fefefe;
+  background: #f0f0f0;
 `
 
 const Nav = styled.nav`
