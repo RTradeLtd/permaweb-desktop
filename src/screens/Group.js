@@ -1,19 +1,48 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
-import FolderListing from '../components/FolderListing'
-import FileEntry from '../components/FileEntry'
+import { Card, List } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
 import MOCK_FILES from '../mocks/files'
+
+const POST_ENFORCE_INTERFACE = {
+  groupId: -1,
+  id: -1,
+  lastModified: 0,
+  author: 'Error',
+  title: 'Error',
+  content: 'Error',
+  comments: [],
+  shares: [],
+  reactions: []
+}
+
+const formatDate = timeStamp => new Date(timeStamp).toLocaleString()
+
+const useStyles = makeStyles(theme => ({
+  list: {
+    width: '100%',
+    backgroundColor: theme.palette.background.paper,
+    color: theme.palette.text.primary
+  },
+  card: {
+    margin: '20px 0'
+  }
+}))
 
 function useGroup(id) {
   // fetch group using id
   // fetch files contents and map to list
-  const list = MOCK_FILES.filter(({ groupId }) => groupId === id)
+  const list = MOCK_FILES.filter(({ groupId }) => groupId === id).map(post => ({
+    ...POST_ENFORCE_INTERFACE,
+    ...post
+  }))
 
   return { list }
 }
 
 function Group({ id }) {
   const { list } = useGroup(id)
+  const classes = useStyles()
 
   const handleFileOpen = () => console.log('file open')
   const handleCopyLink = () => console.log('copy link')
@@ -21,20 +50,54 @@ function Group({ id }) {
   const handleDeleteFile = () => console.log('delete')
 
   return (
-    <FolderListing>
-      {list.map(f => {
+    <List className={classes.list}>
+      {list.map(post => {
+        const {
+          id,
+          author,
+          lastModified,
+          title,
+          content,
+          comments,
+          shares,
+          reactions
+        } = post
         return (
-          <FileEntry
-            key={f.id}
-            {...f}
-            onClick={handleFileOpen}
-            onCopyLink={handleCopyLink}
-            onShowHistory={handleShowHistory}
-            onDelete={handleDeleteFile}
-          />
+          <Card key={id} className={classes.card}>
+            <div>{author}</div>
+            <div>{formatDate(lastModified)}</div>
+            <div>{title}</div>
+            <div>{content}</div>
+            <div>
+              <div key="comment-count">Comments {comments.length}</div>
+              <div key="share-count">Shares {shares.length}</div>
+              <ul key="reactions">
+                Reactions:{' '}
+                {reactions.map((reaction, index) => (
+                  <span key={index}>{reaction}</span>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <div>Reply to {author}</div>
+              <textarea />
+              <button>Send</button>
+            </div>
+            <ul>
+              {comments.map((comment, index) => {
+                return (
+                  <li key={index}>
+                    <div>{author}</div>
+                    <div>{content}</div>
+                    <div>{formatDate(lastModified)}</div>
+                  </li>
+                )
+              })}
+            </ul>
+          </Card>
         )
       })}
-    </FolderListing>
+    </List>
   )
 }
 
