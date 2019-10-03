@@ -1,9 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { observer, inject } from 'mobx-react'
-import { makeStyles } from '@material-ui/core/styles'
 import PostCard from '../components/PostCard'
-import MOCK_FILES from '../mocks/files'
+import MOCK_FILES from '../mocks/files.json'
 
 const POST_ENFORCE_INTERFACE = {
   groupId: -1,
@@ -17,7 +16,7 @@ const POST_ENFORCE_INTERFACE = {
   reactions: []
 }
 
-function useGroup(groupId) {
+function useGroup(groupId: string) {
   // fetch group using id
   // fetch files contents and map to list
   const list = MOCK_FILES.filter(post => groupId === post.groupId).map(
@@ -30,18 +29,13 @@ function useGroup(groupId) {
   return { list }
 }
 
-export const Group = function({ groupId }) {
+export const Group = function({ groupId }: { groupId: string }) {
   const { list } = useGroup(groupId)
-
-  const handleFileOpen = () => console.log('file open')
-  const handleCopyLink = () => console.log('copy link')
-  const handleShowHistory = () => console.log('history')
-  const handleDeleteFile = () => console.log('delete')
 
   return (
     <List>
       {list.map(post => (
-        <PostCard post={post} />
+        <PostCard key={post.id} post={post} />
       ))}
     </List>
   )
@@ -57,7 +51,5 @@ const List = styled.ul`
 `
 
 export default inject('store')(
-  observer(({ store, match: { params: { groupId } } }) => (
-    <Group groupId={groupId} />
-  ))
+  observer(({ match: { params: { groupId } } }) => <Group groupId={groupId} />)
 )
