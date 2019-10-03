@@ -1,7 +1,7 @@
 import React from 'react'
 import { observer, inject } from 'mobx-react'
 import PostCard from '../components/PostCard'
-import MOCK_FILES from '../mocks/files'
+import MOCK_FILES from '../mocks/files.json'
 
 const POST_ENFORCE_INTERFACE = {
   groupId: -1,
@@ -15,9 +15,7 @@ const POST_ENFORCE_INTERFACE = {
   reactions: []
 }
 
-const formatDate = timeStamp => new Date(timeStamp).toLocaleString()
-
-function usePost(postId) {
+function usePost(postId: string) {
   const post = {
     ...POST_ENFORCE_INTERFACE,
     ...MOCK_FILES.find(post => post.postId === postId)
@@ -25,7 +23,7 @@ function usePost(postId) {
   return { post }
 }
 
-function Post({ postId }) {
+function Post({ postId }: { postId: string }) {
   const { post } = usePost(postId)
 
   return <PostCard post={post} />
