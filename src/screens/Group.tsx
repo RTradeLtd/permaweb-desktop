@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { observer, inject } from 'mobx-react'
 import PostCard from '../components/PostCard'
 import MOCK_FILES from '../mocks/files.json'
+import NewPostEntryControl from '../components/NewPostEntryControl'
 
 const POST_ENFORCE_INTERFACE = {
   groupId: -1,
@@ -33,11 +34,14 @@ export const Group = function({ groupId }: { groupId: string }) {
   const { list } = useGroup(groupId)
 
   return (
-    <List>
-      {list.map(post => (
-        <PostCard key={post.id} post={post} />
-      ))}
-    </List>
+    <div>
+      <NewPostEntryControl key={groupId} />
+      <List>
+        {list.map(post => (
+          <PostCard key={post.id} post={post} />
+        ))}
+      </List>
+    </div>
   )
 }
 
