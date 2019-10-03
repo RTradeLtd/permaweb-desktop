@@ -30,7 +30,7 @@ function useGroup(groupId) {
   return { list }
 }
 
-function Group({ groupId }) {
+export const Group = function({ groupId }) {
   const { list } = useGroup(groupId)
 
   const handleFileOpen = () => console.log('file open')
