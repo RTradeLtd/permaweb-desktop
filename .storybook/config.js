@@ -9,7 +9,6 @@ const StorybookFrame = storyFn => {
         rel="stylesheet"
         type="text/css"
       />
-      <h1>Boom</h1>
       {storyFn()}
     </div>
   )

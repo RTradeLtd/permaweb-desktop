@@ -28,6 +28,20 @@ export default function NewPostEntryControl() {
         value={text}
       />
       <PublishButtonRow>
+        <div>
+          <ActionButton>
+            <i className="fas fa-image"></i>Photo or Video
+          </ActionButton>
+          <ActionButton>
+            <i className="fas fa-laugh"></i>Emoji
+          </ActionButton>
+          <ActionButton>
+            <i className="fas fa-user-friends"></i>Tag someone
+          </ActionButton>
+          <ActionButton>
+            <i className="fas fa-file-image"></i>GIF
+          </ActionButton>
+        </div>
         <PublishButton onClick={handlePublish}>Post</PublishButton>
       </PublishButtonRow>
     </NewPostPanel>
@@ -50,15 +64,40 @@ const TextArea = styled.textarea`
 
 const PublishButtonRow = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+const lightblue = 'lightblue'
+const slightlyDarkerBlue = '#94aeb7'
+
+const ActionButton = styled.button`
+  height: 25px;
+  border: none;
+  background: inherit;
+  cursor: pointer;
+  color: darkgray;
+  line-height: 1rem;
+  vertical-align: text-top;
+  i {
+    margin-right: 5px;
+    vertical-align: top;
+    font-size: 1rem;
+  }
+  &:hover {
+    color: ${lightblue};
+  }
+  &:active {
+    color: ${slightlyDarkerBlue};
+  }
 `
 
 const PublishButton = styled.button`
-  align-self: flex-end;
   background: #395ca9;
   border-radius: 5px;
   border: none;
   color: white;
   width: 80px;
   height: 25px;
+  cursor: pointer;
 `
