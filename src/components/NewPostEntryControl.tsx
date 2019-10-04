@@ -48,10 +48,10 @@ const TextArea = styled.textarea`
 `
 
 const PublishButtonRow = styled.div`
-  height: 1.5rem;
+  display: flex;
+  flex-direction: column;
 `
 
 const PublishButton = styled.button`
-  float: right;
-  height: 1.5rem;
+  align-self: flex-end;
 `
