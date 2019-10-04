@@ -29,15 +29,7 @@ function useLayout({ history }) {
 }
 
 const Layout = ({ store, children, history }) => {
-  const {
-    createFile,
-    createGroup,
-    groups,
-    members,
-    navigateHome,
-    navigateToGroup,
-    saveFile
-  } = useLayout({
+  const { groups, members, navigateHome, navigateToGroup } = useLayout({
     history
   })
 
