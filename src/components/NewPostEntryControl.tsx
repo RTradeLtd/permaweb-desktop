@@ -20,9 +20,7 @@ export default function NewPostEntryControl() {
       <TextArea
         autoFocus={true}
         rows={3}
-        placeholder={
-          'Tell the world what it needs to hear (unless its about Dune, nobody cares about Dune)...'
-        }
+        placeholder={'Tell the world what it needs to hear ...'}
         onChange={handleChange}
         value={text}
       />
