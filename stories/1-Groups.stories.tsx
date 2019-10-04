@@ -7,7 +7,7 @@ const Frame = ({ children }: { children: JSX.Element | JSX.Element[] }) => {
   return (
     <div>
       <link
-        href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css"
         rel="stylesheet"
         type="text/css"
       />
