@@ -25,7 +25,7 @@ export default function NewPostEntryControl() {
         value={text}
       />
       <PublishButtonRow>
-        <PublishButton onClick={handlePublish}>Publish</PublishButton>
+        <PublishButton onClick={handlePublish}>Post</PublishButton>
       </PublishButtonRow>
     </NewPostPanel>
   )
@@ -52,4 +52,10 @@ const PublishButtonRow = styled.div`
 
 const PublishButton = styled.button`
   align-self: flex-end;
+  background: #395ca9;
+  border-radius: 5px;
+  border: none;
+  color: white;
+  width: 80px;
+  height: 25px;
 `
