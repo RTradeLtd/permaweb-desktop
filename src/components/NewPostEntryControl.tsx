@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 
+const newPostEntryControlPlaceholderText =
+  'Share a thought, or write your next novel'
+
 export default function NewPostEntryControl() {
   const [text, setText] = useState('')
 
@@ -20,7 +23,7 @@ export default function NewPostEntryControl() {
       <TextArea
         autoFocus={true}
         rows={3}
-        placeholder={'Tell the world what it needs to hear ...'}
+        placeholder={newPostEntryControlPlaceholderText}
         onChange={handleChange}
         value={text}
       />
