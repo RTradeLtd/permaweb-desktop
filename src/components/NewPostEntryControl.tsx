@@ -1,32 +1,34 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
+import SlateEditor, { defaultEditorValue } from './SlateEditor'
 
 const newPostEntryControlPlaceholderText =
   'Share a thought, or write your next novel'
 
 export default function NewPostEntryControl() {
-  const [text, setText] = useState('')
+  const [editorState, setEditorState] = useState(defaultEditorValue)
 
   const handleChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setText(e.target.value)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ({ value }: { value: any }) => {
+      setEditorState(value)
     },
-    [setText]
+    [setEditorState]
   )
 
   const handlePublish = useCallback(() => {
-    setText('')
-  }, [setText])
+    setEditorState(defaultEditorValue)
+  }, [setEditorState])
 
   return (
     <NewPostPanel>
-      <TextArea
-        autoFocus={true}
-        rows={3}
-        placeholder={newPostEntryControlPlaceholderText}
-        onChange={handleChange}
-        value={text}
-      />
+      <ComposerPanel>
+        <SlateEditor
+          onChange={handleChange}
+          placeholder={newPostEntryControlPlaceholderText}
+          value={editorState}
+        />
+      </ComposerPanel>
       <PublishButtonRow>
         <div>
           <ActionButton>
@@ -56,10 +58,17 @@ const NewPostPanel = styled.div`
   margin-bottom: 20px;
 `
 
-const TextArea = styled.textarea`
-  resize: vertical;
-  width: 100%;
-  margin-bottom: 0.25rem;
+const offblack = '#191919'
+
+const ComposerPanel = styled.div`
+  border: 1px lightgray solid;
+  min-height: 4rem;
+  margin-bottom: 5px;
+  padding: 5px;
+  .slate-editor {
+    color: ${offblack};
+    font-size: 18px;
+  }
 `
 
 const PublishButtonRow = styled.div`

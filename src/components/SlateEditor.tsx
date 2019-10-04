@@ -1,9 +1,8 @@
-import React, { useState, useCallback } from 'react'
+import React from 'react'
 import { Editor, RenderBlockProps } from 'slate-react'
 import { Value, Editor as EditorParam } from 'slate'
-import './SlateEditor.css'
 
-export const defaultEditorValue = {
+export const defaultEditorValue = Value.fromJSON({
   document: {
     nodes: [
       {
@@ -18,7 +17,7 @@ export const defaultEditorValue = {
       }
     ]
   }
-}
+})
 
 const renderBlock = (
   props: RenderBlockProps,
@@ -39,38 +38,23 @@ const renderBlock = (
 
 export interface SlateEditorProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onChange: (editorState: any) => void
+  value: any
+  placeholder?: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  initialValue: any
-  isReadOnly: boolean
+  onChange: (editorState: any) => void
 }
 
-const SlateEditor = ({
-  onChange,
-  initialValue,
-  isReadOnly
-}: SlateEditorProps) => {
-  const [editorState, setEditorState] = useState(
-    Value.fromJSON(initialValue || defaultEditorValue)
-  )
-  const handleEditorChange = useCallback(
-    ({ value }) => {
-      setEditorState(value)
-      onChange(value)
-    },
-    [setEditorState, onChange]
-  )
-
+const SlateEditor = ({ value, placeholder, onChange }: SlateEditorProps) => {
+  console.log(value)
   return (
-    <div>
-      <Editor
-        readOnly={isReadOnly}
-        value={editorState}
-        placeholder={'Create your article here...'}
-        onChange={handleEditorChange}
-        renderBlock={renderBlock}
-      />
-    </div>
+    <Editor
+      className={'slate-editor'}
+      readOnly={false}
+      value={value}
+      placeholder={placeholder}
+      onChange={onChange}
+      renderBlock={renderBlock}
+    />
   )
 }
 
