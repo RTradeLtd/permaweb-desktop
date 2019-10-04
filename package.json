@@ -17,6 +17,7 @@
     "@textile/wallet": "^0.2.2",
     "@types/slate": "^0.47.1",
     "@types/slate-react": "^0.22.5",
+    "@types/styled-components": "^4.1.19",
     "bip39": "^3.0.2",
     "ed25519": "0.0.4",
     "electron-is-dev": "^1.1.0",
