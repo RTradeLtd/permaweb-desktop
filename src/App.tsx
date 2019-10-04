@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
 import {
   BrowserRouter as Router,
   Redirect,
@@ -52,10 +51,6 @@ function App({ store }: { store: Store }) {
       <SemanticToastContainer />
     </Router>
   )
-}
-
-App.propTypes = {
-  store: PropTypes.object
 }
 
 export default inject('store')(observer(({ store }) => <App store={store} />))
