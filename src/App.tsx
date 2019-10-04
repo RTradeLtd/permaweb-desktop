@@ -20,6 +20,7 @@ import NotFound from './screens/NotFound'
 import StoreStatus from './components/StoreStatus'
 
 import 'react-semantic-toasts/styles/react-semantic-alert.css'
+import Store from './Store'
 
 const theme = createMuiTheme({
   palette: {
@@ -27,7 +28,7 @@ const theme = createMuiTheme({
   }
 })
 
-function App({ store }) {
+function App({ store }: { store: Store }) {
   useEffect(() => {
     store.getFiles()
   }, [])
