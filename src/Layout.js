@@ -5,7 +5,8 @@ import { observer, inject } from 'mobx-react'
 import { ListItemText, List, ListItem } from '@material-ui/core'
 
 const DRAWER_WIDTH = 240
-const APPBAR_HEIGHT = 80
+const HEADER_HEIGHT = 80
+const FOOTER_HEIGHT = 60
 const BACKGROUND = '#3fb55e'
 
 function useLayout({ history }) {
@@ -35,7 +36,7 @@ const Layout = ({ store, children, history }) => {
 
   return (
     <Section>
-      <AppBar>
+      <Header>
         <Title>
           <Img
             src="https://picsum.photos/seed/picsum/50/50"
@@ -44,7 +45,7 @@ const Layout = ({ store, children, history }) => {
           Permaweb
         </Title>
         <Bar>
-          <h2>Group name</h2>
+          <Sub>Group name</Sub>
           <Info>
             <div>90</div>
             <Members maxCount={5}>
@@ -62,7 +63,7 @@ const Layout = ({ store, children, history }) => {
             <div>Edit</div>
           </Info>
         </Bar>
-      </AppBar>
+      </Header>
       <Wrap>
         <Nav>
           <List>
@@ -83,76 +84,79 @@ const Layout = ({ store, children, history }) => {
               <ListItemText primary={'Create a groupt'} />
             </ListItem>
           </List>
-          <Profile>
-            <Img src="https://picsum.photos/seed/picsum/30/30" alt="avatar" />
-            <div>Shokunin</div>
-            <div>Edit</div>
-          </Profile>
         </Nav>
         <Main>{children}</Main>
       </Wrap>
+      <Footer>
+        <Profile>
+          <Img src="https://picsum.photos/seed/picsum/30/30" alt="avatar" />
+          <div>Shokunin</div>
+          <div>Edit</div>
+        </Profile>
+        <Copyright>© Permaweb</Copyright>
+      </Footer>
     </Section>
   )
 }
 
-const AppBar = styled.header`
+/* section */
+const Section = styled.section`
+  display: grid;
+  grid-template-rows: ${HEADER_HEIGHT}px 1fr ${FOOTER_HEIGHT}px;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+`
+
+const Header = styled.header`
   display: grid;
   grid-template-columns: ${DRAWER_WIDTH}px 1fr;
-  height: ${APPBAR_HEIGHT}px;
+  height: ${HEADER_HEIGHT}px;
   background: ${BACKGROUND};
 `
 
 const Wrap = styled.div`
   display: grid;
   grid-template-columns: ${DRAWER_WIDTH}px 1fr;
-`
-
-const Main = styled.main`
-  height: calc(100vh - ${APPBAR_HEIGHT}px);
   overflow: auto;
-  padding: 20px;
-  background: #f0f0f0;
 `
 
-const Nav = styled.nav`
-  height: calc(100vh - ${APPBAR_HEIGHT}px);
+const Footer = styled.footer`
   display: grid;
-  grid-template-rows: 1fr auto 80px;
-  padding: 0 5px;
+  grid-template-columns: ${DRAWER_WIDTH}px 1fr;
+  height: ${FOOTER_HEIGHT}px;
+  background: ${BACKGROUND};
 `
 
+/* header */
 const Title = styled.h1`
   display: grid;
   grid-template-columns: auto auto;
   grid-gap: 10px;
   align-items: center;
+  height: ${HEADER_HEIGHT}px;
   padding: 0 20px;
 `
 
-const Img = styled.img`
-  border-radius: 50%;
-`
-
-const Section = styled.section`
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-`
-
 const Bar = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: auto 1fr;
   align-items: center;
-  justify-content: space-between;
+  height: ${HEADER_HEIGHT}px;
   padding: 0 10px;
 `
 
+const Sub = styled.h2`
+  padding: 0;
+  margin: 0;
+`
+
 const Info = styled.div`
-  display: grid;
+  display: inline-grid;
   grid-template-columns: auto auto auto auto;
   grid-gap: 5px;
   align-items: center;
+  margin-left: auto;
 `
 
 const Members = styled.div`
@@ -161,12 +165,40 @@ const Members = styled.div`
   grid-gap: 5px;
 `
 
+/* wrap */
+const Main = styled.main`
+  height: 100%;
+  overflow: auto;
+  padding: 20px;
+  background: #f0f0f0;
+`
+
+const Nav = styled.nav`
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: 0 5px;
+`
+
+/* footer */
 const Profile = styled.div`
   display: grid;
   grid-template-columns: auto 1fr auto;
   grid-gap: 10px;
   align-items: center;
   padding: 0 10px;
+`
+
+const Copyright = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 20px;
+`
+
+/* common */
+const Img = styled.img`
+  border-radius: 50%;
 `
 
 export default inject('store')(observer(withRouter(Layout)))
