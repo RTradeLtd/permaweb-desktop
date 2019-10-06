@@ -4,7 +4,7 @@
   "description": "Permaweb Desktop Application",
   "author": {
     "name": "Permaweb Developers",
-    "email": "hello@permaweb.io"
+    "email": "admin@permaweb.io"
   },
   "private": true,
   "dependencies": {
