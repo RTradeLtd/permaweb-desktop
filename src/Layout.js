@@ -6,7 +6,10 @@ import { ListItemText, List, ListItem } from '@material-ui/core'
 
 const DRAWER_WIDTH = 240
 const APPBAR_HEIGHT = 80
-const BACKGROUND = '#3578E5'
+const HEADER_HEIGHT = 80
+const FOOTER_HEIGHT = 60
+const BACKGROUND = '3578E5'
+
 
 function useLayout({ history }) {
   const navigateHome = () => history.push('/')
@@ -29,21 +32,13 @@ function useLayout({ history }) {
 }
 
 const Layout = ({ store, children, history }) => {
-  const {
-    createFile,
-    createGroup,
-    groups,
-    members,
-    navigateHome,
-    navigateToGroup,
-    saveFile
-  } = useLayout({
+  const { groups, members, navigateHome, navigateToGroup } = useLayout({
     history
   })
 
   return (
     <Section>
-      <AppBar>
+      <Header>
         <Title>
           <Img
             src="https://picsum.photos/seed/picsum/50/50"
@@ -52,7 +47,7 @@ const Layout = ({ store, children, history }) => {
           Permaweb
         </Title>
         <Bar>
-          <h2>Group name</h2>
+          <Sub>Group name</Sub>
           <Info>
             <div>90</div>
             <Members maxCount={5}>
@@ -70,8 +65,8 @@ const Layout = ({ store, children, history }) => {
             <div>Edit</div>
           </Info>
         </Bar>
-      </AppBar>
-      <Wrap>
+      </Header>
+      <Content>
         <Nav>
           <List>
             <ListItem button key={'home'} onClick={navigateHome}>
@@ -91,76 +86,79 @@ const Layout = ({ store, children, history }) => {
               <ListItemText primary={'Create a groupt'} />
             </ListItem>
           </List>
-          <Profile>
-            <Img src="https://picsum.photos/seed/picsum/30/30" alt="avatar" />
-            <div>Shokunin</div>
-            <div>Edit</div>
-          </Profile>
         </Nav>
         <Main>{children}</Main>
-      </Wrap>
+      </Content>
+      <Footer>
+        <Profile>
+          <Img src="https://picsum.photos/seed/picsum/30/30" alt="avatar" />
+          <div>Shokunin</div>
+          <div>Edit</div>
+        </Profile>
+        <Copyright>© Permaweb</Copyright>
+      </Footer>
     </Section>
   )
 }
 
-const AppBar = styled.header`
-  display: grid;
-  grid-template-columns: ${DRAWER_WIDTH}px 1fr;
-  height: ${APPBAR_HEIGHT}px;
-  background: ${BACKGROUND};
-`
-
-const Wrap = styled.div`
-  display: grid;
-  grid-template-columns: ${DRAWER_WIDTH}px 1fr;
-`
-
-const Main = styled.main`
-  height: calc(100vh - ${APPBAR_HEIGHT}px);
-  overflow: auto;
-  padding: 20px;
-  background: #f0f0f0;
-`
-
-const Nav = styled.nav`
-  height: calc(100vh - ${APPBAR_HEIGHT}px);
-  display: grid;
-  grid-template-rows: 1fr auto 80px;
-  padding: 0 5px;
-`
-
-const Title = styled.h1`
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-gap: 10px;
-  align-items: center;
-  padding: 0 20px;
-`
-
-const Img = styled.img`
-  border-radius: 50%;
-`
-
+/* section */
 const Section = styled.section`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: ${HEADER_HEIGHT}px 1fr ${FOOTER_HEIGHT}px;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
 `
 
-const Bar = styled.div`
-  display: flex;
+const Header = styled.header`
+  display: grid;
+  grid-template-columns: ${DRAWER_WIDTH}px 1fr;
+  height: ${HEADER_HEIGHT}px;
+  background: ${BACKGROUND};
+`
+
+const Content = styled.div`
+  display: grid;
+  grid-template-columns: ${DRAWER_WIDTH}px 1fr;
+  overflow: auto;
+`
+
+const Footer = styled.footer`
+  display: grid;
+  grid-template-columns: ${DRAWER_WIDTH}px 1fr;
+  height: ${FOOTER_HEIGHT}px;
+  background: ${BACKGROUND};
+`
+
+/* header */
+const Title = styled.h1`
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-gap: 10px;
   align-items: center;
-  justify-content: space-between;
+  height: ${HEADER_HEIGHT}px;
+  padding: 0 20px;
+`
+
+const Bar = styled.div`
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  height: ${HEADER_HEIGHT}px;
   padding: 0 10px;
 `
 
+const Sub = styled.h2`
+  padding: 0;
+  margin: 0;
+`
+
 const Info = styled.div`
-  display: grid;
+  display: inline-grid;
   grid-template-columns: auto auto auto auto;
   grid-gap: 5px;
   align-items: center;
+  margin-left: auto;
 `
 
 const Members = styled.div`
@@ -169,12 +167,40 @@ const Members = styled.div`
   grid-gap: 5px;
 `
 
+/* content */
+const Nav = styled.nav`
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  padding: 0 5px;
+`
+
+const Main = styled.main`
+  height: 100%;
+  overflow: auto;
+  padding: 20px;
+  background: #f0f0f0;
+`
+
+/* footer */
 const Profile = styled.div`
   display: grid;
   grid-template-columns: auto 1fr auto;
   grid-gap: 10px;
   align-items: center;
   padding: 0 10px;
+`
+
+const Copyright = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 20px;
+`
+
+/* common */
+const Img = styled.img`
+  border-radius: 50%;
 `
 
 export default inject('store')(observer(withRouter(Layout)))

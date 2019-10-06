@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
 import {
   BrowserRouter as Router,
   Redirect,
@@ -20,6 +19,7 @@ import NotFound from './screens/NotFound'
 import StoreStatus from './components/StoreStatus'
 
 import 'react-semantic-toasts/styles/react-semantic-alert.css'
+import Store from './Store'
 
 const theme = createMuiTheme({
   palette: {
@@ -27,7 +27,7 @@ const theme = createMuiTheme({
   }
 })
 
-function App({ store }) {
+function App({ store }: { store: Store }) {
   useEffect(() => {
     store.getFiles()
   }, [])
@@ -51,10 +51,6 @@ function App({ store }) {
       <SemanticToastContainer />
     </Router>
   )
-}
-
-App.propTypes = {
-  store: PropTypes.object
 }
 
 export default inject('store')(observer(({ store }) => <App store={store} />))
