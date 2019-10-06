@@ -6,7 +6,7 @@ import { ListItemText, List, ListItem } from '@material-ui/core'
 
 const DRAWER_WIDTH = 240
 const APPBAR_HEIGHT = 80
-const BACKGROUND = '#3fb55e'
+const BACKGROUND = '#3578E5'
 
 function useLayout({ history }) {
   const navigateHome = () => history.push('/')
