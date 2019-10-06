@@ -64,7 +64,7 @@ const Layout = ({ store, children, history }) => {
           </Info>
         </Bar>
       </Header>
-      <Wrap>
+      <Content>
         <Nav>
           <List>
             <ListItem button key={'home'} onClick={navigateHome}>
@@ -86,7 +86,7 @@ const Layout = ({ store, children, history }) => {
           </List>
         </Nav>
         <Main>{children}</Main>
-      </Wrap>
+      </Content>
       <Footer>
         <Profile>
           <Img src="https://picsum.photos/seed/picsum/30/30" alt="avatar" />
@@ -115,7 +115,7 @@ const Header = styled.header`
   background: ${BACKGROUND};
 `
 
-const Wrap = styled.div`
+const Content = styled.div`
   display: grid;
   grid-template-columns: ${DRAWER_WIDTH}px 1fr;
   overflow: auto;
@@ -165,19 +165,19 @@ const Members = styled.div`
   grid-gap: 5px;
 `
 
-/* wrap */
-const Main = styled.main`
-  height: 100%;
-  overflow: auto;
-  padding: 20px;
-  background: #f0f0f0;
-`
-
+/* content */
 const Nav = styled.nav`
   height: 100%;
   display: grid;
   grid-template-rows: 1fr auto;
   padding: 0 5px;
+`
+
+const Main = styled.main`
+  height: 100%;
+  overflow: auto;
+  padding: 20px;
+  background: #f0f0f0;
 `
 
 /* footer */
