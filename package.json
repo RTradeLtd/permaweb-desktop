@@ -15,6 +15,7 @@
     "@textile/go-textile-dep": "^0.6.5",
     "@textile/js-http-client": "0.2.11",
     "@textile/wallet": "^0.2.2",
+    "@types/react-router": "^5.1.1",
     "@types/slate": "^0.47.1",
     "@types/slate-react": "^0.22.5",
     "bip39": "^3.0.2",
