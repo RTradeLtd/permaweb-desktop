@@ -1,8 +1,10 @@
 matrix:
   include:
     - os: osx
+      osx_image: xcode10.2
       env: TARGET_OS=macos
     - os: osx
+      osx_image: xcode10.2
       env: TARGET_OS=windows
     - os: linux
       env: TARGET_OS=linux
