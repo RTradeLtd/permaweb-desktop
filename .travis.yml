@@ -3,8 +3,7 @@ matrix:
     - os: osx
       osx_image: xcode10.2
       env: TARGET_OS=macos
-    - os: osx
-      osx_image: xcode10.2
+    - os: linux
       env: TARGET_OS=windows
     - os: linux
       env: TARGET_OS=linux
@@ -13,16 +12,11 @@ language: node_js
 node_js:
   - '10'
 
-cache:
-  directories:
-    - $HOME/Library/Caches/Homebrew
-    - /usr/local/Homebrew
-
-before_cache:
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then brew cleanup; fi
-  # Credit https://discourse.brew.sh/t/best-practice-for-homebrew-on-travis-brew-update-is-5min-to-build-time/5215/9
-  # Cache only .git files under "/usr/local/Homebrew" so "brew update" does not take 5min every build
-  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then find /usr/local/Homebrew \! -regex ".+\.git.+" -delete; fi
+addons:
+  apt:
+    update: true
+    packages:
+      - libssl-dev
 
 before_install:
   # macos
