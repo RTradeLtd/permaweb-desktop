@@ -129,17 +129,17 @@ jobs:
             #- output
       #- store_artifacts:
           #path: ~/output
-  #release:
-    #docker:
-      #- image: cibuilds/github:0.10
-    #steps:
-      #- checkout
-      #- attach_workspace:
-          #at: ~/
-      #- deploy:
-          #name: Release Installers
-          #command: |
-            #ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ~/output/
+  release:
+    docker:
+      - image: cibuilds/github:0.10
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - deploy:
+          name: Release Installers
+          command: |
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ~/output/
 
 workflows:
   version: 2
@@ -169,15 +169,15 @@ workflows:
                 #- develop
             #tags:
               #only: /.*/
-      #- release:
-          #requires:
-            #- build-linux
-            ##- build-win
-            ##- build-macos
-          #filters:
-            #branches:
-              #only:
-                #- master
-                #- develop
-            #tags:
-              #only: /^v.*
+      - release:
+          requires:
+            - build-linux
+            #- build-win
+            #- build-macos
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+            tags:
+              only: /^v.*
