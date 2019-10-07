@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build-linux:
     docker:
-      - image: electronuserland/builder:wine
+      - image: circleci/node:current
     working_directory: ~/permaweb
     steps:
       - checkout
@@ -26,14 +26,12 @@ jobs:
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: dependencies-{{ checksum "package.json" }}
       - run:
           name: Collect Artifacts
           command: |
             VERSION=v$(node -p "require('./package.json').version")
-            if [ "${CIRCLE_TAG}" != "" ]; then
-                VERSION=${CIRCLE_TAG}
-            fi
+            echo VERSION
             OUT=~/output
             mkdir -p ${OUT}
             mv ~/permaweb/dist/Permaweb-${VERSION}.{exe} ${OUT}/
