@@ -1,55 +1,54 @@
-os:
-  - linux
-  - osx
-  - windows
-
 matrix:
-  allow_failures:
-    - os: windows
-
-dist: xenial
-
-addons:
-  apt:
-    update: true
-    packages:
-      - bsdtar
-      - build-essential
-      - g++-multilib
-      - gcc-multilib
-      - libopenjp2-tools
-      - python
-      - rpm
-      - snapcraft
+  include:
+    - os: osx
+      env: TARGET_OS=macos
+    - os: osx
+      env: TARGET_OS=windows
+    - os: linux
+      env: TARGET_OS=linux
 
 language: node_js
 node_js:
-  - "11"
+  - '10'
 
 cache:
-  yarn: true
   directories:
-    - node_modules
+    - $HOME/Library/Caches/Homebrew
+    - /usr/local/Homebrew
+
+before_cache:
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then brew cleanup; fi
+  # Credit https://discourse.brew.sh/t/best-practice-for-homebrew-on-travis-brew-update-is-5min-to-build-time/5215/9
+  # Cache only .git files under "/usr/local/Homebrew" so "brew update" does not take 5min every build
+  - if [ "${TRAVIS_OS_NAME}" = "osx" ]; then find /usr/local/Homebrew \! -regex ".+\.git.+" -delete; fi
 
 before_install:
-    # Windows
-  # Install
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install openssl.light --params "/InstallDir:C:\\OpenSSL-Win64\\" ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install -y vcbuildtools -ia "/Full" ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then choco install python2 vcredist-all ; fi
-  # Configure
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then npm config set python python2.7 ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "windows" ]]; then npm config set msvs_version 2017 ; fi
-    # MacOS
-  # Install
+  # macos
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install openssl ; fi
-  # Configure
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ln -s /usr/local/opt/openssl/include/openssl /usr/local/include ; fi
 
 install:
+  - curl https://api.github.com/?access_token=$GITHUB_PAT
   - yarn install
+  - yarn add @textile/go-textile-dep
 
 script:
+  # windows
+  - if [ "$TARGET_OS" == "windows" ]; then echo env ; fi
+  # linux and macos
+  - yarn exec electron-builder install-app-deps
   - yarn build
-  - yarn dist
+  - yarn dist --$TARGET_OS
+
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key: $GITHUB_PAT
+  file_glob: true
+  file:
+    - 'dist/Permaweb-*.AppImage'
+    - 'dist/Permaweb-*.exe'
+    - 'dist/Permaweb-*.dmg'
+  on:
+    tags: true
