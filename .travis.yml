@@ -4,6 +4,8 @@ matrix:
       osx_image: xcode10.2
       env: TARGET_OS=macos
     - os: linux
+      services: docker
+      language: generic
       env: TARGET_OS=windows
     - os: linux
       env: TARGET_OS=linux
@@ -33,10 +35,18 @@ install:
 script:
   # windows
   - if [ "$TARGET_OS" == "windows" ]; then echo env ; fi
+  - |
+    if [ "$TARGET_OS" == "windows" ]; then
+      docker run --rm \
+        --env-file <(env | grep -iE 'DEBUG|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|_TOKEN|_KEY|AWS_|STRIP|BUILD_') \
+        -v ${PWD}:/project \
+        electronuserland/builder:wine \
+        /bin/bash -c "yarn && yarn exec electron-builder install-app-deps && yarn build && yarn dist --windows"
+    fi
   # linux and macos
-  - yarn exec electron-builder install-app-deps
-  - yarn build
-  - yarn dist --$TARGET_OS
+  - if [ "$TARGET_OS" != "windows" ]; then yarn exec electron-builder install-app-deps ; fi
+  - if [ "$TARGET_OS" != "windows" ]; then yarn build ; fi
+  - if [ "$TARGET_OS" != "windows" ]; then yarn dist --$TARGET_OS ; fi
 
 deploy:
   provider: releases
