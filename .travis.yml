@@ -34,7 +34,7 @@ script:
   # windows
   - if [ "$TARGET_OS" == "windows" ]; then echo env ; fi
   # linux and macos
-  - yarn exec electron-rebuild
+  - yarn exec electron-builder install-app-deps
   - yarn build
   - yarn dist --$TARGET_OS
 
