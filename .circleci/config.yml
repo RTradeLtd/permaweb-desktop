@@ -135,7 +135,7 @@ workflows:
               only:
                 - master
                 - develop
-                #- feature/builds
+                - feature/builds
             tags:
               only: /.*/
       - build-win:
@@ -144,7 +144,7 @@ workflows:
               only:
                 - master
                 - develop
-                #- feature/builds
+                - feature/builds
             tags:
               only: /.*/
       - build-macos:
@@ -156,16 +156,16 @@ workflows:
                 - feature/builds
             tags:
               only: /.*/
-      #- release:
-          #requires:
-            #- build-linux
-            #- build-win
-            #- build-macos
-          #filters:
-            #branches:
-              #only:
-                #- master
-                #- develop
-                #- feature/builds
-            #tags:
-              #only: /^v.*
+      - release:
+          requires:
+            - build-linux
+            - build-win
+            - build-macos
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+                - feature/builds
+            tags:
+              only: /^v.*
