@@ -26,7 +26,6 @@ jobs:
       - run:
           name: Collect Artifacts
           command: |
-            ls dist
             VERSION=v$(node -p "require('./package.json').version")
             echo VERSION
             OUT=~/output
@@ -63,7 +62,6 @@ jobs:
       - run:
           name: Collect Artifacts
           command: |
-            ls dist
             VERSION=v$(node -p "require('./package.json').version")
             OUT=~/output
             mkdir -p ${OUT}
@@ -74,52 +72,45 @@ jobs:
             - output
       - store_artifacts:
           path: ~/output
-  #build-macos:
-    #macos:
-      #xcode: '10.2.0'
-    #working_directory: ~/permaweb
-    #steps:
-      #- checkout
-      #- run:
-          #name: Install Dependencies
-          #command: |
-            #yarn install
-      #- run:
-          #name: Rebuild deps for electron node version
-          #command: |
-            #yarn exec electron-rebuild
-      #- run:
-          #name: Create build
-          #command: |
-            #yarn build
-      #- run:
-          #name: Link SSL
-          #command: |
-            #ln -s /usr/local/opt/openssl/include/openssl/ /usr/local/include/
-      #- run:
-          #name: Build Installers
-          #command: |
-            #yarn dist-mac
-      #- save_cache:
-          #paths:
-            #- node_modules
-          #key: v1-dependencies-{{ checksum "package.json" }}
-      #- run:
-          #name: Collect Artifacts
-          #command: |
-            #VERSION=v$(node -p "require('./package.json').version")
-            #if [ "${CIRCLE_TAG}" != "" ]; then
-                #VERSION=${CIRCLE_TAG}
-            #fi
-            #OUT=~/output
-            #mkdir -p ${OUT}
-            #mv ~/permaweb/dist/Permaweb-${VERSION}.dmg ${OUT}/
-      #- persist_to_workspace:
-          #root: ~/
-          #paths:
-            #- output
-      #- store_artifacts:
-          #path: ~/output
+  build-macos:
+    macos:
+      xcode: '10.2.0'
+    working_directory: ~/permaweb
+    steps:
+      - checkout
+      - run:
+          name: Link SSL
+          command: |
+            ln -s /usr/local/opt/openssl/include/openssl/ /usr/local/include/
+      - run:
+          name: Install Dependencies
+          command: |
+            yarn install
+      - run:
+          name: Rebuild deps for electron node version
+          command: |
+            yarn exec electron-builder install-app-deps
+      - run:
+          name: Create build
+          command: |
+            yarn build
+      - run:
+          name: Build Installers
+          command: |
+            yarn dist --macos
+      - run:
+          name: Collect Artifacts
+          command: |
+            VERSION=v$(node -p "require('./package.json').version")
+            OUT=~/output
+            mkdir -p ${OUT}
+            mv ~/permaweb/dist/Permaweb-${VERSION}.dmg ${OUT}/
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output
+      - store_artifacts:
+          path: ~/output
   #release:
     #docker:
       #- image: cibuilds/github:0.10
@@ -154,15 +145,15 @@ workflows:
                 - feature/builds
             tags:
               only: /.*/
-      #- build-macos:
-          #filters:
-            #branches:
-              #only:
-                #- master
-                #- develop
-                #- feature/builds
-            #tags:
-              #only: /.*/
+      - build-macos:
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+                - feature/builds
+            tags:
+              only: /.*/
       #- release:
           #requires:
             #- build-linux
