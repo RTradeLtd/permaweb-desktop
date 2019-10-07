@@ -22,11 +22,7 @@ jobs:
       - run:
           name: Build Installers
           command: |
-            yarn dist-linux
-      - save_cache:
-          paths:
-            - node_modules
-          key: dependencies-{{ checksum "package.json" }}
+            yarn dist --linux
       - run:
           name: Collect Artifacts
           command: |
