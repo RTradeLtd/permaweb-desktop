@@ -1,4 +1,5 @@
 version: 2.1
+
 jobs:
   build-linux:
     docker:
@@ -170,15 +171,15 @@ workflows:
                 #- develop
             #tags:
               #only: /.*/
-      - release:
-          requires:
-            - build-linux
-            #- build-win
-            #- build-macos
-          filters:
-            branches:
-              only:
-                - master
-                - develop
-            tags:
-              only: /^v.*
+      #- release:
+          #requires:
+            #- build-linux
+            ##- build-win
+            ##- build-macos
+          #filters:
+            #branches:
+              #only:
+                #- master
+                #- develop
+            #tags:
+              #only: /^v.*
