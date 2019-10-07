@@ -5,7 +5,6 @@ import { observer, inject } from 'mobx-react'
 import { ListItemText, List, ListItem } from '@material-ui/core'
 
 const DRAWER_WIDTH = 240
-const APPBAR_HEIGHT = 80
 const HEADER_HEIGHT = 80
 const FOOTER_HEIGHT = 60
 const BACKGROUND = '3578E5'

@@ -13,6 +13,7 @@
     "@textile/go-daemon": "^0.1.1",
     "@textile/js-http-client": "0.2.11",
     "@textile/wallet": "^0.2.2",
+    "@types/emoji-mart": "^2.11.0",
     "bip39": "^3.0.2",
     "ed25519": "0.0.4",
     "electron-is-dev": "^1.1.0",

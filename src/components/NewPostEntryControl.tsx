@@ -1,12 +1,15 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
 import SlateEditor, { defaultEditorValue } from './SlateEditor'
+import 'emoji-mart/css/emoji-mart.css'
+import { Picker } from 'emoji-mart'
 
 const newPostEntryControlPlaceholderText =
   'Share a thought, or write your next novel'
 
 export default function NewPostEntryControl() {
   const [editorState, setEditorState] = useState(defaultEditorValue)
+  const [emojiPickerVisible, setEmojiPickerVisible] = useState(true)
 
   const handleChange = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -19,6 +22,14 @@ export default function NewPostEntryControl() {
   const handlePublish = useCallback(() => {
     setEditorState(defaultEditorValue)
   }, [setEditorState])
+
+  const toggleEmojiPicker = () => {
+    setEmojiPickerVisible(!emojiPickerVisible)
+  }
+
+  const addEmojiToEditor = () => {
+    console.log(editorState, 'editorState')
+  }
 
   return (
     <NewPostPanel>
@@ -34,7 +45,7 @@ export default function NewPostEntryControl() {
           <ActionButton>
             <i className="fas fa-image"></i>Photo or Video
           </ActionButton>
-          <ActionButton>
+          <ActionButton onClick={toggleEmojiPicker}>
             <i className="fas fa-laugh"></i>Emoji
           </ActionButton>
           <ActionButton>
@@ -43,6 +54,11 @@ export default function NewPostEntryControl() {
           <ActionButton>
             <i className="fas fa-file-image"></i>GIF
           </ActionButton>
+          {
+            emojiPickerVisible ?
+              <Picker style={{ position: 'absolute', left: '460px' }} onSelect={addEmojiToEditor} /> :
+              null
+          }
         </div>
         <PublishButton onClick={handlePublish}>Post</PublishButton>
       </PublishButtonRow>
