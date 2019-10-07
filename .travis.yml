@@ -31,8 +31,9 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ln -s /usr/local/opt/openssl/include/openssl /usr/local/include ; fi
 
 install:
-  - curl https://api.github.com/?access_token=$GITHUB_PAT
   - yarn install
+  - curl https://api.github.com/?access_token=$GITHUB_PAT
+  - curl https://api.github.com/rate_limit
   - yarn add @textile/go-textile-dep
 
 script:
