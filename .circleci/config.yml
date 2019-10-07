@@ -146,7 +146,15 @@ workflows:
   version: 2
   permaweb-desktop:
     jobs:
-      - build-win-linux:
+      - build-linux:
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+            tags:
+              only: /.*/
+      - build-win:
           filters:
             branches:
               only:
@@ -164,7 +172,8 @@ workflows:
               only: /.*/
       - release:
           requires:
-            - build-win-linux
+            - build-win
+            - build-linux
             - build-macos
           filters:
             branches:
