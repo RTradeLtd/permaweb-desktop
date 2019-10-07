@@ -1,8 +1,10 @@
 matrix:
   include:
     - os: osx
+      osx_image: xcode10.2
       env: TARGET_OS=macos
     - os: osx
+      osx_image: xcode10.2
       env: TARGET_OS=windows
     - os: linux
       env: TARGET_OS=linux
@@ -37,7 +39,7 @@ script:
   # windows
   - if [ "$TARGET_OS" == "windows" ]; then echo env ; fi
   # linux and macos
-  - yarn exec electron-builder install-app-deps
+  - yarn exec electron-rebuild
   - yarn build
   - yarn dist --$TARGET_OS
 
