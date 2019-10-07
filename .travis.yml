@@ -31,6 +31,7 @@ before_install:
 install:
   - curl https://api.github.com/?access_token=$GITHUB_PAT
   - yarn install
+  - npm i @textile/go-textile-dep
 
 script:
   # windows
