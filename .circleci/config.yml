@@ -26,6 +26,7 @@ jobs:
       - run:
           name: Collect Artifacts
           command: |
+            ls
             VERSION=v$(node -p "require('./package.json').version")
             echo VERSION
             OUT=~/output
