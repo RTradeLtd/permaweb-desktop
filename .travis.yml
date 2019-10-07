@@ -26,7 +26,7 @@ before_install:
 
 install:
   - yarn install
-  - curl https://api.github.com/?access_token=$GITHUB_PAT
+  - curl -u AquiGorka:$GITHUB_PAT https://api.github.com/user
   - curl https://api.github.com/rate_limit
   - yarn add @textile/go-textile-dep
 
