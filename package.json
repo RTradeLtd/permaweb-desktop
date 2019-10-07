@@ -81,7 +81,7 @@
     "format": "prettier --write \"./src/**/*.{tsx,ts,js}\" \"./stories/**/*.{tsx,ts,js}\"",
     "eject": "react-scripts eject",
     "pack": "electron-builder --dir",
-    "dist": "build --x64 --c.extraMetadata.main=public/electron.js -c.asarUnpack=**/node_modules/@textile/go-textile-dep/**/*",
+    "dist": "electron-builder --x64 --c.extraMetadata.main=public/electron.js -c.asarUnpack=**/node_modules/@textile/go-textile-dep/**/*",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "preelectron-pack": "yarn build",
     "release": "build",
