@@ -5,7 +5,6 @@ matrix:
       env: TARGET_OS=macos
     - os: linux
       services: docker
-      language: generic
       env: TARGET_OS=windows
     - os: linux
       env: TARGET_OS=linux
