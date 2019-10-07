@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   build-linux:
     docker:
-      - image: circleci/node:current
+      - image: circleci/node:10
     working_directory: ~/permaweb
     steps:
       - checkout
@@ -34,7 +34,7 @@ jobs:
             echo VERSION
             OUT=~/output
             mkdir -p ${OUT}
-            mv ~/permaweb/dist/Permaweb-${VERSION}.{exe} ${OUT}/
+            mv ~/permaweb/dist/Permaweb-${VERSION}.{AppImage} ${OUT}/
       - persist_to_workspace:
           root: ~/
           paths:
@@ -66,17 +66,14 @@ jobs:
       #- save_cache:
           #paths:
             #- node_modules
-          #key: v1-dependencies-{{ checksum "package.json" }}
+          #key: dependencies-{{ checksum "package.json" }}
       #- run:
           #name: Collect Artifacts
           #command: |
             #VERSION=v$(node -p "require('./package.json').version")
-            #if [ "${CIRCLE_TAG}" != "" ]; then
-                #VERSION=${CIRCLE_TAG}
-            #fi
             #OUT=~/output
             #mkdir -p ${OUT}
-            #mv ~/permaweb/dist/Permaweb-${VERSION}.{AppImage} ${OUT}/
+            #mv ~/permaweb/dist/Permaweb-${VERSION}.{exe} ${OUT}/
       #- persist_to_workspace:
           #root: ~/
           #paths:
@@ -129,17 +126,17 @@ jobs:
             #- output
       #- store_artifacts:
           #path: ~/output
-  release:
-    docker:
-      - image: cibuilds/github:0.10
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/
-      - deploy:
-          name: Release Installers
-          command: |
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ~/output/
+  #release:
+    #docker:
+      #- image: cibuilds/github:0.10
+    #steps:
+      #- checkout
+      #- attach_workspace:
+          #at: ~/
+      #- deploy:
+          #name: Release Installers
+          #command: |
+            #ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ~/output/
 
 workflows:
   version: 2
@@ -160,6 +157,7 @@ workflows:
               #only:
                 #- master
                 #- develop
+                #- feature/builds
             #tags:
               #only: /.*/
       #- build-macos:
@@ -168,17 +166,18 @@ workflows:
               #only:
                 #- master
                 #- develop
+                #- feature/builds
             #tags:
               #only: /.*/
-      - release:
-          requires:
-            - build-linux
+      #- release:
+          #requires:
+            #- build-linux
             #- build-win
             #- build-macos
-          filters:
-            branches:
-              only:
-                - master
-                - develop
-            tags:
-              only: /^v.*
+          #filters:
+            #branches:
+              #only:
+                #- master
+                #- develop
+            #tags:
+              #only: /^v.*
