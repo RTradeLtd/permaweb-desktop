@@ -14,7 +14,7 @@ jobs:
       - run:
           name: Rebuild deps for electron node version
           command: |
-            yarn exec electron-rebuild
+            yarn exec electron-builder install-app-deps
       - run:
           name: Create build
           command: |
