@@ -27,7 +27,6 @@ jobs:
           name: Collect Artifacts
           command: |
             VERSION=v$(node -p "require('./package.json').version")
-            echo VERSION
             OUT=~/output
             mkdir -p ${OUT}
             mv ~/permaweb/dist/Permaweb-${VERSION}.AppImage ${OUT}/
@@ -122,7 +121,7 @@ jobs:
           name: Release Installers
           command: |
             ls
-            ls output
+            ls ~/output
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ~/output/
 
 workflows:
