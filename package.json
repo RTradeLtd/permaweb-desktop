@@ -6,13 +6,11 @@
     "name": "Permaweb Developers",
     "email": "admin@permaweb.io"
   },
-  "private": true,
   "dependencies": {
     "@craco/craco": "^3.5.0",
     "@material-ui/core": "^4.2.0",
     "@material-ui/icons": "^4.2.1",
     "@textile/go-daemon": "^0.1.1",
-    "@textile/go-textile-dep": "^0.6.5",
     "@textile/js-http-client": "0.2.11",
     "@textile/wallet": "^0.2.2",
     "@types/react-router-dom": "^5.1.0",
