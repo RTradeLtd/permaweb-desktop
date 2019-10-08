@@ -4,8 +4,10 @@ import SlateEditor from './SlateEditor'
 import { Value } from 'slate'
 import { observer, inject } from 'mobx-react'
 import { Link } from 'react-router-dom'
+import { Post } from '../domain'
+import Store from '../Store'
 
-const formatDate = timeStamp => new Date(timeStamp).toLocaleString()
+const formatDate = (timeStamp: string) => new Date(timeStamp).toLocaleString()
 
 function usePost({
   post: {
@@ -20,6 +22,9 @@ function usePost({
     block
   },
   store
+}: {
+  post: Post
+  store: Store
 }) {
   const deletePost = () => store.postsDelete(block)
 
@@ -36,7 +41,7 @@ function usePost({
   }
 }
 
-function PostCard({ store, post }) {
+function PostCard({ store, post }: { post: Post; store: Store }) {
   const {
     groupHash,
     postHash,

@@ -47,12 +47,13 @@ export interface SlateEditorProps {
   value: any
   placeholder?: string
   ref?: MutableRefObject<Editor | null>
+  readOnly?: boolean
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onChange: (editorState: any) => void
+  onChange?: (editorState: any) => void
 }
 
 const SlateEditor = (
-  { value, placeholder, onChange }: SlateEditorProps,
+  { value, placeholder, readOnly, onChange }: SlateEditorProps,
   ref: Ref<Editor>
 ) => {
   const editorRef = useRef<Editor>(null)
@@ -74,7 +75,7 @@ const SlateEditor = (
     <Editor
       className={'slate-editor'}
       ref={editorRef}
-      readOnly={false}
+      readOnly={readOnly}
       value={value}
       placeholder={placeholder}
       onChange={onChange}

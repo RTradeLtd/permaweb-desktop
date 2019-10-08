@@ -4,6 +4,7 @@ export interface Post {
   block: string
   lastModified: string
   author: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   content: any
   comments: Comment[]
   shares: Share[]
@@ -13,6 +14,9 @@ export interface Post {
 export interface Comment {
   // This is a placeholder
   commentHash: never
+  author: string
+  lastModified: string
+  content: string
 }
 
 export interface Share {
