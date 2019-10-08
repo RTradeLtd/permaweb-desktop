@@ -4,19 +4,19 @@ import { observer, inject } from 'mobx-react'
 import PostCard from '../components/PostCard'
 import NewPostEntryControl from '../components/NewPostEntryControl'
 import Store from '../Store'
+import { Post } from '../domain'
 
 function useGroup({ groupHash, store }: { groupHash: string; store: Store }) {
-  // @ts-ignore
-  const [list, setList] = useState([])
+  const [list, setList] = useState<Post[]>([])
 
   useEffect(() => {
     const getList = async () => {
-      // @ts-ignore
       setList(await store.postsGetAll(groupHash))
     }
+
     getList()
   }, [groupHash])
-  // @ts-ignore
+
   return { list }
 }
 
@@ -33,9 +33,7 @@ export const Group = function({
     <div>
       <NewPostEntryControl key={groupHash} groupHash={groupHash} />
       <List>
-        // @ts-ignore
         {list.map(post => (
-          // @ts-ignore
           <PostCard key={post.postHash} post={post} />
         ))}
       </List>

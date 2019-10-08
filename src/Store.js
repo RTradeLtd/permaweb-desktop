@@ -91,11 +91,11 @@ class Store {
           const data = JSON.parse(content)
 
           return {
-            block,
             groupHash,
-            author: 'Error',
-            lastModified: added,
             postHash: hash,
+            block,
+            lastModified: added,
+            author: 'Error',
             content: data,
             comments: [],
             shares: [],
