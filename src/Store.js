@@ -6,6 +6,7 @@ configure({ enforceActions: 'always' })
 const SCHEMA = {
   name: 'permaweb-v0.0.3',
   mill: '/json',
+  // eslint-disable-next-line @typescript-eslint/camelcase
   json_schema: {
     definitions: {},
     $schema: 'http://json-schema.org/draft-07/schema#',
@@ -72,18 +73,15 @@ class Store {
     console.log('items: ', items)
     const list = await Promise.all(
       items.map(
-        async (
-          {
-            block,
-            files: [
-              {
-                file: { hash, added }
-              }
-            ],
-            ...rest
-          },
-          index
-        ) => {
+        async ({
+          block,
+          files: [
+            {
+              file: { hash, added }
+            }
+          ],
+          ...rest
+        }) => {
           console.log(rest)
           const serialized = await textile.file.content(hash)
           const { content } = JSON.parse(serialized)
