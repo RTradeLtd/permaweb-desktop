@@ -7,7 +7,7 @@ import NewPostEntryControl from '../components/NewPostEntryControl'
 
 const POST_ENFORCE_INTERFACE = {
   groupId: -1,
-  id: -1,
+  postId: -1,
   lastModified: 0,
   author: 'Error',
   title: 'Error',
@@ -38,7 +38,7 @@ export const Group = function({ groupId }: { groupId: string }) {
       <NewPostEntryControl key={groupId} />
       <List>
         {list.map(post => (
-          <PostCard key={post.id} post={post} />
+          <PostCard key={post.postId} post={post} />
         ))}
       </List>
     </div>
