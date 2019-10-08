@@ -2,11 +2,29 @@ import React, { useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import SlateEditor, { defaultEditorValue } from './SlateEditor'
 import 'emoji-mart/css/emoji-mart.css'
-import { Picker, EmojiData, BaseEmoji } from 'emoji-mart'
+import { Picker, BaseEmoji } from 'emoji-mart'
 import { Editor } from 'slate-react'
 
 const newPostEntryControlPlaceholderText =
   'Share a thought, or write your next novel'
+
+const ToolbarButton = ({
+  className,
+  icon,
+  onClick
+}: {
+  className?: string
+  icon: string
+  onClick?: () => void
+}) => {
+  const handleOnClick = onClick || (() => alert('Coming Soon'))
+
+  return (
+    <button className={className} onClick={handleOnClick}>
+      <i className={`fas fa-${icon}`}></i>
+    </button>
+  )
+}
 
 export default function NewPostEntryControl() {
   const editorRef = useRef<Editor | null>(null)
@@ -41,6 +59,17 @@ export default function NewPostEntryControl() {
 
   return (
     <NewPostPanel>
+      <Toolbar>
+        <ToolbarEditorBtn icon="bold" />
+        <ToolbarEditorBtn icon="italic" />
+        <ToolbarEditorBtn icon="underline" />
+        <ToolbarEditorBtn icon="code" />
+        <ToolbarEditorBtn icon="quote-right" />
+        <ToolbarEditorBtn icon="list-ul" />
+        <ToolbarEditorBtn icon="list-ol" />
+        <ToolbarEditorBtn icon="link" />
+        <ToolbarEditorBtn icon="check-square" />
+      </Toolbar>
       <ComposerPanel>
         <SlateEditor
           ref={editorRef}
@@ -76,6 +105,12 @@ export default function NewPostEntryControl() {
   )
 }
 
+const offblack = '#191919'
+const buttonGray = 'darkgray'
+const lightblue = 'lightblue'
+const slightlyDarkerBlue = '#94aeb7'
+const publishButtonBlue = '#395ca9'
+
 const NewPostPanel = styled.div`
   padding: 0.5rem;
   width: 100%;
@@ -84,7 +119,26 @@ const NewPostPanel = styled.div`
   margin-bottom: 20px;
 `
 
-const offblack = '#191919'
+const Toolbar = styled.div`
+  padding: 0.25rem;
+`
+
+const ToolbarEditorBtn = styled(ToolbarButton)`
+  margin-right: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: ${buttonGray};
+  &:hover {
+    color: ${lightblue};
+  }
+  &:active {
+    color: ${slightlyDarkerBlue};
+  }
+  &:focus {
+    outline: none;
+  }
+`
 
 const ComposerPanel = styled.div`
   border: 1px lightgray solid;
@@ -103,15 +157,12 @@ const PublishButtonRow = styled.div`
   justify-content: space-between;
 `
 
-const lightblue = 'lightblue'
-const slightlyDarkerBlue = '#94aeb7'
-
 const ActionButton = styled.button`
   height: 25px;
   border: none;
   background: inherit;
   cursor: pointer;
-  color: darkgray;
+  color: ${buttonGray};
   line-height: 1rem;
   vertical-align: text-top;
   i {
@@ -125,14 +176,20 @@ const ActionButton = styled.button`
   &:active {
     color: ${slightlyDarkerBlue};
   }
+  &:focus {
+    outline: none;
+  }
 `
 
 const PublishButton = styled.button`
-  background: #395ca9;
+  background: ${publishButtonBlue};
   border-radius: 5px;
   border: none;
   color: white;
   width: 80px;
   height: 25px;
   cursor: pointer;
+  &:focus {
+    outline: none;
+  }
 `
