@@ -1,15 +1,17 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useRef } from 'react'
 import styled from 'styled-components'
 import SlateEditor, { defaultEditorValue } from './SlateEditor'
 import 'emoji-mart/css/emoji-mart.css'
-import { Picker } from 'emoji-mart'
+import { Picker, EmojiData, BaseEmoji } from 'emoji-mart'
+import { Editor } from 'slate-react'
 
 const newPostEntryControlPlaceholderText =
   'Share a thought, or write your next novel'
 
 export default function NewPostEntryControl() {
+  const editorRef = useRef<Editor | null>(null)
   const [editorState, setEditorState] = useState(defaultEditorValue)
-  const [emojiPickerVisible, setEmojiPickerVisible] = useState(true)
+  const [emojiPickerVisible, setEmojiPickerVisible] = useState(false)
 
   const handleChange = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,14 +29,21 @@ export default function NewPostEntryControl() {
     setEmojiPickerVisible(!emojiPickerVisible)
   }
 
-  const addEmojiToEditor = () => {
-    console.log(editorState, 'editorState')
+  const addEmojiToEditor = async (emoji: BaseEmoji) => {
+    if (!editorRef || !editorRef.current || !emoji) {
+      return
+    }
+
+    await editorRef.current.insertText(emoji.native)
+
+    setEmojiPickerVisible(!emojiPickerVisible)
   }
 
   return (
     <NewPostPanel>
       <ComposerPanel>
         <SlateEditor
+          ref={editorRef}
           onChange={handleChange}
           placeholder={newPostEntryControlPlaceholderText}
           value={editorState}
@@ -54,11 +63,12 @@ export default function NewPostEntryControl() {
           <ActionButton>
             <i className="fas fa-file-image"></i>GIF
           </ActionButton>
-          {
-            emojiPickerVisible ?
-              <Picker style={{ position: 'absolute', left: '460px' }} onSelect={addEmojiToEditor} /> :
-              null
-          }
+          {emojiPickerVisible ? (
+            <Picker
+              style={{ position: 'absolute', left: '460px' }}
+              onSelect={addEmojiToEditor}
+            />
+          ) : null}
         </div>
         <PublishButton onClick={handlePublish}>Post</PublishButton>
       </PublishButtonRow>

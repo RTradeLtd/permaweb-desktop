@@ -1,6 +1,12 @@
-import React from 'react'
+import React, {
+  MutableRefObject,
+  forwardRef,
+  Ref,
+  useRef,
+  useImperativeHandle
+} from 'react'
 import { Editor, RenderBlockProps } from 'slate-react'
-import { Value, Editor as EditorParam } from 'slate'
+import { Value, Editor as InternalEditor } from 'slate'
 
 export const defaultEditorValue = Value.fromJSON({
   document: {
@@ -21,7 +27,7 @@ export const defaultEditorValue = Value.fromJSON({
 
 const renderBlock = (
   props: RenderBlockProps,
-  _editor: EditorParam,
+  _editor: InternalEditor,
   next: () => JSX.Element
 ): JSX.Element => {
   switch (props.node.type) {
@@ -40,15 +46,34 @@ export interface SlateEditorProps {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   value: any
   placeholder?: string
+  ref?: MutableRefObject<Editor | null>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onChange: (editorState: any) => void
 }
 
-const SlateEditor = ({ value, placeholder, onChange }: SlateEditorProps) => {
-  console.log(value)
+const SlateEditor = (
+  { value, placeholder, onChange }: SlateEditorProps,
+  ref: Ref<Editor>
+) => {
+  const editorRef = useRef<Editor>(null)
+
+  useImperativeHandle(ref, () => ({
+    // @ts-ignore
+    insertText: (text: string) => {
+      if (!editorRef.current) {
+        throw new Error('Editor not set')
+      }
+
+      editorRef.current.insertText(text)
+
+      return editorRef.current
+    }
+  }))
+
   return (
     <Editor
       className={'slate-editor'}
+      ref={editorRef}
       readOnly={false}
       value={value}
       placeholder={placeholder}
@@ -58,4 +83,4 @@ const SlateEditor = ({ value, placeholder, onChange }: SlateEditorProps) => {
   )
 }
 
-export default SlateEditor
+export default forwardRef(SlateEditor)
