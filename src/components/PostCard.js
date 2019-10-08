@@ -1,37 +1,70 @@
 import React from 'react'
 import styled from 'styled-components'
+import SlateEditor from './SlateEditor'
+import { Value } from 'slate'
+import { observer, inject } from 'mobx-react'
 import { Link } from 'react-router-dom'
 
 const formatDate = timeStamp => new Date(timeStamp).toLocaleString()
 
-function PostCard({ post }) {
-  const {
-    groupId,
-    postId,
+function usePost({
+  post: {
+    groupHash,
+    postHash,
     author,
     lastModified,
-    title,
     content,
     comments,
     shares,
-    reactions
-  } = post
+    reactions,
+    block
+  },
+  store
+}) {
+  const deletePost = () => store.postsDelete(block)
+
+  return {
+    groupHash,
+    postHash,
+    author,
+    lastModified,
+    content,
+    comments,
+    shares,
+    reactions,
+    deletePost
+  }
+}
+
+function PostCard({ store, post }) {
+  const {
+    groupHash,
+    postHash,
+    author,
+    lastModified,
+    content,
+    comments,
+    shares,
+    reactions,
+    deletePost
+  } = usePost({ store, post })
 
   return (
-    <Card key={postId}>
+    <Card key={postHash}>
       <Header>
         <Author>
           <Img src="https://picsum.photos/seed/picsum/30/30" alt={author} />
           <div>{author}</div>
         </Author>
-        <Sub>{title}</Sub>
         <When>
-          <Link to={`/g/${groupId}/p/${postId}`}>
+          <Link to={`/g/${groupHash}/p/${postHash}`}>
             {formatDate(lastModified)}
           </Link>
         </When>
       </Header>
-      <div>{content}</div>
+      <div>
+        <SlateEditor value={Value.fromJSON(content)} readOnly />
+      </div>
       <Interactions>
         <div key="comment-count">Comments {comments.length}</div>
         <div key="share-count">Shares {shares.length}</div>
@@ -59,6 +92,7 @@ function PostCard({ post }) {
           )
         })}
       </Comments>
+      <button onClick={deletePost}>-</button>
     </Card>
   )
 }
@@ -78,12 +112,6 @@ const Header = styled.div`
   grid-template-columns: auto auto 1fr;
   grid-gap: 10px;
   align-items: center;
-`
-
-const Sub = styled.h2`
-  padding: 0;
-  margin: 0;
-  font-size: 16px;
 `
 
 const Author = styled.div`
@@ -136,4 +164,4 @@ const CommentContent = styled.div`
   border-radius: 4px;
 `
 
-export default PostCard
+export default inject('store')(observer(props => <PostCard {...props} />))

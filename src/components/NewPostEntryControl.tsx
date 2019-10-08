@@ -1,9 +1,12 @@
 import React, { useState, useCallback, useRef } from 'react'
+import { inject } from 'mobx-react'
 import styled from 'styled-components'
+import Store from '../Store'
 import SlateEditor, { defaultEditorValue } from './SlateEditor'
 import 'emoji-mart/css/emoji-mart.css'
-import { Picker, BaseEmoji } from 'emoji-mart'
 import { Editor } from 'slate-react'
+// @ts-ignore
+import { Picker, BaseEmoji } from 'emoji-mart'
 
 const newPostEntryControlPlaceholderText =
   'Share a thought, or write your next novel'
@@ -26,7 +29,13 @@ const ToolbarButton = ({
   )
 }
 
-export default function NewPostEntryControl() {
+function NewPostEntryControl({
+  store,
+  groupHash
+}: {
+  store: Store
+  groupHash: string
+}) {
   const editorRef = useRef<Editor | null>(null)
   const [editorState, setEditorState] = useState(defaultEditorValue)
   const [emojiPickerVisible, setEmojiPickerVisible] = useState(false)
@@ -39,9 +48,15 @@ export default function NewPostEntryControl() {
     [setEditorState]
   )
 
-  const handlePublish = useCallback(() => {
-    setEditorState(defaultEditorValue)
-  }, [setEditorState])
+  const handlePublish = useCallback(async () => {
+    const res = await store.postsAdd(groupHash, editorState.toJSON())
+    setTimeout(() => {
+      console.log('reset editor after publishing: ', res)
+      if (res) {
+        setEditorState(defaultEditorValue)
+      }
+    }, 2000)
+  }, [setEditorState, editorState])
 
   const toggleEmojiPicker = () => {
     setEmojiPickerVisible(!emojiPickerVisible)
@@ -193,3 +208,5 @@ const PublishButton = styled.button`
     outline: none;
   }
 `
+
+export default inject('store')(props => <NewPostEntryControl {...props} />)

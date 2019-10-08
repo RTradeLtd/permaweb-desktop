@@ -29,7 +29,7 @@ const theme = createMuiTheme({
 
 function App({ store }: { store: Store }) {
   useEffect(() => {
-    store.getFiles()
+    store.connect()
   }, [])
 
   return (
@@ -40,9 +40,9 @@ function App({ store }: { store: Store }) {
             <Switch>
               <Route path="/404" component={NotFound} />
               <Route exact path="/" component={Home} />
-              <Route exact path="/g/:groupId" component={Group} />
-              <Route exact path="/g/:groupId/p/:postId" component={Post} />
-              <Route exact path="/e/:groupId/:postId" component={Edit} />
+              <Route exact path="/g/:groupHash" component={Group} />
+              <Route exact path="/g/:groupHash/p/:postHash" component={Post} />
+              <Route exact path="/e/:groupHash/:postHash" component={Edit} />
               <Redirect from="*" to="/404" />
             </Switch>
           </Layout>

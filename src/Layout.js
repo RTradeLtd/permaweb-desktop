@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
@@ -9,20 +9,27 @@ const HEADER_HEIGHT = 80
 const FOOTER_HEIGHT = 60
 const BACKGROUND = '3578E5'
 
-
-function useLayout({ history }) {
+function useLayout({ history, store }) {
   const navigateHome = () => history.push('/')
-  const navigateToGroup = groupId => history.push(`/g/${groupId}`)
+  const navigateToGroup = groupHash => history.push(`/g/${groupHash}`)
+  const leaveGroup = store.groupsDelete
   const createFile = () => console.log('Layout: create file')
   const saveFile = () => console.log('Layout: save')
-  const createGroup = () => console.log('Layout: create group')
   const members = [1, 2, 3, 4, 5]
-  const groups = [{ id: '1', name: 'Group 1' }, { id: '2', name: 'Group 2' }]
+  const createGroup = () => {
+    const rand = parseInt(Math.random() * 40, 10)
+    store.groupsAdd(`G-${rand}`)
+  }
+
+  useEffect(() => {
+    store.groupsGetAll()
+  }, [])
 
   return {
     createFile,
     createGroup,
-    groups,
+    groups: store.groups,
+    leaveGroup,
     members,
     navigateHome,
     navigateToGroup,
@@ -31,8 +38,16 @@ function useLayout({ history }) {
 }
 
 const Layout = ({ store, children, history }) => {
-  const { groups, members, navigateHome, navigateToGroup } = useLayout({
-    history
+  const {
+    createGroup,
+    groups,
+    leaveGroup,
+    members,
+    navigateHome,
+    navigateToGroup
+  } = useLayout({
+    history,
+    store
   })
 
   return (
@@ -71,9 +86,19 @@ const Layout = ({ store, children, history }) => {
             <ListItem button key={'home'} onClick={navigateHome}>
               <ListItemText primary={'Home'} />
             </ListItem>
-            {groups.map(({ id, name }) => (
-              <ListItem button key={id} onClick={() => navigateToGroup(id)}>
+            {groups.map(({ groupHash, name }) => (
+              <ListItem
+                key={groupHash}
+                button
+                onClick={() => navigateToGroup(groupHash)}
+              >
                 <ListItemText primary={name} />
+                <button
+                  data-key={`leave-${groupHash}`}
+                  onClick={() => leaveGroup(groupHash)}
+                >
+                  -
+                </button>
               </ListItem>
             ))}
           </List>
@@ -81,8 +106,8 @@ const Layout = ({ store, children, history }) => {
             <ListItem button key={'search'} onClick={navigateHome}>
               <ListItemText primary={'Find people or groups'} />
             </ListItem>
-            <ListItem button key={'create-group'} onClick={navigateHome}>
-              <ListItemText primary={'Create a groupt'} />
+            <ListItem button key={'create-group'} onClick={createGroup}>
+              <ListItemText primary={'Create a group'} />
             </ListItem>
           </List>
         </Nav>
@@ -202,4 +227,8 @@ const Img = styled.img`
   border-radius: 50%;
 `
 
-export default inject('store')(observer(withRouter(Layout)))
+export default withRouter(
+  inject('store')(
+    observer(props => <Layout {...props} gps={props.store.groups} />)
+  )
+)
