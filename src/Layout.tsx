@@ -1,23 +1,25 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, ReactElement } from 'react'
 import styled from 'styled-components'
 import { withRouter } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
 import { ListItemText, List, ListItem } from '@material-ui/core'
+import { History } from 'history'
+import Store from './Store'
 
 const DRAWER_WIDTH = 240
 const HEADER_HEIGHT = 80
 const FOOTER_HEIGHT = 60
 const BACKGROUND = '3578E5'
 
-function useLayout({ history, store }) {
+function useLayout({ history, store }: { history: History; store: Store }) {
   const navigateHome = () => history.push('/')
-  const navigateToGroup = groupHash => history.push(`/g/${groupHash}`)
+  const navigateToGroup = (groupHash: string) => history.push(`/g/${groupHash}`)
   const leaveGroup = store.groupsDelete
   const createFile = () => console.log('Layout: create file')
   const saveFile = () => console.log('Layout: save')
   const members = [1, 2, 3, 4, 5]
   const createGroup = () => {
-    const rand = parseInt(Math.random() * 40, 10)
+    const rand = parseInt((Math.random() * 40).toString(), 10)
     store.groupsAdd(`G-${rand}`)
   }
 
@@ -37,7 +39,13 @@ function useLayout({ history, store }) {
   }
 }
 
-const Layout = ({ store, children, history }) => {
+export interface LayoutProps {
+  store: Store
+  children: ReactElement
+  history: History
+}
+
+const Layout = ({ store, children, history }: LayoutProps) => {
   const {
     createGroup,
     groups,
@@ -187,7 +195,8 @@ const Info = styled.div`
 
 const Members = styled.div`
   display: grid;
-  grid-template-columns: ${({ maxCount }) => `repeat(${maxCount}, auto)`};
+  grid-template-columns: ${({ maxCount }: { maxCount: number }) =>
+    `repeat(${maxCount}, auto)`};
   grid-gap: 5px;
 `
 
@@ -228,7 +237,6 @@ const Img = styled.img`
 `
 
 export default withRouter(
-  inject('store')(
-    observer(props => <Layout {...props} gps={props.store.groups} />)
-  )
+  // @ts-ignore
+  inject('store')(observer(props => <Layout {...props} />))
 )
