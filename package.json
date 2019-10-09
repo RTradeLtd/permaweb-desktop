@@ -27,7 +27,6 @@
     "mobx-react": "^5.4.3",
     "moment": "^2.24.0",
     "react": "^16.10.2",
-    "react-codemirror": "^1.0.0",
     "react-dom": "^16.8.3",
     "react-markdown-it": "^1.0.2",
     "react-medium-editor": "^1.8.1",
