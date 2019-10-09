@@ -1,3 +1,8 @@
+export interface Group {
+  groupHash: string
+  name: string
+}
+
 export interface Post {
   groupHash: string
   postHash: string

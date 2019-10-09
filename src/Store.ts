@@ -1,5 +1,6 @@
 import { runInAction, action, configure, observable } from 'mobx'
-import { Textile } from '@textile/js-http-client'
+import { Textile, FileIndex } from '@textile/js-http-client'
+import { Group } from './domain'
 
 configure({ enforceActions: 'always' })
 
@@ -25,9 +26,10 @@ const textile = new Textile({
 })
 
 class Store {
-  gateway = 'http://127.0.0.1:5052'
-  @observable status = 'offline'
-  @observable groups = []
+  gateway: string = 'http://127.0.0.1:5052'
+  schema: FileIndex | undefined = undefined
+  @observable status: string = 'offline'
+  @observable groups: Group[] = []
 
   @action
   async connect() {
@@ -54,21 +56,25 @@ class Store {
   }
 
   @action
-  async groupsAdd(name) {
+  async groupsAdd(name: string) {
+    if (!this.schema) {
+      throw new Error('Schema not loaded')
+    }
+
     const group = await textile.threads.add(name, this.schema.hash)
     this.groupsGetAll()
     return group
   }
 
   @action
-  groupsDelete = async groupHash => {
+  groupsDelete = async (groupHash: string) => {
     const res = await textile.threads.remove(groupHash)
     this.groupsGetAll()
     return res
   }
 
   /* posts */
-  async postsGetAll(groupHash) {
+  async postsGetAll(groupHash: string) {
     const { items } = await textile.files.list(groupHash)
     console.log('items: ', items)
     const list = await Promise.all(
@@ -107,7 +113,7 @@ class Store {
   }
 
   @action
-  async postsAdd(groupHash, content) {
+  async postsAdd(groupHash: string, content: {}) {
     try {
       const payload = {
         content: JSON.stringify(content)
@@ -124,7 +130,7 @@ class Store {
   }
 
   @action
-  async postsDelete(block) {
+  async postsDelete(block: string) {
     const res = await textile.files.ignore(block)
     return res
   }
