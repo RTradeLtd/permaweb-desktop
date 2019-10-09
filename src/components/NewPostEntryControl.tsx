@@ -18,7 +18,7 @@ const ToolbarButton = ({
 }: {
   className?: string
   icon: string
-  onClick?: () => void
+  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
 }) => {
   const handleOnClick = onClick || (() => alert('Coming Soon'))
 
@@ -33,12 +33,18 @@ const buildEditorBtnHandler = (
   markType: string,
   editorRef: React.MutableRefObject<Editor | null>
 ) => {
-  return async () => {
+  return async (event: React.MouseEvent) => {
+    event.preventDefault()
+    event.stopPropagation()
+
     if (!editorRef || !editorRef.current) {
       return
     }
 
     editorRef.current.toggleMark(markType)
+    editorRef.current.focus()
+
+    return false
   }
 }
 
