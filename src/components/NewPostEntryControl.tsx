@@ -29,6 +29,19 @@ const ToolbarButton = ({
   )
 }
 
+const buildEditorBtnHandler = (
+  markType: string,
+  editorRef: React.MutableRefObject<Editor | null>
+) => {
+  return async () => {
+    if (!editorRef || !editorRef.current) {
+      return
+    }
+
+    editorRef.current.toggleMark(markType)
+  }
+}
+
 function NewPostEntryControl({
   store,
   groupHash
@@ -58,6 +71,26 @@ function NewPostEntryControl({
     }, 2000)
   }, [setEditorState, editorState])
 
+  const handleEditorBtnBold = useCallback(
+    buildEditorBtnHandler('bold', editorRef),
+    [editorRef]
+  )
+
+  const handleEditorBtnItalic = useCallback(
+    buildEditorBtnHandler('italic', editorRef),
+    [editorRef]
+  )
+
+  const handleEditorBtnUnderline = useCallback(
+    buildEditorBtnHandler('underline', editorRef),
+    [editorRef]
+  )
+
+  const handleEditorBtnCode = useCallback(
+    buildEditorBtnHandler('code', editorRef),
+    [editorRef]
+  )
+
   const toggleEmojiPicker = () => {
     setEmojiPickerVisible(!emojiPickerVisible)
   }
@@ -75,10 +108,10 @@ function NewPostEntryControl({
   return (
     <NewPostPanel>
       <Toolbar>
-        <ToolbarEditorBtn icon="bold" />
-        <ToolbarEditorBtn icon="italic" />
-        <ToolbarEditorBtn icon="underline" />
-        <ToolbarEditorBtn icon="code" />
+        <ToolbarEditorBtn icon="bold" onClick={handleEditorBtnBold} />
+        <ToolbarEditorBtn icon="italic" onClick={handleEditorBtnItalic} />
+        <ToolbarEditorBtn icon="underline" onClick={handleEditorBtnUnderline} />
+        <ToolbarEditorBtn icon="code" onClick={handleEditorBtnCode} />
         <ToolbarEditorBtn icon="quote-right" />
         <ToolbarEditorBtn icon="list-ul" />
         <ToolbarEditorBtn icon="list-ol" />
