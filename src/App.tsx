@@ -27,7 +27,7 @@ const theme = createMuiTheme({
   }
 })
 
-function App({ store }: { store: Store }) {
+function App({ store, status }: { store: Store; status: string }) {
   useEffect(() => {
     store.connect()
   }, [])
@@ -35,7 +35,7 @@ function App({ store }: { store: Store }) {
   return (
     <Router>
       <ThemeProvider theme={theme}>
-        <StoreStatus>
+        <StoreStatus status={status}>
           <Layout>
             <Switch>
               <Route path="/404" component={NotFound} />
@@ -53,4 +53,6 @@ function App({ store }: { store: Store }) {
   )
 }
 
-export default inject('store')(observer(({ store }) => <App store={store} />))
+export default inject('store')(
+  observer(({ store }) => <App store={store} status={store.status} />)
+)
