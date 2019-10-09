@@ -196,6 +196,7 @@ const ComposerPanel = styled.div`
   .slate-editor {
     color: ${offblack};
     font-size: 18px;
+    min-height: 3rem;
   }
 `
 
