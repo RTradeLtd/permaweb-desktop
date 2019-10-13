@@ -1,44 +1,40 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { observer, inject } from 'mobx-react'
 import PostCard from '../components/PostCard'
-import MOCK_FILES from '../mocks/files.json'
 import NewPostEntryControl from '../components/NewPostEntryControl'
+import Store from '../Store'
+import { Post } from '../domain'
 
-const POST_ENFORCE_INTERFACE = {
-  groupId: -1,
-  id: -1,
-  lastModified: 0,
-  author: 'Error',
-  title: 'Error',
-  content: 'Error',
-  comments: [],
-  shares: [],
-  reactions: []
-}
+function useGroup({ groupHash, store }: { groupHash: string; store: Store }) {
+  const [list, setList] = useState<Post[]>([])
 
-function useGroup(groupId: string) {
-  // fetch group using id
-  // fetch files contents and map to list
-  const list = MOCK_FILES.filter(post => groupId === post.groupId).map(
-    post => ({
-      ...POST_ENFORCE_INTERFACE,
-      ...post
-    })
-  )
+  useEffect(() => {
+    const getList = async () => {
+      setList(await store.postsGetAll(groupHash))
+    }
+
+    getList()
+  }, [groupHash])
 
   return { list }
 }
 
-export const Group = function({ groupId }: { groupId: string }) {
-  const { list } = useGroup(groupId)
+export const Group = function({
+  groupHash,
+  store
+}: {
+  groupHash: string
+  store: Store
+}) {
+  const { list } = useGroup({ store, groupHash })
 
   return (
     <div>
-      <NewPostEntryControl key={groupId} />
+      <NewPostEntryControl key={groupHash} groupHash={groupHash} />
       <List>
         {list.map(post => (
-          <PostCard key={post.id} post={post} />
+          <PostCard key={post.postHash} post={post} />
         ))}
       </List>
     </div>
@@ -55,5 +51,7 @@ const List = styled.ul`
 `
 
 export default inject('store')(
-  observer(({ match: { params: { groupId } } }) => <Group groupId={groupId} />)
+  observer(({ store, match: { params: { groupHash } } }) => (
+    <Group store={store} groupHash={groupHash} />
+  ))
 )

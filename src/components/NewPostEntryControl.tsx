@@ -1,12 +1,63 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useRef } from 'react'
+import { inject } from 'mobx-react'
 import styled from 'styled-components'
+import Store from '../Store'
 import SlateEditor, { defaultEditorValue } from './SlateEditor'
+import 'emoji-mart/css/emoji-mart.css'
+import { Editor } from 'slate-react'
+// @ts-ignore
+import { Picker, BaseEmoji } from 'emoji-mart'
 
 const newPostEntryControlPlaceholderText =
   'Share a thought, or write your next novel'
 
-export default function NewPostEntryControl() {
+const ToolbarButton = ({
+  className,
+  icon,
+  onClick
+}: {
+  className?: string
+  icon: string
+  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void
+}) => {
+  const handleOnClick = onClick || (() => alert('Coming Soon'))
+
+  return (
+    <button className={className} onClick={handleOnClick}>
+      <i className={`fas fa-${icon}`}></i>
+    </button>
+  )
+}
+
+const buildEditorBtnHandler = (
+  markType: string,
+  editorRef: React.MutableRefObject<Editor | null>
+) => {
+  return async (event: React.MouseEvent) => {
+    event.preventDefault()
+    event.stopPropagation()
+
+    if (!editorRef || !editorRef.current) {
+      return
+    }
+
+    editorRef.current.toggleMark(markType)
+    editorRef.current.focus()
+
+    return false
+  }
+}
+
+function NewPostEntryControl({
+  store,
+  groupHash
+}: {
+  store: Store
+  groupHash: string
+}) {
+  const editorRef = useRef<Editor | null>(null)
   const [editorState, setEditorState] = useState(defaultEditorValue)
+  const [emojiPickerVisible, setEmojiPickerVisible] = useState(false)
 
   const handleChange = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,14 +67,66 @@ export default function NewPostEntryControl() {
     [setEditorState]
   )
 
-  const handlePublish = useCallback(() => {
-    setEditorState(defaultEditorValue)
-  }, [setEditorState])
+  const handlePublish = useCallback(async () => {
+    const res = await store.postsAdd(groupHash, editorState.toJSON())
+    setTimeout(() => {
+      console.log('reset editor after publishing: ', res)
+      if (res) {
+        setEditorState(defaultEditorValue)
+      }
+    }, 2000)
+  }, [setEditorState, editorState])
+
+  const handleEditorBtnBold = useCallback(
+    buildEditorBtnHandler('bold', editorRef),
+    [editorRef]
+  )
+
+  const handleEditorBtnItalic = useCallback(
+    buildEditorBtnHandler('italic', editorRef),
+    [editorRef]
+  )
+
+  const handleEditorBtnUnderline = useCallback(
+    buildEditorBtnHandler('underline', editorRef),
+    [editorRef]
+  )
+
+  const handleEditorBtnCode = useCallback(
+    buildEditorBtnHandler('code', editorRef),
+    [editorRef]
+  )
+
+  const toggleEmojiPicker = () => {
+    setEmojiPickerVisible(!emojiPickerVisible)
+  }
+
+  const addEmojiToEditor = async (emoji: BaseEmoji) => {
+    if (!editorRef || !editorRef.current || !emoji) {
+      return
+    }
+
+    await editorRef.current.insertText(emoji.native)
+
+    setEmojiPickerVisible(!emojiPickerVisible)
+  }
 
   return (
     <NewPostPanel>
+      <Toolbar>
+        <ToolbarEditorBtn icon="bold" onClick={handleEditorBtnBold} />
+        <ToolbarEditorBtn icon="italic" onClick={handleEditorBtnItalic} />
+        <ToolbarEditorBtn icon="underline" onClick={handleEditorBtnUnderline} />
+        <ToolbarEditorBtn icon="code" onClick={handleEditorBtnCode} />
+        <ToolbarEditorBtn icon="quote-right" />
+        <ToolbarEditorBtn icon="list-ul" />
+        <ToolbarEditorBtn icon="list-ol" />
+        <ToolbarEditorBtn icon="link" />
+        <ToolbarEditorBtn icon="check-square" />
+      </Toolbar>
       <ComposerPanel>
         <SlateEditor
+          ref={editorRef}
           onChange={handleChange}
           placeholder={newPostEntryControlPlaceholderText}
           value={editorState}
@@ -34,7 +137,7 @@ export default function NewPostEntryControl() {
           <ActionButton>
             <i className="fas fa-image"></i>Photo or Video
           </ActionButton>
-          <ActionButton>
+          <ActionButton onClick={toggleEmojiPicker}>
             <i className="fas fa-laugh"></i>Emoji
           </ActionButton>
           <ActionButton>
@@ -43,12 +146,24 @@ export default function NewPostEntryControl() {
           <ActionButton>
             <i className="fas fa-file-image"></i>GIF
           </ActionButton>
+          {emojiPickerVisible ? (
+            <Picker
+              style={{ position: 'absolute', left: '460px' }}
+              onSelect={addEmojiToEditor}
+            />
+          ) : null}
         </div>
         <PublishButton onClick={handlePublish}>Post</PublishButton>
       </PublishButtonRow>
     </NewPostPanel>
   )
 }
+
+const offblack = '#191919'
+const buttonGray = 'darkgray'
+const lightblue = 'lightblue'
+const slightlyDarkerBlue = '#94aeb7'
+const publishButtonBlue = '#395ca9'
 
 const NewPostPanel = styled.div`
   padding: 0.5rem;
@@ -58,7 +173,26 @@ const NewPostPanel = styled.div`
   margin-bottom: 20px;
 `
 
-const offblack = '#191919'
+const Toolbar = styled.div`
+  padding: 0.25rem;
+`
+
+const ToolbarEditorBtn = styled(ToolbarButton)`
+  margin-right: 0.5rem;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: ${buttonGray};
+  &:hover {
+    color: ${lightblue};
+  }
+  &:active {
+    color: ${slightlyDarkerBlue};
+  }
+  &:focus {
+    outline: none;
+  }
+`
 
 const ComposerPanel = styled.div`
   border: 1px lightgray solid;
@@ -68,6 +202,7 @@ const ComposerPanel = styled.div`
   .slate-editor {
     color: ${offblack};
     font-size: 18px;
+    min-height: 3rem;
   }
 `
 
@@ -77,15 +212,12 @@ const PublishButtonRow = styled.div`
   justify-content: space-between;
 `
 
-const lightblue = 'lightblue'
-const slightlyDarkerBlue = '#94aeb7'
-
 const ActionButton = styled.button`
   height: 25px;
   border: none;
   background: inherit;
   cursor: pointer;
-  color: darkgray;
+  color: ${buttonGray};
   line-height: 1rem;
   vertical-align: text-top;
   i {
@@ -99,14 +231,22 @@ const ActionButton = styled.button`
   &:active {
     color: ${slightlyDarkerBlue};
   }
+  &:focus {
+    outline: none;
+  }
 `
 
 const PublishButton = styled.button`
-  background: #395ca9;
+  background: ${publishButtonBlue};
   border-radius: 5px;
   border: none;
   color: white;
   width: 80px;
   height: 25px;
   cursor: pointer;
+  &:focus {
+    outline: none;
+  }
 `
+
+export default inject('store')(props => <NewPostEntryControl {...props} />)
