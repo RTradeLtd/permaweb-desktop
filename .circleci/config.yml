@@ -130,14 +130,26 @@ workflows:
     jobs:
       - build-linux:
           filters:
+            branches:
+              only:
+                - master
+                - develop
             tags:
               only: /v.*/
       - build-win:
           filters:
+            branches:
+              only:
+                - master
+                - develop
             tags:
               only: /v.*/
       - build-macos:
           filters:
+            branches:
+              only:
+                - master
+                - develop
             tags:
               only: /v.*/
       - release:
