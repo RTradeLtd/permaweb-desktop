@@ -120,7 +120,7 @@ jobs:
       - deploy:
           name: Release Installers
           command: |
-            ls output
+            VERSION=v$(node -p "require('./package.json').version")
             echo $VERSION
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ~/output/
 
@@ -130,41 +130,23 @@ workflows:
     jobs:
       - build-linux:
           filters:
-            branches:
-              only:
-                - master
-                - develop
-                - feature/builds
             tags:
-              only: /.*/
+              only: /v.*/
       - build-win:
           filters:
-            branches:
-              only:
-                - master
-                - develop
-                - feature/builds
             tags:
-              only: /.*/
+              only: /v.*/
       - build-macos:
           filters:
-            branches:
-              only:
-                - master
-                - develop
-                - feature/builds
             tags:
-              only: /.*/
+              only: /v.*/
       - release:
           requires:
             - build-linux
             - build-win
             - build-macos
           filters:
-            branches:
-              only:
-                - master
-                - develop
-                - feature/builds
             tags:
-              only: /^v.*
+              only: /v.*/
+            branches:
+              ignore: /.*/
