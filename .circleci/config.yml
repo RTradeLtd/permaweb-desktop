@@ -1,0 +1,164 @@
+version: 2.1
+
+jobs:
+  build-linux:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/permaweb
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            yarn install
+      - run:
+          name: Rebuild deps for electron node version
+          command: |
+            yarn exec electron-builder install-app-deps
+      - run:
+          name: Create build
+          command: |
+            yarn build
+      - run:
+          name: Build Installers
+          command: |
+            yarn dist --linux
+      - run:
+          name: Collect Artifacts
+          command: |
+            VERSION=v$(node -p "require('./package.json').version")
+            OUT=~/output
+            mkdir -p ${OUT}
+            mv ~/permaweb/dist/Permaweb-${VERSION}.AppImage ${OUT}/
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output
+      - store_artifacts:
+          path: ~/output
+  build-win:
+    docker:
+      - image: electronuserland/builder:wine
+    working_directory: ~/permaweb
+    steps:
+      - checkout
+      - run:
+          name: Install Dependencies
+          command: |
+            TARGET_OS=windows yarn install
+      - run:
+          name: Rebuild deps for electron node version
+          command: |
+            TARGET_OS=windows yarn exec electron-builder install-app-deps
+      - run:
+          name: Create build
+          command: |
+            TARGET_OS=windows yarn build
+      - run:
+          name: Build Installers
+          command: |
+            yarn dist --windows
+      - run:
+          name: Collect Artifacts
+          command: |
+            VERSION=v$(node -p "require('./package.json').version")
+            OUT=~/output
+            mkdir -p ${OUT}
+            mv ~/permaweb/dist/Permaweb-${VERSION}.exe ${OUT}/
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output
+      - store_artifacts:
+          path: ~/output
+  build-macos:
+    macos:
+      xcode: '10.0.0'
+    working_directory: ~/permaweb
+    steps:
+      - checkout
+      - run:
+          name: Link SSL
+          command: |
+            ln -s /usr/local/opt/openssl/include/openssl/ /usr/local/include/
+      - run:
+          name: Install Dependencies
+          command: |
+            yarn install
+      - run:
+          name: Rebuild deps for electron node version
+          command: |
+            yarn exec electron-builder install-app-deps
+      - run:
+          name: Create build
+          command: |
+            yarn build
+      - run:
+          name: Build Installers
+          command: |
+            yarn dist --macos
+      - run:
+          name: Collect Artifacts
+          command: |
+            VERSION=v$(node -p "require('./package.json').version")
+            OUT=~/output
+            mkdir -p ${OUT}
+            mv ~/permaweb/dist/Permaweb-${VERSION}.dmg ${OUT}/
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - output
+      - store_artifacts:
+          path: ~/output
+  release:
+    docker:
+      - image: cibuilds/github:0.10
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - deploy:
+          name: Release Installers
+          command: |
+            VERSION=v$(node -p "require('./package.json').version")
+            echo $VERSION
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ~/output/
+
+workflows:
+  version: 2
+  permaweb-desktop:
+    jobs:
+      - build-linux:
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+            tags:
+              only: /v.*/
+      - build-win:
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+            tags:
+              only: /v.*/
+      - build-macos:
+          filters:
+            branches:
+              only:
+                - master
+                - develop
+            tags:
+              only: /v.*/
+      - release:
+          requires:
+            - build-linux
+            - build-macos
+            - build-win
+          filters:
+            tags:
+              only: /v.*/
+            branches:
+              ignore: /.*/

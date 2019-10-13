@@ -7,12 +7,12 @@ const { default: Wallet, Keypair } = require('@textile/wallet')
 const bip39 = require('bip39')
 const Store = require('electron-store')
 
-const {
-  PERMAWEB_APP_NAMESPACE,
-  PERMAWEB_PINCODE,
-  PERMAWEB_IO_PEER_ID,
-  PERMAWEB_IO_CAFE_TOKEN
-} = process.env
+const PERMAWEB_APP_NAMESPACE = 'io-permaweb-desktop'
+const PERMAWEB_PINCODE = 'secret-pincode'
+const PERMAWEB_IO_PEER_ID =
+  '12D3KooWK5r8kK4fjgHXFn7T5DFy6txPffrkFCPUUDk2ZLvWtPCy'
+const PERMAWEB_IO_CAFE_TOKEN =
+  'oasxtEFS2Z1Yis69UKsif32PW21jDxmFbCKVbkaFhW2pMPHNAm66mYx8VRCT'
 const store = new Store()
 
 let mainWindow
