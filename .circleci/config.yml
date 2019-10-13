@@ -120,6 +120,8 @@ jobs:
       - deploy:
           name: Release Installers
           command: |
+            ls output
+            echo $VERSION
             ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ~/output/
 
 workflows:
