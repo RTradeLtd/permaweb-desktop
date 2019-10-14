@@ -19,7 +19,7 @@ const GroupsSidebar = observer(
     groups: Group[]
     navigateHome: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
     navigateToGroup: Function
-    leaveGroup: Function
+    leaveGroup: (groupHash: string) => void
     createGroup: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   }) => {
     return (
@@ -35,12 +35,7 @@ const GroupsSidebar = observer(
               onClick={() => navigateToGroup(groupHash)}
             >
               <ListItemText primary={name} />
-              <button
-                data-key={`leave-${groupHash}`}
-                onClick={() => leaveGroup(groupHash)}
-              >
-                -
-              </button>
+              <button onClick={() => leaveGroup(groupHash)}>-</button>
             </ListItem>
           ))}
         </List>
@@ -78,11 +73,16 @@ const WrappedGroupsSidebar = observer(
       history.push(`/g/${groupHash}`)
     }
 
+    const leaveGroup = async (groupHash: string) => {
+      await store.groupsDelete(groupHash)
+      history.push('/')
+    }
+
     return (
       <GroupsSidebar
         groups={store.groups}
         createGroup={createGroup}
-        leaveGroup={store.groupsDelete}
+        leaveGroup={leaveGroup}
         navigateHome={navigateHome}
         navigateToGroup={navigateToGroup}
       />
