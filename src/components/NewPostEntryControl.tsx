@@ -35,7 +35,6 @@ const buildEditorBtnHandler = (
 ) => {
   return async (event: React.MouseEvent) => {
     event.preventDefault()
-    event.stopPropagation()
 
     if (!editorRef || !editorRef.current) {
       return
