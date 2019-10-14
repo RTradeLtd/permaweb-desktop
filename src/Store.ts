@@ -136,6 +136,11 @@ class Store {
   }
 
   /* interactions */
+  async reactionsGetAll(groupHash: string, postHash: string) {}
+
+  async reactionsAdd(groupHash: string, postHash: string, reaction: string) {}
+
+  async reactionsRemove(groupHash: string, postHash: string, reaction: string) {}
 }
 
 export default Store
