@@ -6,34 +6,18 @@ import NewPostEntryControl from '../components/NewPostEntryControl'
 import Store from '../Store'
 import { Post } from '../domain'
 
-function useGroup({ groupHash, store }: { groupHash: string; store: Store }) {
-  const [list, setList] = useState<Post[]>([])
-
-  useEffect(() => {
-    const getList = async () => {
-      setList(await store.postsGetAll(groupHash))
-    }
-
-    getList()
-  }, [groupHash])
-
-  return { list }
-}
-
 export const Group = function({
   groupHash,
-  store
+  posts
 }: {
   groupHash: string
-  store: Store
+  posts: Post[]
 }) {
-  const { list } = useGroup({ store, groupHash })
-
   return (
     <div>
       <NewPostEntryControl key={groupHash} groupHash={groupHash} />
       <List>
-        {list.map(post => (
+        {posts.map(post => (
           <PostCard key={post.postHash} post={post} />
         ))}
       </List>
@@ -50,8 +34,36 @@ const List = styled.ul`
   grid-gap: 20px;
 `
 
+const GroupWrap = ({
+  store,
+  groupHash
+}: {
+  store: Store
+  groupHash: string
+}) => {
+  const [posts, setPosts] = useState<Post[]>([])
+
+  useEffect(() => {
+    const getPosts = async () => {
+      setPosts(await store.postsGetAll(groupHash))
+    }
+
+    getPosts()
+  }, [store, groupHash])
+
+  return <Group groupHash={groupHash} posts={posts} />
+}
+
 export default inject('store')(
-  observer(({ store, match: { params: { groupHash } } }) => (
-    <Group store={store} groupHash={groupHash} />
-  ))
+  observer(
+    ({
+      store,
+      match: {
+        params: { groupHash }
+      }
+    }: {
+      store: Store
+      match: { params: { groupHash: string } }
+    }) => <GroupWrap store={store} groupHash={groupHash} />
+  )
 )
