@@ -68,12 +68,10 @@ function NewPostEntryControl({
 
   const handlePublish = useCallback(async () => {
     const res = await store.postsAdd(groupHash, editorState.toJSON())
-    setTimeout(() => {
-      console.log('reset editor after publishing: ', res)
-      if (res) {
-        setEditorState(defaultEditorValue)
-      }
-    }, 2000)
+
+    if (res) {
+      setEditorState(defaultEditorValue)
+    }
   }, [store, groupHash, editorState])
 
   const handleEditorBtnBold = useCallback(

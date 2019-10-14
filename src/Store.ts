@@ -1,6 +1,13 @@
-import { runInAction, action, configure, observable } from 'mobx'
+import {
+  runInAction,
+  action,
+  configure,
+  observable,
+  IObservableArray,
+  ObservableMap
+} from 'mobx'
 import { Textile, FileIndex } from '@textile/js-http-client'
-import { Group } from './domain'
+import { Group, Post } from './domain'
 
 configure({ enforceActions: 'always' })
 
@@ -29,7 +36,8 @@ class Store {
   gateway: string = 'http://127.0.0.1:5052'
   schema: FileIndex | undefined = undefined
   @observable status: string = 'offline'
-  @observable groups: Group[] = []
+  @observable groups: IObservableArray<Group> = [] as any
+  @observable currentPosts: IObservableArray<Post> = [] as any
 
   @action
   async connect() {
@@ -45,13 +53,16 @@ class Store {
   @action
   async groupsGetAll() {
     const { items } = await textile.threads.list()
+
     const groups = items.map(({ id, name }) => ({
       groupHash: id,
       name
     }))
+
     runInAction(() => {
-      this.groups = groups
+      this.groups.replace(groups)
     })
+
     return groups
   }
 
@@ -74,42 +85,36 @@ class Store {
   }
 
   /* posts */
-  async postsGetAll(groupHash: string) {
+  @action
+  async postsLoad(groupHash: string) {
     const { items } = await textile.files.list(groupHash)
-    console.log('items: ', items)
-    const list = await Promise.all(
-      items.map(
-        async ({
-          block,
-          files: [
-            {
-              file: { hash, added }
-            }
-          ],
-          ...rest
-        }) => {
-          console.log(rest)
-          const serialized = await textile.file.content(hash)
-          const { content } = JSON.parse(serialized)
-          // content was also sserialized
-          const data = JSON.parse(content)
 
-          return {
-            groupHash,
-            postHash: hash,
-            block,
-            lastModified: added,
-            author: 'Error',
-            content: data,
-            comments: [],
-            shares: [],
-            reactions: []
-          }
+    const posts: Post[] = await Promise.all(
+      items.map(async ({ block, files: [{ file: { hash, added } }] }) => {
+        const serialized = await textile.file.content(hash)
+        const { content } = JSON.parse(serialized)
+        // content was also sserialized
+        const data = JSON.parse(content)
+
+        return {
+          groupHash,
+          postHash: hash,
+          block,
+          lastModified: added,
+          author: 'Error',
+          content: data,
+          comments: [],
+          shares: [],
+          reactions: []
         }
-      )
+      })
     )
-    console.log('list: ', list)
-    return list
+
+    runInAction(() => {
+      this.currentPosts.replace(posts)
+    })
+
+    return posts
   }
 
   @action
@@ -120,7 +125,7 @@ class Store {
       }
       await textile.files.addFile(JSON.stringify(payload), '', groupHash)
       runInAction(() => {
-        this.postsGetAll(groupHash)
+        this.postsLoad(groupHash)
       })
       return true
     } catch (err) {
