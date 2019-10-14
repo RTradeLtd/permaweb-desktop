@@ -5,6 +5,8 @@ import { observer, inject } from 'mobx-react'
 import { ListItemText, List, ListItem } from '@material-ui/core'
 import { History } from 'history'
 import Store from './Store'
+import { Group } from './domain'
+import GroupsSidebar from './components/GroupsSidebar'
 
 const DRAWER_WIDTH = 240
 const HEADER_HEIGHT = 80
@@ -89,36 +91,13 @@ const Layout = ({ store, children, history }: LayoutProps) => {
         </Bar>
       </Header>
       <Content>
-        <Nav>
-          <List>
-            <ListItem button key={'home'} onClick={navigateHome}>
-              <ListItemText primary={'Home'} />
-            </ListItem>
-            {groups.map(({ groupHash, name }) => (
-              <ListItem
-                key={groupHash}
-                button
-                onClick={() => navigateToGroup(groupHash)}
-              >
-                <ListItemText primary={name} />
-                <button
-                  data-key={`leave-${groupHash}`}
-                  onClick={() => leaveGroup(groupHash)}
-                >
-                  -
-                </button>
-              </ListItem>
-            ))}
-          </List>
-          <List>
-            <ListItem button key={'search'} onClick={navigateHome}>
-              <ListItemText primary={'Find people or groups'} />
-            </ListItem>
-            <ListItem button key={'create-group'} onClick={createGroup}>
-              <ListItemText primary={'Create a group'} />
-            </ListItem>
-          </List>
-        </Nav>
+        <GroupsSidebar
+          groups={groups}
+          createGroup={createGroup}
+          leaveGroup={leaveGroup}
+          navigateHome={navigateHome}
+          navigateToGroup={navigateToGroup}
+        />
         <Main>{children}</Main>
       </Content>
       <Footer>
@@ -201,12 +180,6 @@ const Members = styled.div`
 `
 
 /* content */
-const Nav = styled.nav`
-  height: 100%;
-  display: grid;
-  grid-template-rows: 1fr auto;
-  padding: 0 5px;
-`
 
 const Main = styled.main`
   height: 100%;
