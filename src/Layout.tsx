@@ -1,11 +1,8 @@
 import React, { useEffect, ReactElement } from 'react'
 import styled from 'styled-components'
-import { withRouter } from 'react-router-dom'
 import { observer, inject } from 'mobx-react'
-import { ListItemText, List, ListItem } from '@material-ui/core'
-import { History } from 'history'
 import Store from './Store'
-import { Group } from './domain'
+
 import GroupsSidebar from './components/GroupsSidebar'
 
 const DRAWER_WIDTH = 240
@@ -13,50 +10,25 @@ const HEADER_HEIGHT = 80
 const FOOTER_HEIGHT = 60
 const BACKGROUND = '3578E5'
 
-function useLayout({ history, store }: { history: History; store: Store }) {
-  const navigateHome = () => history.push('/')
-  const navigateToGroup = (groupHash: string) => history.push(`/g/${groupHash}`)
-  const leaveGroup = store.groupsDelete
-  const createFile = () => console.log('Layout: create file')
-  const saveFile = () => console.log('Layout: save')
+function useLayout({ store }: { store: Store }) {
   const members = [1, 2, 3, 4, 5]
-  const createGroup = () => {
-    const rand = parseInt((Math.random() * 40).toString(), 10)
-    store.groupsAdd(`G-${rand}`)
-  }
 
   useEffect(() => {
     store.groupsGetAll()
   }, [])
 
   return {
-    createFile,
-    createGroup,
-    groups: store.groups,
-    leaveGroup,
-    members,
-    navigateHome,
-    navigateToGroup,
-    saveFile
+    members
   }
 }
 
 export interface LayoutProps {
   store: Store
   children: ReactElement
-  history: History
 }
 
-const Layout = ({ store, children, history }: LayoutProps) => {
-  const {
-    createGroup,
-    groups,
-    leaveGroup,
-    members,
-    navigateHome,
-    navigateToGroup
-  } = useLayout({
-    history,
+const Layout = ({ store, children }: LayoutProps) => {
+  const { members } = useLayout({
     store
   })
 
@@ -91,13 +63,7 @@ const Layout = ({ store, children, history }: LayoutProps) => {
         </Bar>
       </Header>
       <Content>
-        <GroupsSidebar
-          groups={groups}
-          createGroup={createGroup}
-          leaveGroup={leaveGroup}
-          navigateHome={navigateHome}
-          navigateToGroup={navigateToGroup}
-        />
+        <GroupsSidebar />
         <Main>{children}</Main>
       </Content>
       <Footer>
@@ -209,7 +175,4 @@ const Img = styled.img`
   border-radius: 50%;
 `
 
-export default withRouter(
-  // @ts-ignore
-  inject('store')(observer(props => <Layout {...props} />))
-)
+export default inject('store')(observer(props => <Layout {...props} />))

@@ -1,7 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import { Group } from '../domain'
 import { List, ListItem, ListItemText } from '@material-ui/core'
 import styled from 'styled-components'
+import { inject, observer } from 'mobx-react'
+import Store from '../Store'
+import { History } from 'history'
+import { withRouter } from 'react-router-dom'
 
 const GroupsSidebar = ({
   groups,
@@ -57,4 +62,33 @@ const Nav = styled.nav`
   padding: 0 5px;
 `
 
-export default GroupsSidebar
+const SmartGroupsSidebar = ({
+  store,
+  history
+}: {
+  store: Store
+  history: History
+}) => {
+  const { groups, groupsDelete } = store
+
+  const createGroup = () => {
+    const rand = parseInt((Math.random() * 40).toString(), 10)
+    store.groupsAdd(`G-${rand}`)
+  }
+
+  const navigateHome = () => history.push('/')
+
+  const navigateToGroup = (groupHash: string) => history.push(`/g/${groupHash}`)
+
+  return (
+    <GroupsSidebar
+      groups={groups}
+      createGroup={createGroup}
+      leaveGroup={groupsDelete}
+      navigateHome={navigateHome}
+      navigateToGroup={navigateToGroup}
+    />
+  )
+}
+
+export default withRouter(inject('store')(observer(SmartGroupsSidebar as any)))
