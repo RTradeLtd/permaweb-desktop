@@ -74,7 +74,7 @@ function NewPostEntryControl({
         setEditorState(defaultEditorValue)
       }
     }, 2000)
-  }, [setEditorState, editorState])
+  }, [store, groupHash, editorState])
 
   const handleEditorBtnBold = useCallback(
     buildEditorBtnHandler('bold', editorRef),

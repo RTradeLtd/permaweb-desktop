@@ -7,7 +7,7 @@ module.exports = {
     'prettier/@typescript-eslint',
     'prettier/react'
   ],
-  plugins: ['@typescript-eslint', 'prettier', 'react'],
+  plugins: ['@typescript-eslint', 'prettier', 'react', 'react-hooks'],
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
@@ -20,7 +20,9 @@ module.exports = {
     '@typescript-eslint/explicit-member-accessibility': [
       'error',
       { accessibility: 'no-public' }
-    ]
+    ],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'warn'
   },
   settings: {
     react: {

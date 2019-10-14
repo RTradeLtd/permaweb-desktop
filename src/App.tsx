@@ -22,7 +22,7 @@ import Store from './Store'
 function App({ store, status }: { store: Store; status: string }) {
   useEffect(() => {
     store.connect()
-  }, [])
+  }, [store])
 
   return (
     <Router>

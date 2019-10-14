@@ -15,7 +15,7 @@ function useLayout({ store }: { store: Store }) {
 
   useEffect(() => {
     store.groupsGetAll()
-  }, [])
+  }, [store])
 
   return {
     members
