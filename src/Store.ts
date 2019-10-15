@@ -11,6 +11,16 @@ import { Group, Post } from './domain'
 
 configure({ enforceActions: 'always' })
 
+async function getBlobContent(serialized: Blob): Promise<string> {
+  return new Promise(resolve => {
+    const reader = new FileReader()
+    reader.onload = function() {
+      resolve(reader.result as string)
+    }
+    reader.readAsText(serialized)
+  })
+}
+
 const SCHEMA = {
   name: 'permaweb-v0.0.3',
   mill: '/json',
@@ -91,9 +101,10 @@ class Store {
 
     const posts: Post[] = await Promise.all(
       items.map(async ({ block, files: [{ file: { hash, added } }] }) => {
-        const serialized = await textile.file.content(hash)
+        const blob = await textile.file.content(hash)
+        const serialized = await getBlobContent(blob)
         const { content } = JSON.parse(serialized)
-        // content was also sserialized
+        // content was also serialized
         const data = JSON.parse(content)
 
         return {
@@ -120,10 +131,8 @@ class Store {
   @action
   async postsAdd(groupHash: string, content: {}) {
     try {
-      const payload = {
-        content: JSON.stringify(content)
-      }
-      await textile.files.addFile(JSON.stringify(payload), '', groupHash)
+      const payload = { content: JSON.stringify(content) }
+      await textile.files.add(payload, '', groupHash)
       runInAction(() => {
         this.postsLoad(groupHash)
       })
