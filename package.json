@@ -12,7 +12,7 @@
     "@material-ui/icons": "^4.2.1",
     "@textile/go-daemon": "^0.1.1",
     "@textile/go-textile-dep": "^0.6.5",
-    "@textile/js-http-client": "0.2.11",
+    "@textile/js-http-client": "^1.0.2",
     "@textile/wallet": "^0.2.2",
     "bip39": "^3.0.2",
     "ed25519": "0.0.4",

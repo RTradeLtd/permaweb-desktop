@@ -1936,25 +1936,7 @@
     typescript "^3.5.3"
     unzip-stream "^0.3.0"
 
-"@textile/js-http-client@0.2.11":
-  version "0.2.11"
-  resolved "https://registry.yarnpkg.com/@textile/js-http-client/-/js-http-client-0.2.11.tgz#15e967b5030fd067242b6e141d3b45b943ba160c"
-  integrity sha512-4UBARVdAYTb50EGzRVe0CDMVDFJUw2t+dcOHidMipdjJkh4rT6kI/C+co3xrpswk/aJl4HUZk23gSIS4Avmc9w==
-  dependencies:
-    bip39 "^2.5.0"
-    bs58 "^4.0.1"
-    crc "^3.8.0"
-    create-hash "^1.2.0"
-    create-hmac "^1.1.7"
-    isomorphic-fetch "^2.2.1"
-    tiny-secp256k1 "^1.0.1"
-    toposort "^2.0.2"
-    tweetnacl "^1.0.1"
-    url-parse "^1.4.4"
-    url-toolkit "^2.1.6"
-    web-streams-polyfill "^2.0.3"
-
-"@textile/js-http-client@^1.0.1":
+"@textile/js-http-client@^1.0.1", "@textile/js-http-client@^1.0.2":
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/@textile/js-http-client/-/js-http-client-1.0.2.tgz#015de8a2a1466c0652a67abdaa26f10648e9be1e"
   integrity sha512-nsrOZttV1vdagrdX/y+QMxhvkVj7jQr0Pg1U+H2LtM8VMDmKv6EVHhxYOup6Ol7SiuRWsLRYF8bmcluRzFvW8w==
@@ -8479,7 +8461,7 @@ isomorphic-base64@^1.0.2:
   resolved "https://registry.yarnpkg.com/isomorphic-base64/-/isomorphic-base64-1.0.2.tgz#f426aae82569ba8a4ec5ca73ad21a44ab1ee7803"
   integrity sha1-9Caq6CVpuopOxcpzrSGkSrHueAM=
 
-isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
+isomorphic-fetch@^2.1.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
   integrity sha1-YRrhrPFPXoH3KVB0coGf6XM1WKk=
@@ -14225,7 +14207,7 @@ tiny-invariant@^1.0.1, tiny-invariant@^1.0.2:
   resolved "https://registry.yarnpkg.com/tiny-invariant/-/tiny-invariant-1.0.6.tgz#b3f9b38835e36a41c843a3b0907a5a7b3755de73"
   integrity sha512-FOyLWWVjG+aC0UqG76V53yAWdXfH8bO6FNmyZOuUrzDzK8DI3/JRY25UD7+g49JWM1LXwymsKERB+DzI0dTEQA==
 
-tiny-secp256k1@^1.0.1, tiny-secp256k1@^1.1.2:
+tiny-secp256k1@^1.1.2:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/tiny-secp256k1/-/tiny-secp256k1-1.1.3.tgz#e93b1e1bf62e9bd1ad3ab24af27ff6127ce0e077"
   integrity sha512-ZpobrhOtHP98VYEN51IYQH1YcrbFpnxFhI6ceWa3OEbJn7eHvSd8YFjGPxbedGCy7PNYU1v/+BRsdvyr5uRd4g==
