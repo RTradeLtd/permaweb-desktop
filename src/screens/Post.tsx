@@ -4,34 +4,12 @@ import PostCard from '../components/PostCard'
 import { Post as PostType } from '../domain'
 import Store from '../Store'
 
-const POST_ENFORCE_INTERFACE = {
-  groupHash: '-1',
-  postHash: '-1',
-  block: '123',
-  lastModified: '',
-  author: 'Error',
-  content: 'Error',
-  comments: [],
-  shares: [],
-  reactions: []
-}
-
-function usePost(postHash: string) {
-  const post: PostType = {
-    ...POST_ENFORCE_INTERFACE
-  }
-
-  return { post }
-}
-
 interface PostProps {
-  postHash: string
+  post: PostType
   onPostDelete: (block: string) => void
 }
 
-export const Post = ({ postHash, onPostDelete }: PostProps) => {
-  const { post } = usePost(postHash)
-
+export const Post = ({ post, onPostDelete }: PostProps) => {
   return <PostCard post={post} onPostDelete={onPostDelete} />
 }
 
@@ -53,11 +31,14 @@ const WrappedPost = ({
     [store]
   )
 
+  const post = store.currentPosts.find(p => p.postHash === postHash)
+
+  if (!post) {
+    throw new Error(`No post found for ${postHash}`)
+  }
+
   return (
-    <ObservedPost
-      postHash={postHash}
-      onPostDelete={handlePostDelete}
-    ></ObservedPost>
+    <ObservedPost post={post} onPostDelete={handlePostDelete}></ObservedPost>
   )
 }
 
