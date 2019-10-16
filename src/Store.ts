@@ -3,8 +3,7 @@ import {
   action,
   configure,
   observable,
-  IObservableArray,
-  ObservableMap
+  IObservableArray
 } from 'mobx'
 import { Textile, FileIndex } from '@textile/js-http-client'
 import { Group, Post } from './domain'
@@ -46,7 +45,9 @@ class Store {
   gateway: string = 'http://127.0.0.1:5052'
   schema: FileIndex | undefined = undefined
   @observable status: string = 'offline'
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @observable groups: IObservableArray<Group> = [] as any
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @observable currentPosts: IObservableArray<Post> = [] as any
 
   @action
@@ -150,11 +151,16 @@ class Store {
   }
 
   /* interactions */
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   async reactionsGetAll(groupHash: string, postHash: string) {}
 
   async reactionsAdd(groupHash: string, postHash: string, reaction: string) {}
 
-  async reactionsRemove(groupHash: string, postHash: string, reaction: string) {}
+  async reactionsRemove(
+    groupHash: string,
+    postHash: string,
+    reaction: string
+  ) {}
 }
 
 export default Store
