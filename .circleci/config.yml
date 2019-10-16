@@ -7,7 +7,8 @@ jobs:
     working_directory: ~/permaweb
     steps:
       - checkout
-      - run: apt install snapd
+      - run: sudo snap install docker circleci
+      - run: sudo snap connect circleci:docker docker
       - run:
           name: Install Dependencies
           command: |
@@ -133,7 +134,8 @@ workflows:
             tags:
               only: /v.*/
             branches:
-              ignore: /.*/
+              only:
+                - develop
       - build-win:
           filters:
             tags:
