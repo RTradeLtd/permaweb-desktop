@@ -26,10 +26,9 @@ jobs:
       - run:
           name: Collect Artifacts
           command: |
-            VERSION=v$(node -p "require('./package.json').version")
             OUT=~/output
             mkdir -p ${OUT}
-            mv ~/permaweb/dist/Permaweb-${VERSION}.AppImage ${OUT}/
+            mv ~/permaweb/dist/Permaweb-${CIRCLE_TAG}.AppImage ${OUT}/
       - persist_to_workspace:
           root: ~/
           paths:
@@ -61,10 +60,9 @@ jobs:
       - run:
           name: Collect Artifacts
           command: |
-            VERSION=v$(node -p "require('./package.json').version")
             OUT=~/output
             mkdir -p ${OUT}
-            mv ~/permaweb/dist/Permaweb-${VERSION}.exe ${OUT}/
+            mv ~/permaweb/dist/Permaweb-${CIRCLE_TAG}.exe ${OUT}/
       - persist_to_workspace:
           root: ~/
           paths:
@@ -100,10 +98,9 @@ jobs:
       - run:
           name: Collect Artifacts
           command: |
-            VERSION=v$(node -p "require('./package.json').version")
             OUT=~/output
             mkdir -p ${OUT}
-            mv ~/permaweb/dist/Permaweb-${VERSION}.dmg ${OUT}/
+            mv ~/permaweb/dist/Permaweb-${CIRCLE_TAG}.dmg ${OUT}/
       - persist_to_workspace:
           root: ~/
           paths:
@@ -120,8 +117,7 @@ jobs:
       - deploy:
           name: Release Installers
           command: |
-            VERSION=v$(node -p "require('./package.json').version")
-            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${VERSION} ~/output/
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} -delete ${CIRCLE_TAG} ~/output/
 
 workflows:
   version: 2
@@ -132,15 +128,13 @@ workflows:
             tags:
               only: /v.*/
             branches:
-              only:
-                - develop
+              ignore: /.*/
       - build-win:
           filters:
             tags:
               only: /v.*/
             branches:
-              only:
-                - develop
+              ignore: /.*/
       - build-macos:
           filters:
             tags:
