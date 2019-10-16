@@ -107,6 +107,7 @@ const onKeyDown = (
 
   event.preventDefault()
   editor.toggleMark(mark)
+  return next()
 }
 
 const SlateEditor = (

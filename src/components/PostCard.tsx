@@ -1,58 +1,34 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import styled from 'styled-components'
 import SlateEditor from './SlateEditor'
 import { Value } from 'slate'
-import { observer, inject } from 'mobx-react'
 import { Link } from 'react-router-dom'
 import { Post } from '../domain'
-import Store from '../Store'
 
 const formatDate = (timeStamp: string) => new Date(timeStamp).toLocaleString()
 
-function usePost({
+interface PostCardProps {
+  post: Post
+  onPostDelete: (block: string) => void
+}
+
+function PostCard({
+  onPostDelete,
   post: {
     groupHash,
     postHash,
+    block,
     author,
     lastModified,
     content,
     comments,
     shares,
-    reactions,
-    block
-  },
-  store
-}: {
-  post: Post
-  store: Store
-}) {
-  const deletePost = () => store.postsDelete(block)
-
-  return {
-    groupHash,
-    postHash,
-    author,
-    lastModified,
-    content,
-    comments,
-    shares,
-    reactions,
-    deletePost
+    reactions
   }
-}
-
-function PostCard({ store, post }: { post: Post; store: Store }) {
-  const {
-    groupHash,
-    postHash,
-    author,
-    lastModified,
-    content,
-    comments,
-    shares,
-    reactions,
-    deletePost
-  } = usePost({ store, post })
+}: PostCardProps) {
+  const handleDeletePost = useCallback(() => {
+    return onPostDelete(block)
+  }, [onPostDelete, block])
 
   return (
     <Card key={postHash}>
@@ -97,7 +73,7 @@ function PostCard({ store, post }: { post: Post; store: Store }) {
           )
         })}
       </Comments>
-      <button onClick={deletePost}>-</button>
+      <button onClick={handleDeletePost}>-</button>
     </Card>
   )
 }
@@ -169,4 +145,4 @@ const CommentContent = styled.div`
   border-radius: 4px;
 `
 
-export default inject('store')(observer(props => <PostCard {...props} />))
+export default PostCard

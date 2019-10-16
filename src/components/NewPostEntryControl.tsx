@@ -1,12 +1,9 @@
 import React, { useState, useCallback, useRef } from 'react'
-import { inject } from 'mobx-react'
 import styled from 'styled-components'
-import Store from '../Store'
 import SlateEditor, { defaultEditorValue } from './SlateEditor'
-import 'emoji-mart/css/emoji-mart.css'
 import { Editor } from 'slate-react'
-// @ts-ignore
 import { Picker, BaseEmoji } from 'emoji-mart'
+import 'emoji-mart/css/emoji-mart.css'
 
 const newPostEntryControlPlaceholderText =
   'Share a thought, or write your next novel'
@@ -48,11 +45,10 @@ const buildEditorBtnHandler = (
 }
 
 function NewPostEntryControl({
-  store,
-  groupHash
+  onPostClicked
 }: {
-  store: Store
-  groupHash: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onPostClicked: (editorState: any) => Promise<boolean>
 }) {
   const editorRef = useRef<Editor | null>(null)
   const [editorState, setEditorState] = useState(defaultEditorValue)
@@ -67,12 +63,12 @@ function NewPostEntryControl({
   )
 
   const handlePublish = useCallback(async () => {
-    const res = await store.postsAdd(groupHash, editorState.toJSON())
+    const res = await onPostClicked(editorState.toJSON())
 
     if (res) {
       setEditorState(defaultEditorValue)
     }
-  }, [store, groupHash, editorState])
+  }, [onPostClicked, editorState])
 
   const handleEditorBtnBold = useCallback(
     buildEditorBtnHandler('bold', editorRef),
@@ -246,4 +242,4 @@ const PublishButton = styled.button`
   }
 `
 
-export default inject('store')(props => <NewPostEntryControl {...props} />)
+export default NewPostEntryControl
