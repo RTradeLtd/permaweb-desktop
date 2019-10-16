@@ -39,22 +39,57 @@ const stringToSlateContent = (text: string) => {
   }
 }
 
-const exampleShortPost: Post = {
+const examplePost: Post = {
   postHash: '999',
   groupHash: '88887777766666',
   author: 'Shokunin',
   block: '123',
   content: stringToSlateContent('Hello World!'),
   lastModified: '2019-01-01T10:00:00Z',
-  comments: [],
-  reactions: [],
+  comments: [
+    {
+      commentHash: '5567',
+      author: 'Akshay',
+      content: 'Hello',
+      lastModified: '2019-01-02T13:22:00Z'
+    },
+    {
+      commentHash: '6567',
+      author: 'kanej',
+      content: 'More words',
+      lastModified: '2019-01-03T22:12:00Z'
+    }
+  ],
+  reactions: [
+    {
+      symbol: '👍',
+      count: 3
+    },
+    {
+      symbol: '😀',
+      count: 2
+    }
+  ],
   shares: []
+}
+
+const StandardFrame: React.FC = ({ children }) => {
+  return (
+    <div
+      style={{
+        background: '#e9ebee',
+        padding: '2rem'
+      }}
+    >
+      {children}
+    </div>
+  )
 }
 
 export const publicGroup = () => (
   <MemoryRouter>
     <Group
-      posts={[exampleShortPost]}
+      posts={[examplePost]}
       onPostClicked={addPostAction}
       onPostDelete={deletePostAction}
     />
@@ -75,6 +110,8 @@ newPostEnryControl.story = {
 
 export const shortPost = () => (
   <MemoryRouter>
-    <PostCard onPostDelete={deletePostAction} post={exampleShortPost} />
+    <StandardFrame>
+      <PostCard onPostDelete={deletePostAction} post={examplePost} />
+    </StandardFrame>
   </MemoryRouter>
 )

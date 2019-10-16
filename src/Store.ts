@@ -105,7 +105,7 @@ class Store {
     return textile.invites.addExternal(groupHash)
   }
 
-  async groupsJoin({ id, key }: any) {
+  async groupsJoin({ id, key }: { id: string; key: string }) {
     const res = textile.invites.accept(id, key)
     console.log(res)
   }

@@ -17,8 +17,7 @@ export interface Post {
 }
 
 export interface Comment {
-  // This is a placeholder
-  commentHash: never
+  commentHash: string
   author: string
   lastModified: string
   content: string
@@ -30,6 +29,6 @@ export interface Share {
 }
 
 export interface Reaction {
-  // This is a placeholder
-  reactionHash: never
+  symbol: string
+  count: number
 }

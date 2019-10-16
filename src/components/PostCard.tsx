@@ -42,48 +42,71 @@ function PostCard({
             {formatDate(lastModified)}
           </Link>
         </When>
+        <button onClick={handleDeletePost}>-</button>
       </Header>
-      <div>
-        <SlateEditor value={Value.fromJSON(content)} readOnly />
-      </div>
-      <Interactions>
-        <div key="comment-count">Comments {comments.length}</div>
-        <div key="share-count">Shares {shares.length}</div>
-        <Reactions key="reactions">
-          Reactions:{' '}
-          {reactions.map((reaction, index) => (
-            <span key={index}>{reaction}</span>
-          ))}
-        </Reactions>
-      </Interactions>
-      <div>
-        <div>Reply to {author}</div>
-        <textarea />
-        <button>Send</button>
-      </div>
+      <PostBorderContainer>
+        <PostBody>
+          <SlateEditor value={Value.fromJSON(content)} readOnly />
+        </PostBody>
+      </PostBorderContainer>
+      <PostBorderContainer>
+        <Interactions>
+          <Reactions key="reactions">
+            {reactions.map((reaction, index) => (
+              <Reaction key={index}>
+                <span>{reaction.symbol}</span>
+                <span>{reaction.count}</span>
+              </Reaction>
+            ))}
+            <Reaction key={'add-reaction'}>
+              <span>+</span>
+              <span>React</span>
+            </Reaction>
+          </Reactions>
+          <Reactions>
+            <Reaction key="comment-count">
+              <i className={`fas fa-comment-alt`}></i>
+              <span>{comments.length} Comments</span>
+            </Reaction>
+            <Reaction key="share-count">
+              <i className="fas fa-share-square"></i>
+              <span>{shares.length} Shared</span>
+            </Reaction>
+          </Reactions>
+        </Interactions>
+      </PostBorderContainer>
       <Comments>
-        {comments.map(({ author, content, lastModified }, index) => {
-          return (
-            <Comment key={index}>
-              <Img src="https://picsum.photos/seed/picsum/20/20" alt={author} />
-              <div>{author}</div>
-              <CommentContent>{content}</CommentContent>
-              <div>{formatDate(lastModified)}</div>
-            </Comment>
-          )
-        })}
+        <div>
+          <textarea placeholder={`Reply to ${author}`} />
+        </div>
+        <CommentList>
+          {comments.map(({ author, content, lastModified }, index) => {
+            return (
+              <Comment key={index}>
+                <Img
+                  src="https://picsum.photos/seed/picsum/20/20"
+                  alt={author}
+                />
+                <div>{author}</div>
+                <CommentContent>{content}</CommentContent>
+                <div>{formatDate(lastModified)}</div>
+              </Comment>
+            )
+          })}
+        </CommentList>
       </Comments>
-      <button onClick={handleDeletePost}>-</button>
     </Card>
   )
 }
 
+// TODO: pull this from theme
+const backgroundColor = '#e9ebee'
+
 const Card = styled.li`
   display: grid;
   grid-template-columns: auto;
-  grid-gap: 20px;
+  grid-gap: 0px;
   border-radius: 5px;
-  padding: 15px;
   background: #fff;
   box-shadow: 1px 1px 5px -2px rgba(0, 0, 0, 0.1);
 `
@@ -93,6 +116,7 @@ const Header = styled.div`
   grid-template-columns: auto auto 1fr;
   grid-gap: 10px;
   align-items: center;
+  padding: 15px;
 `
 
 const Author = styled.div`
@@ -101,6 +125,13 @@ const Author = styled.div`
   grid-gap: 10px;
   align-items: center;
 `
+
+const PostBorderContainer = styled.div`
+  padding: 15px;
+  border-bottom: 2px solid ${backgroundColor};
+`
+
+const PostBody = styled.div``
 
 const Img = styled.img`
   border-radius: 50%;
@@ -111,19 +142,43 @@ const When = styled.div`
 `
 
 const Interactions = styled.div`
+  display: flex;
+  justify-content: space-between;
+`
+
+const Reactions = styled.ul`
   display: inline-grid;
   grid-template-columns: auto auto auto;
   grid-gap: 10px;
   width: fit-content;
-`
-
-const Reactions = styled.ul`
-  padding: 0;
-  margin: 0;
   list-style: none;
+  padding-inline-start: 10px;
+  padding-inline-end: 10px;
+  margin-block-start: 0px;
+  margin-block-end: 0px;
 `
 
-const Comments = styled.ul`
+const Reaction = styled.li`
+  background: #f5f6f7;
+  padding: 5px 10px 5px 10px;
+  border-radius: 15px;
+  height: 28px;
+  color: #4267b2;
+  span:first-of-type {
+    margin-right: 8px;
+  }
+  i {
+    padding-left: 3px;
+    padding-top: 7px;
+    margin-right: 8px;
+  }
+`
+
+const Comments = styled.div`
+  padding: 15px;
+`
+
+const CommentList = styled.ul`
   padding: 0;
   margin: 0;
   list-style: none;
