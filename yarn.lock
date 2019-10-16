@@ -1123,6 +1123,14 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
+"@cloudcmd/create-element@^2.0.0":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@cloudcmd/create-element/-/create-element-2.0.1.tgz#2a4c54142c7131143da4bf4fa8b0336423327fc9"
+  integrity sha512-4miZma2zXqJKOk9njtksYKibwjyqVuqGZeG6DvREls5A0qhvdI5oGepgfMUcGNiBwiIDe3xiLqCJ2rAQjXUF9Q==
+  dependencies:
+    currify "^4.0.0"
+    fullstore "^2.0.2"
+
 "@craco/craco@^3.5.0":
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/@craco/craco/-/craco-3.6.0.tgz#4b4ce7dacda8ac64731c18b1542f70127cd3eb8e"
@@ -5119,6 +5127,11 @@ currently-unhandled@^0.4.1:
   dependencies:
     array-find-index "^1.0.1"
 
+currify@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/currify/-/currify-4.0.0.tgz#54637df9a9752de8a0d59efbfb5ce59384a1e306"
+  integrity sha512-ABfH28PWp5oqqp31cLXJQdeMqoFNej9rJOu84wKhN3jPCH7FAZg3zY1MVI27PTFoqfPlxOyhGmh9PzOVv+yN2g==
+
 cyclist@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
@@ -6982,6 +6995,11 @@ fsevents@^1.2.3, fsevents@^1.2.7:
   dependencies:
     nan "^2.12.1"
     node-pre-gyp "^0.12.0"
+
+fullstore@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/fullstore/-/fullstore-2.0.2.tgz#8731db0801f67f26a5d60fadfdd3367ec24e5832"
+  integrity sha512-uwXXpcw9PswbJ7a+2RpAdCcznL1ObHpwwpi3bCTVwY+hJj5ZB9x+upNNjOYMTdpZk5ZEI2LDFfaYAkIPkc6K0A==
 
 function-bind@^1.0.2, function-bind@^1.1.1:
   version "1.1.1"
@@ -13408,6 +13426,15 @@ slice-ansi@^2.1.0:
     ansi-styles "^3.2.0"
     astral-regex "^1.0.0"
     is-fullwidth-code-point "^2.0.0"
+
+smalltalk@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/smalltalk/-/smalltalk-4.0.2.tgz#796dd3a400c90cc3c06ab65f8a51a5579495eb1b"
+  integrity sha512-LOdFdFgX2HaSxqPFcz4qaDPwieEGe1L6lF9z70IaBnvNgs2swwBsGb3M57UfRnBkKn8ysUtw83OetKUN+JeSeg==
+  dependencies:
+    "@cloudcmd/create-element" "^2.0.0"
+    currify "^4.0.0"
+    fullstore "^2.0.2"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
