@@ -32,6 +32,7 @@
     "semantic-ui-react": "^0.84.0",
     "slate": "^0.47.8",
     "slate-react": "^0.22.8",
+    "smalltalk": "^4.0.2",
     "styled-components": "^4.4.0"
   },
   "devDependencies": {

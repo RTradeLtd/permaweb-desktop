@@ -7,20 +7,26 @@ import { inject, observer } from 'mobx-react'
 import Store from '../Store'
 import { History } from 'history'
 import { withRouter } from 'react-router-dom'
+// @ts-ignore
+import { alert, prompt } from 'smalltalk'
 
 const GroupsSidebar = observer(
   ({
+    createGroup,
+    createInvite,
     groups,
-    navigateHome,
-    navigateToGroup,
+    joinGroup,
     leaveGroup,
-    createGroup
+    navigateHome,
+    navigateToGroup
   }: {
+    createGroup: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+    createInvite: Function
     groups: Group[]
+    joinGroup: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
+    leaveGroup: (groupHash: string) => void
     navigateHome: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
     navigateToGroup: Function
-    leaveGroup: (groupHash: string) => void
-    createGroup: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
   }) => {
     return (
       <Nav>
@@ -36,11 +42,12 @@ const GroupsSidebar = observer(
             >
               <ListItemText primary={name} />
               <button onClick={() => leaveGroup(groupHash)}>-</button>
+              <button onClick={() => createInvite(groupHash)}>+</button>
             </ListItem>
           ))}
         </List>
         <List>
-          <ListItem button key={'search'} onClick={navigateHome}>
+          <ListItem button key={'search'} onClick={joinGroup}>
             <ListItemText primary={'Find people or groups'} />
           </ListItem>
           <ListItem button key={'create-group'} onClick={createGroup}>
@@ -78,6 +85,19 @@ const WrappedGroupsSidebar = observer(
       history.push('/')
     }
 
+    const createInvite = async (groupHash: string) => {
+      const res = await store.groupsInvite(groupHash)
+      const serialized = btoa(JSON.stringify(res))
+      alert('Invite code', serialized)
+    }
+
+    const joinGroup = async () => {
+      prompt('Invite code', '').then((value: string) => {
+        const invite = JSON.parse(atob(value as string))
+        store.groupsJoin(invite)
+      })
+    }
+
     return (
       <GroupsSidebar
         groups={store.groups}
@@ -85,6 +105,8 @@ const WrappedGroupsSidebar = observer(
         leaveGroup={leaveGroup}
         navigateHome={navigateHome}
         navigateToGroup={navigateToGroup}
+        joinGroup={joinGroup}
+        createInvite={createInvite}
       />
     )
   }

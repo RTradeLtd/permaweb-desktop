@@ -83,7 +83,13 @@ class Store {
       throw new Error('Schema not loaded')
     }
 
-    const group = await textile.threads.add(name, this.schema.hash)
+    const group = await textile.threads.add(
+      name,
+      this.schema.hash,
+      undefined,
+      'open',
+      'invite_only'
+    )
     this.groupsGetAll()
     return group
   }
@@ -93,6 +99,15 @@ class Store {
     const res = await textile.threads.remove(groupHash)
     this.groupsGetAll()
     return res
+  }
+
+  async groupsInvite(groupHash: string) {
+    return textile.invites.addExternal(groupHash)
+  }
+
+  async groupsJoin({ id, key }: any) {
+    const res = textile.invites.accept(id, key)
+    console.log(res)
   }
 
   /* posts */
