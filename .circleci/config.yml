@@ -130,28 +130,22 @@ workflows:
     jobs:
       - build-linux:
           filters:
-            branches:
-              only:
-                - master
-                - develop
             tags:
               only: /v.*/
+            branches:
+              ignore: /.*/
       - build-win:
           filters:
-            branches:
-              only:
-                - master
-                - develop
             tags:
               only: /v.*/
+            branches:
+              ignore: /.*/
       - build-macos:
           filters:
-            branches:
-              only:
-                - master
-                - develop
             tags:
               only: /v.*/
+            branches:
+              ignore: /.*/
       - release:
           requires:
             - build-linux
