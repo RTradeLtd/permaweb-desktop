@@ -48,16 +48,16 @@ const examplePost: Post = {
   lastModified: '2019-01-01T10:00:00Z',
   comments: [
     {
-      commentHash: '5567',
+      id: 'QmcyKGjMg3rc4xzaLH85NndHrVNxjnErhoEqJr2QnFR53P',
       author: 'Akshay',
-      content: 'Hello',
-      lastModified: '2019-01-02T13:22:00Z'
+      body: 'Hello',
+      date: '2019-01-02T13:22:00Z'
     },
     {
-      commentHash: '6567',
+      id: '"QmTzXnviSPdZPu6nAWtMuTfhqsFU3iysuQ743im6e2YbwH"',
       author: 'kanej',
-      content: 'More words',
-      lastModified: '2019-01-03T22:12:00Z'
+      body: 'More words',
+      date: '2019-01-03T22:12:00Z'
     }
   ],
   reactions: [

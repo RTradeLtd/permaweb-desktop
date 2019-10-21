@@ -87,7 +87,7 @@ function PostCard({
           />
         </div>
         <CommentList>
-          {comments.map(({ author, content, lastModified }, index) => {
+          {comments.map(({ author, body, date }, index) => {
             return (
               <Comment key={index}>
                 <Img
@@ -95,8 +95,8 @@ function PostCard({
                   alt={author}
                 />
                 <div>{author}</div>
-                <CommentContent>{content}</CommentContent>
-                <div>{formatDate(lastModified)}</div>
+                <CommentContent>{body}</CommentContent>
+                <div>{formatDate(date)}</div>
               </Comment>
             )
           })}

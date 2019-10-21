@@ -17,10 +17,10 @@ export interface Post {
 }
 
 export interface Comment {
-  commentHash: string
+  id: string
   author: string
-  lastModified: string
-  content: string
+  date: string
+  body: string
 }
 
 export interface Share {

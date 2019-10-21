@@ -6,7 +6,7 @@ import {
   IObservableArray
 } from 'mobx'
 import { Textile, FileIndex } from '@textile/js-http-client'
-import { Group, Post } from './domain'
+import { Group, Post, Comment } from './domain'
 
 configure({ enforceActions: 'always' })
 
@@ -123,6 +123,17 @@ class Store {
         // content was also serialized
         const data = JSON.parse(content)
 
+        const commentList = await textile.comments.list(block)
+
+        const comments: Comment[] = commentList.items.map(
+          ({ id, body, date, user: { name } }) => ({
+            id,
+            body,
+            date,
+            author: name
+          })
+        )
+
         return {
           groupHash,
           postHash: hash,
@@ -130,7 +141,7 @@ class Store {
           lastModified: added,
           author: 'Error',
           content: data,
-          comments: [],
+          comments: comments,
           shares: [],
           reactions: []
         }
