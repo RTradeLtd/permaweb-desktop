@@ -36,7 +36,7 @@ const CommentComposer: React.FC<CommentComposerProps> = ({
         setText('')
       }
     },
-    [text, onAddComment]
+    [onAddComment, postHash, text]
   )
 
   return (

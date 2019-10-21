@@ -88,12 +88,14 @@ const StandardFrame: React.FC = ({ children }) => {
 
 export const publicGroup = () => (
   <MemoryRouter>
-    <Group
-      posts={[examplePost]}
-      onPostClicked={addPostAction}
-      onPostDelete={deletePostAction}
-      onAddComment={(() => {}) as any}
-    />
+    <StandardFrame>
+      <Group
+        posts={[examplePost]}
+        onPostClicked={addPostAction}
+        onPostDelete={deletePostAction}
+        onAddComment={(() => {}) as any}
+      />
+    </StandardFrame>
   </MemoryRouter>
 )
 

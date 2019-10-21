@@ -8,6 +8,7 @@ import formatDistance from 'date-fns/formatDistance'
 
 import { Post } from '../domain'
 import CommentComposer from './CommentComposer'
+import Avatar from './Avatar'
 
 const formatDate = (timeStamp: string) => {
   const now = new Date()
@@ -49,7 +50,7 @@ function PostCard({
     <Card key={postHash}>
       <Header>
         <Author>
-          <Img src="https://picsum.photos/seed/picsum/30/30" alt={author} />
+          <PostAvatar author={author} />
           <div>{author}</div>
         </Author>
         <When>
@@ -102,11 +103,8 @@ function PostCard({
           {comments.map(({ author, body, date }, index) => {
             return (
               <Comment key={index}>
-                <Img
-                  src="https://picsum.photos/seed/picsum/20/20"
-                  alt={author}
-                />
-                <div>{author}</div>
+                <CommentAvatar author={author} />
+                <AuthorText>{author}</AuthorText>
                 <CommentContent>{body}</CommentContent>
                 <div>{formatDate(date)}</div>
               </Comment>
@@ -143,6 +141,11 @@ const Author = styled.div`
   grid-template-columns: auto auto;
   grid-gap: 10px;
   align-items: center;
+  color: #425c95;
+`
+
+const PostAvatar = styled(Avatar)`
+  margin: 0px;
 `
 
 const PostBorderContainer = styled.div`
@@ -151,10 +154,6 @@ const PostBorderContainer = styled.div`
 `
 
 const PostBody = styled.div``
-
-const Img = styled.img`
-  border-radius: 50%;
-`
 
 const When = styled.div`
   text-align: right;
@@ -211,6 +210,17 @@ const Comment = styled.li`
   grid-template-columns: auto auto auto 1fr;
   grid-gap: 10px;
   align-items: center;
+`
+
+const CommentAvatar = styled(Avatar)`
+  .avatar {
+    width: 28px;
+    height: 28px;
+  }
+`
+
+const AuthorText = styled.div`
+  color: #425c95;
 `
 
 const CommentContent = styled.div`
