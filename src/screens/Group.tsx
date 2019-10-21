@@ -9,12 +9,14 @@ import { Post } from '../domain'
 export const Group = ({
   posts,
   onPostClicked,
-  onPostDelete
+  onPostDelete,
+  onAddComment
 }: {
   posts: Post[]
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onPostClicked: (editorState: any) => Promise<boolean>
   onPostDelete: (block: string) => void
+  onAddComment: (postHash: string, comment: string) => Promise<boolean>
 }) => {
   return (
     <div>
@@ -25,6 +27,7 @@ export const Group = ({
             key={post.postHash}
             post={post}
             onPostDelete={onPostDelete}
+            onAddComment={onAddComment}
           />
         ))}
       </List>
@@ -73,12 +76,18 @@ const WrappedGroup = ({
     [store]
   )
 
+  const handleAddComment = async (postHash: string, commentText: string) => {
+    store.commentsAdd(groupHash, postHash, commentText)
+    return true
+  }
+
   return (
     <ObservedGroup
       key={groupHash}
       posts={store.currentPosts}
       onPostClicked={handlePostClicked}
       onPostDelete={handlePostDelete}
+      onAddComment={handleAddComment}
     />
   )
 }

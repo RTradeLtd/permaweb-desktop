@@ -92,6 +92,7 @@ export const publicGroup = () => (
       posts={[examplePost]}
       onPostClicked={addPostAction}
       onPostDelete={deletePostAction}
+      onAddComment={(() => {}) as any}
     />
   </MemoryRouter>
 )
@@ -111,7 +112,11 @@ newPostEnryControl.story = {
 export const shortPost = () => (
   <MemoryRouter>
     <StandardFrame>
-      <PostCard onPostDelete={deletePostAction} post={examplePost} />
+      <PostCard
+        onPostDelete={deletePostAction}
+        post={examplePost}
+        onAddComment={(() => {}) as any}
+      />
     </StandardFrame>
   </MemoryRouter>
 )

@@ -165,6 +165,35 @@ class Store {
     return res
   }
 
+  /* comments */
+
+  async commentsAdd(
+    groupHash: string,
+    postHash: string,
+    commentText: string
+  ): Promise<boolean> {
+    try {
+      const post = this.currentPosts.find(p => p.postHash === postHash)
+
+      if (!post) {
+        console.error(`Could not add comment to unknown post ${postHash}`)
+        return false
+      }
+
+      await textile.comments.add(post.block, commentText)
+
+      runInAction(() => {
+        this.postsLoad(groupHash)
+      })
+
+      return true
+    } catch (err) {
+      console.log('Error adding post: ', err)
+    }
+
+    return false
+  }
+
   /* interactions */
   /* eslint-disable @typescript-eslint/no-unused-vars */
   async reactionsGetAll(groupHash: string, postHash: string) {}

@@ -4,16 +4,17 @@ import SlateEditor from './SlateEditor'
 import { Value } from 'slate'
 import { Link } from 'react-router-dom'
 import { Post } from '../domain'
+import CommentComposer from './CommentComposer'
 
 const formatDate = (timeStamp: string) => new Date(timeStamp).toLocaleString()
 
 interface PostCardProps {
   post: Post
   onPostDelete: (block: string) => void
+  onAddComment: (postHash: string, comment: string) => Promise<boolean>
 }
 
 function PostCard({
-  onPostDelete,
   post: {
     groupHash,
     postHash,
@@ -24,7 +25,9 @@ function PostCard({
     comments,
     shares,
     reactions
-  }
+  },
+  onPostDelete,
+  onAddComment
 }: PostCardProps) {
   const handleDeletePost = useCallback(() => {
     return onPostDelete(block)
@@ -77,7 +80,11 @@ function PostCard({
       </PostBorderContainer>
       <Comments>
         <div>
-          <textarea placeholder={`Reply to ${author}`} />
+          <CommentComposer
+            postHash={postHash}
+            author={author}
+            onAddComment={onAddComment}
+          />
         </div>
         <CommentList>
           {comments.map(({ author, content, lastModified }, index) => {

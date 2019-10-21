@@ -7,10 +7,17 @@ import Store from '../Store'
 interface PostProps {
   post: PostType
   onPostDelete: (block: string) => void
+  onAddComment: (comment: string) => Promise<boolean>
 }
 
-export const Post = ({ post, onPostDelete }: PostProps) => {
-  return <PostCard post={post} onPostDelete={onPostDelete} />
+export const Post = ({ post, onPostDelete, onAddComment }: PostProps) => {
+  return (
+    <PostCard
+      post={post}
+      onPostDelete={onPostDelete}
+      onAddComment={onAddComment}
+    />
+  )
 }
 
 const ObservedPost = observer(Post)
@@ -31,6 +38,11 @@ const WrappedPost = ({
     [store]
   )
 
+  const handleAddComment = async (comment: string) => {
+    alert(comment)
+    return true
+  }
+
   const post = store.currentPosts.find(p => p.postHash === postHash)
 
   if (!post) {
@@ -38,7 +50,11 @@ const WrappedPost = ({
   }
 
   return (
-    <ObservedPost post={post} onPostDelete={handlePostDelete}></ObservedPost>
+    <ObservedPost
+      post={post}
+      onPostDelete={handlePostDelete}
+      onAddComment={handleAddComment}
+    ></ObservedPost>
   )
 }
 
