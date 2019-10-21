@@ -3,6 +3,10 @@ import styled from 'styled-components'
 import SlateEditor from './SlateEditor'
 import { Value } from 'slate'
 import { Link } from 'react-router-dom'
+import IconButton from '@material-ui/core/IconButton'
+import Menu from '@material-ui/core/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 import differenceInDays from 'date-fns/differenceInDays'
 import formatDistance from 'date-fns/formatDistance'
 
@@ -46,19 +50,43 @@ function PostCard({
     return onPostDelete(block)
   }, [onPostDelete, block])
 
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+  const menuOpen = Boolean(anchorEl)
+
+  const handleMenuOpenClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setAnchorEl(null)
+  }
+
   return (
     <Card key={postHash}>
       <Header>
-        <Author>
-          <PostAvatar author={author} />
-          <div>{author}</div>
-        </Author>
-        <When>
-          <Link to={`/g/${groupHash}/p/${postHash}`}>
-            {formatDate(lastModified)}
-          </Link>
-        </When>
-        <button onClick={handleDeletePost}>-</button>
+        <HeaderSection>
+          <Author>
+            <PostAvatar author={author} />
+            <div>{author}</div>
+          </Author>
+        </HeaderSection>
+
+        <HeaderSection>
+          <When>
+            <Link to={`/g/${groupHash}/p/${postHash}`}>
+              {formatDate(lastModified)}
+            </Link>
+          </When>
+          <IconButton className={'action-button'} onClick={handleMenuOpenClick}>
+            <MoreVertIcon />
+          </IconButton>
+          <Menu open={menuOpen} onClose={handleMenuClose} anchorEl={anchorEl}>
+            <MenuItem onClick={handleDeletePost}>
+              <i className={'fas fa-trash'}></i>
+              <MenuItemText>Delete</MenuItemText>
+            </MenuItem>
+          </Menu>
+        </HeaderSection>
       </Header>
       <PostBorderContainer>
         <PostBody>
@@ -74,10 +102,10 @@ function PostCard({
                 <span>{reaction.count}</span>
               </Reaction>
             ))}
-            <Reaction key={'add-reaction'}>
+            {/* <Reaction key={'add-reaction'}>
               <span>+</span>
               <span>React</span>
-            </Reaction>
+            </Reaction> */}
           </Reactions>
           <Reactions>
             <Reaction key="comment-count">
@@ -129,6 +157,15 @@ const Card = styled.li`
 `
 
 const Header = styled.div`
+  display: flexbox;
+  justify-content: space-between;
+`
+
+const MenuItemText = styled.span`
+  margin-left: 10px;
+`
+
+const HeaderSection = styled.div`
   display: grid;
   grid-template-columns: auto auto 1fr;
   grid-gap: 10px;
@@ -187,7 +224,7 @@ const Reaction = styled.li`
   }
   i {
     padding-left: 3px;
-    padding-top: 7px;
+    padding-top: 2px;
     margin-right: 8px;
   }
 `
@@ -199,6 +236,7 @@ const Comments = styled.div`
 const CommentList = styled.ul`
   padding: 0;
   margin: 0;
+  margin-top: 20px;
   list-style: none;
   display: grid;
   grid-template-rows: auto;
