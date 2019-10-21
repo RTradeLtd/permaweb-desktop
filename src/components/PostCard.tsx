@@ -3,10 +3,22 @@ import styled from 'styled-components'
 import SlateEditor from './SlateEditor'
 import { Value } from 'slate'
 import { Link } from 'react-router-dom'
+import differenceInDays from 'date-fns/differenceInDays'
+import formatDistance from 'date-fns/formatDistance'
+
 import { Post } from '../domain'
 import CommentComposer from './CommentComposer'
 
-const formatDate = (timeStamp: string) => new Date(timeStamp).toLocaleString()
+const formatDate = (timeStamp: string) => {
+  const now = new Date()
+  const time = new Date(timeStamp)
+
+  if (differenceInDays(now, time) === 0) {
+    return formatDistance(time, now, { addSuffix: true })
+  }
+
+  return `${differenceInDays(now, time)} d`
+}
 
 interface PostCardProps {
   post: Post
