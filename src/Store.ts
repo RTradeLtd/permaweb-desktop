@@ -116,36 +116,46 @@ class Store {
     const { items } = await textile.files.list(groupHash)
 
     const posts: Post[] = await Promise.all(
-      items.map(async ({ block, files: [{ file: { hash, added } }] }) => {
-        const blob = await textile.file.content(hash)
-        const serialized = await getBlobContent(blob)
-        const { content } = JSON.parse(serialized)
-        // content was also serialized
-        const data = JSON.parse(content)
-
-        const commentList = await textile.comments.list(block)
-
-        const comments: Comment[] = commentList.items.map(
-          ({ id, body, date, user: { name } }) => ({
-            id,
-            body,
-            date,
-            author: name
-          })
-        )
-
-        return {
-          groupHash,
-          postHash: hash,
+      items.map(
+        async ({
           block,
-          lastModified: added,
-          author: 'Error',
-          content: data,
-          comments: comments,
-          shares: [],
-          reactions: []
+          user: { name },
+          files: [
+            {
+              file: { hash, added }
+            }
+          ]
+        }) => {
+          const blob = await textile.file.content(hash)
+          const serialized = await getBlobContent(blob)
+          const { content } = JSON.parse(serialized)
+          // content was also serialized
+          const data = JSON.parse(content)
+
+          const commentList = await textile.comments.list(block)
+
+          const comments: Comment[] = commentList.items.map(
+            ({ id, body, date, user: { name } }) => ({
+              id,
+              body,
+              date,
+              author: name
+            })
+          )
+
+          return {
+            groupHash,
+            postHash: hash,
+            block,
+            lastModified: added,
+            author: name,
+            content: data,
+            comments: comments,
+            shares: [],
+            reactions: []
+          }
         }
-      })
+      )
     )
 
     runInAction(() => {
