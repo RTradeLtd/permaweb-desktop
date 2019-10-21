@@ -3,17 +3,7 @@
 ## Community [![Discord](https://img.shields.io/badge/Chat-Discord-purple.svg?style=flat)](https://discord.gg/DrPFqa2) [![Matrix](https://img.shields.io/badge/Chat-Matrix%20&%20Riot-blue.svg?style=flat)](https://riot.permaweb.io/#/room/#general:permaweb.io) [![IRC](https://img.shields.io/badge/IRC-freenode%20%23permaweb-brightgreen.svg?style=flat)](http://webchat.freenode.net/?channels=%23permaweb)
 
 ## Description
-Permaweb is a super productive, privacy focused writing app.
-* Tons of shortcuts. Mouse-free navigation.
-* Super resilient. Everything you write is encrypted and decentralized.
-
-We are building the best self-hosted tool to write and publish text.
-
-Use cases:
-* Draft notes
-* Create markdown documents
-* Share a pastebin
-* A simple public blog
+Permaweb lets you create groups for friends and teams. Fully private to discuss sensitive info. Hosted P2P by group users. E2E encrypted. No cloud.
 
 ## Technology
 Permaweb runs on a series of self-hosted nodes. These are powered by [Textile.io](https://textile.io), which is acts as a digital wallet for fully encrypted, decentralized content. Content is stored using the [IPFS](https://ipfs.io) protocol, which makes Permaweb links unique and permanent.  This makes Permaweb extremely resilient: we do not have your keys, and there is no single point of failure. *You are the platform*.
