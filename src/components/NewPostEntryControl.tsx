@@ -111,11 +111,6 @@ function NewPostEntryControl({
         <ToolbarEditorBtn icon="italic" onClick={handleEditorBtnItalic} />
         <ToolbarEditorBtn icon="underline" onClick={handleEditorBtnUnderline} />
         <ToolbarEditorBtn icon="code" onClick={handleEditorBtnCode} />
-        <ToolbarEditorBtn icon="quote-right" />
-        <ToolbarEditorBtn icon="list-ul" />
-        <ToolbarEditorBtn icon="list-ol" />
-        <ToolbarEditorBtn icon="link" />
-        <ToolbarEditorBtn icon="check-square" />
       </Toolbar>
       <ComposerPanel>
         <SlateEditor
