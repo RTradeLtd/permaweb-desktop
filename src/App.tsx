@@ -10,6 +10,7 @@ import { SemanticToastContainer } from 'react-semantic-toasts'
 
 import Layout from './Layout'
 import Home from './screens/Home'
+import CreateGroup from './screens/CreateGroup'
 import Group from './screens/Group'
 import Post from './screens/Post'
 import Edit from './screens/Edit'
@@ -31,6 +32,7 @@ function App({ store, status }: { store: Store; status: string }) {
           <Switch>
             <Route path="/404" component={NotFound} />
             <Route exact path="/" component={Home} />
+            <Route exact path="/g/create" component={CreateGroup} />
             <Route exact path="/g/:groupHash" component={Group} />
             <Route exact path="/g/:groupHash/p/:postHash" component={Post} />
             <Route exact path="/e/:groupHash/:postHash" component={Edit} />
