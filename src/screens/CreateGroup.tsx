@@ -1,10 +1,6 @@
 import React from 'react'
 
-interface CreateGroupProps {
-  className?: string
-}
-
-const CreateGroup: React.FC<CreateGroupProps> = props => {
+const CreateGroup: React.FC = () => {
   return (
     <div className="create-group">
       <h2>Create Group</h2>

@@ -69,8 +69,7 @@ const Nav = styled.nav`
 const WrappedGroupsSidebar = observer(
   ({ store, history }: { store: Store; groups: Group[]; history: History }) => {
     const createGroup = () => {
-      const rand = parseInt((Math.random() * 40).toString(), 10)
-      store.groupsAdd(`G-${rand}`)
+      history.push(`/g/create`)
     }
 
     const navigateHome = () => history.push('/')
