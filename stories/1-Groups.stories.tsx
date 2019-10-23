@@ -5,7 +5,7 @@ import NewPostEntryControl from '../src/components/NewPostEntryControl'
 import { action } from '@storybook/addon-actions'
 import { Post } from '../src/domain'
 import PostCard from '../src/components/PostCard'
-import CreateGroup from '../src/screens/CreateGroup'
+import { CreateGroup } from '../src/screens/CreateGroup'
 
 export default {
   title: 'Group'
@@ -90,7 +90,7 @@ const StandardFrame: React.FC = ({ children }) => {
 export const createGroup = () => {
   return (
     <StandardFrame>
-      <CreateGroup />
+      <CreateGroup onCreateGroup={action('Create Group Clicked')} />
     </StandardFrame>
   )
 }

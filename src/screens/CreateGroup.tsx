@@ -9,7 +9,7 @@ interface CreateGroupProps {
   onCreateGroup: (groupName: string, groupDescription: string) => void
 }
 
-const CreateGroup: React.FC<CreateGroupProps> = ({ onCreateGroup }) => {
+export const CreateGroup: React.FC<CreateGroupProps> = ({ onCreateGroup }) => {
   const [groupName, setGroupName] = useState('')
   const [groupDescription, setGroupDescription] = useState('')
 
@@ -39,40 +39,101 @@ const CreateGroup: React.FC<CreateGroupProps> = ({ onCreateGroup }) => {
   )
 
   return (
-    <div className="create-group">
-      <h2>Create Group</h2>
-      <CreateGroupForm onSubmit={handleSubmit}>
-        <div>
-          <label>Group Name</label>
-          <input
-            type={'text'}
-            placeholder={'Enter a group name'}
-            onChange={handleGroupNameChange}
-            value={groupName}
-          />
-        </div>
+    <CreateGroupContainer>
+      <MainColumn>
+        <Title>Create Group</Title>
+        <CreateGroupForm onSubmit={handleSubmit}>
+          <FormControl>
+            <FormLabel>Group Name</FormLabel>
+            <input
+              required
+              type={'text'}
+              placeholder={'Enter a group name'}
+              onChange={handleGroupNameChange}
+              maxLength={120}
+              value={groupName}
+            />
+          </FormControl>
 
-        <div>
-          <label>Description</label>
-          <textarea
-            rows={4}
-            placeholder={'Enter a group description'}
-            onChange={handleGroupDescriptionChange}
-            value={groupDescription}
-          />
-        </div>
+          <FormControl>
+            <FormLabel>Description</FormLabel>
+            <textarea
+              rows={4}
+              placeholder={'Enter a group description'}
+              onChange={handleGroupDescriptionChange}
+              value={groupDescription}
+            />
+          </FormControl>
 
-        <div>
-          <button type={'submit'}>Create Group</button>
-        </div>
-      </CreateGroupForm>
-    </div>
+          <ButtonRow>
+            <SubmitButton type={'submit'}>Create Group</SubmitButton>
+          </ButtonRow>
+        </CreateGroupForm>
+      </MainColumn>
+    </CreateGroupContainer>
   )
 }
+
+const CreateGroupContainer = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: 50px auto 50px;
+  grid-template-areas: '. main .';
+`
+
+const MainColumn = styled.div`
+  grid-area: main;
+  justify-self: start;
+  width: 406px;
+`
+
+const Title = styled.h2`
+  color: #696a77;
+`
 
 const CreateGroupForm = styled.form`
   display: flex;
   flex-direction: column;
+`
+
+const FormControl = styled.div`
+  margin-top: 10px;
+  margin-bottom: 10px;
+
+  input {
+    width: 300px;
+  }
+
+  textarea {
+    width: 300px;
+  }
+`
+
+const FormLabel = styled.label`
+  display: inline-block;
+  vertical-align: top;
+  width: 100px;
+  color: #696a77;
+`
+
+const ButtonRow = styled.div`
+  display: flex;
+  flex-direction: row-reverse;
+  width: 406px;
+`
+
+const SubmitButton = styled.button`
+  background: #4267b2;
+  font-size: 14px;
+  padding: 6px 10px 6px 10px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+
+  &:hover {
+    background: #375695;
+    color: lightgray;
+  }
 `
 
 const WrappedCreateGroup = ({
