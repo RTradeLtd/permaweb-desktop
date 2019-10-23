@@ -9,7 +9,7 @@ function Home() {
   return (
     <div>
       <WelcomeMessage>Welcome to Permaweb</WelcomeMessage>
-      <CreateProfileMessage>Let's create a profile</CreateProfileMessage>
+      <CreateProfileMessage>Let&apos;s create a profile</CreateProfileMessage>
       <p>
         You can modify your profile (except your name) later by clicking your
         profile on the lower left corner.
@@ -81,9 +81,6 @@ const WelcomeMessage = styled(Message)`
   margin-bottom: 30px;
 `
 
-const NameContainer = styled.div`
-  display: flex;
-`
 const SearchMessage = styled(Message)`
   margin-right: 30px;
 `
