@@ -78,19 +78,22 @@ class Store {
   }
 
   @action
-  async groupsAdd(name: string) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  async groupsAdd(groupName: string, _groupDescription: string) {
     if (!this.schema) {
       throw new Error('Schema not loaded')
     }
 
     const group = await textile.threads.add(
-      name,
+      groupName,
       this.schema.hash,
       undefined,
       'open',
       'invite_only'
     )
+
     this.groupsGetAll()
+
     return group
   }
 
