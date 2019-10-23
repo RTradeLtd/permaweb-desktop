@@ -40,7 +40,6 @@ function PostCard({
     lastModified,
     content,
     comments,
-    shares,
     reactions
   },
   onPostDelete,
@@ -102,19 +101,11 @@ function PostCard({
                 <span>{reaction.count}</span>
               </Reaction>
             ))}
-            {/* <Reaction key={'add-reaction'}>
-              <span>+</span>
-              <span>React</span>
-            </Reaction> */}
           </Reactions>
           <Reactions>
             <Reaction key="comment-count">
               <i className={`fas fa-comment-alt`}></i>
               <span>{comments.length} Comments</span>
-            </Reaction>
-            <Reaction key="share-count">
-              <i className="fas fa-share-square"></i>
-              <span>{shares.length} Shared</span>
             </Reaction>
           </Reactions>
         </Interactions>
