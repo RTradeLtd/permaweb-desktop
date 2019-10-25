@@ -10,6 +10,8 @@ import { withRouter } from 'react-router-dom'
 // @ts-ignore
 import { alert, prompt } from 'smalltalk'
 
+const BACKGROUND = '#f0f0f0'
+
 const GroupsSidebar = observer(
   ({
     createGroup,
@@ -64,6 +66,8 @@ const Nav = styled.nav`
   display: grid;
   grid-template-rows: 1fr auto;
   padding: 0 5px;
+  background: ${BACKGROUND};
+  color: #696a77;
 `
 
 const WrappedGroupsSidebar = observer(

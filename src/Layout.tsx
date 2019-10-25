@@ -8,6 +8,7 @@ import GroupsSidebar from './components/GroupsSidebar'
 const DRAWER_WIDTH = 240
 const HEADER_HEIGHT = 80
 const FOOTER_HEIGHT = 60
+const PRIMARY = '#4267b2'
 const BACKGROUND = '3578E5'
 
 export interface LayoutProps {
@@ -79,7 +80,8 @@ const Footer = styled.footer`
   display: grid;
   grid-template-columns: ${DRAWER_WIDTH}px 1fr;
   height: ${FOOTER_HEIGHT}px;
-  background: ${BACKGROUND};
+  background: ${PRIMARY};
+  color: white;
 `
 
 /* header */
@@ -90,6 +92,8 @@ const Title = styled.h1`
   align-items: center;
   height: ${HEADER_HEIGHT}px;
   padding: 0 20px;
+  background: ${PRIMARY};
+  color: white;
 `
 
 const Bar = styled.div`
@@ -98,6 +102,8 @@ const Bar = styled.div`
   align-items: center;
   height: ${HEADER_HEIGHT}px;
   padding: 0 10px;
+  background: ${PRIMARY};
+  color: white;
 `
 
 const Info = styled.div`
