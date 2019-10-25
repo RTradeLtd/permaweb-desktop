@@ -79,7 +79,7 @@ class Store {
 
   @action
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  async groupsAdd(groupName: string, _groupDescription: string) {
+  async groupsAdd(groupName: string) {
     if (!this.schema) {
       throw new Error('Schema not loaded')
     }

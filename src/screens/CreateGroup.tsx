@@ -6,12 +6,11 @@ import { inject } from 'mobx-react'
 import { withRouter } from 'react-router'
 
 interface CreateGroupProps {
-  onCreateGroup: (groupName: string, groupDescription: string) => void
+  onCreateGroup: (groupName: string) => void
 }
 
 export const CreateGroup: React.FC<CreateGroupProps> = ({ onCreateGroup }) => {
   const [groupName, setGroupName] = useState('')
-  const [groupDescription, setGroupDescription] = useState('')
 
   const handleGroupNameChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,22 +19,15 @@ export const CreateGroup: React.FC<CreateGroupProps> = ({ onCreateGroup }) => {
     [setGroupName]
   )
 
-  const handleGroupDescriptionChange = useCallback(
-    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setGroupDescription(event.currentTarget.value)
-    },
-    [setGroupDescription]
-  )
-
   const handleSubmit = useCallback(
     (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
 
-      onCreateGroup(groupName, groupDescription)
+      onCreateGroup(groupName)
 
       return false
     },
-    [onCreateGroup, groupName, groupDescription]
+    [onCreateGroup, groupName]
   )
 
   return (
@@ -52,16 +44,6 @@ export const CreateGroup: React.FC<CreateGroupProps> = ({ onCreateGroup }) => {
               onChange={handleGroupNameChange}
               maxLength={120}
               value={groupName}
-            />
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>Description</FormLabel>
-            <textarea
-              rows={4}
-              placeholder={'Enter a group description'}
-              onChange={handleGroupDescriptionChange}
-              value={groupDescription}
             />
           </FormControl>
 
@@ -144,8 +126,8 @@ const WrappedCreateGroup = ({
   history: History
 }) => {
   const handleCreateGroup = useCallback(
-    async (groupName: string, groupDescription: string) => {
-      const group = await store.groupsAdd(groupName, groupDescription)
+    async (groupName: string) => {
+      const group = await store.groupsAdd(groupName)
 
       history.push(`/g/${group.id}`)
     },
