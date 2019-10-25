@@ -10,27 +10,15 @@ const HEADER_HEIGHT = 80
 const FOOTER_HEIGHT = 60
 const BACKGROUND = '3578E5'
 
-function useLayout({ store }: { store: Store }) {
-  const members = [1, 2, 3, 4, 5]
-
-  useEffect(() => {
-    store.groupsGetAll()
-  }, [store])
-
-  return {
-    members
-  }
-}
-
 export interface LayoutProps {
   store: Store
   children: ReactElement
 }
 
 const Layout = ({ store, children }: LayoutProps) => {
-  const { members } = useLayout({
-    store
-  })
+  useEffect(() => {
+    store.groupsGetAll()
+  }, [store])
 
   return (
     <Section>
@@ -43,20 +31,7 @@ const Layout = ({ store, children }: LayoutProps) => {
           Permaweb
         </Title>
         <Bar>
-          <Sub>Group name</Sub>
           <Info>
-            <div>90</div>
-            <Members maxCount={5}>
-              {members.map((member, i) => {
-                return (
-                  <Img
-                    src="https://picsum.photos/seed/picsum/30/30"
-                    alt=""
-                    key={i}
-                  />
-                )
-              })}
-            </Members>
             <div>Share</div>
             <div>Edit</div>
           </Info>
@@ -119,15 +94,10 @@ const Title = styled.h1`
 
 const Bar = styled.div`
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto;
   align-items: center;
   height: ${HEADER_HEIGHT}px;
   padding: 0 10px;
-`
-
-const Sub = styled.h2`
-  padding: 0;
-  margin: 0;
 `
 
 const Info = styled.div`
@@ -136,13 +106,6 @@ const Info = styled.div`
   grid-gap: 5px;
   align-items: center;
   margin-left: auto;
-`
-
-const Members = styled.div`
-  display: grid;
-  grid-template-columns: ${({ maxCount }: { maxCount: number }) =>
-    `repeat(${maxCount}, auto)`};
-  grid-gap: 5px;
 `
 
 /* content */
