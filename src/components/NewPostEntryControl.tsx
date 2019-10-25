@@ -122,17 +122,8 @@ function NewPostEntryControl({
       </ComposerPanel>
       <PublishButtonRow>
         <div>
-          <ActionButton>
-            <i className="fas fa-image"></i>Photo or Video
-          </ActionButton>
           <ActionButton onClick={toggleEmojiPicker}>
             <i className="fas fa-laugh"></i>Emoji
-          </ActionButton>
-          <ActionButton>
-            <i className="fas fa-user-friends"></i>Tag someone
-          </ActionButton>
-          <ActionButton>
-            <i className="fas fa-file-image"></i>GIF
           </ActionButton>
           {emojiPickerVisible ? (
             <Picker
