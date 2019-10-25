@@ -1,3 +1,9 @@
+export interface Profile {
+  id: string
+  name: string
+  avatar: string
+}
+
 export interface Group {
   groupHash: string
   name: string

@@ -1,9 +1,11 @@
-import React, { useEffect, ReactElement } from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { observer, inject } from 'mobx-react'
+import { inject } from 'mobx-react'
 import Store from './Store'
+import { Profile as ProfileType } from './domain'
 
 import GroupsSidebar from './components/GroupsSidebar'
+import Avatar from './components/Avatar'
 
 const DRAWER_WIDTH = 240
 const HEADER_HEIGHT = 80
@@ -11,16 +13,11 @@ const FOOTER_HEIGHT = 60
 const PRIMARY = '#4267b2'
 const BACKGROUND = '3578E5'
 
-export interface LayoutProps {
-  store: Store
-  children: ReactElement
+interface LayoutProps {
+  profile: ProfileType
 }
 
-const Layout = ({ store, children }: LayoutProps) => {
-  useEffect(() => {
-    store.groupsGetAll()
-  }, [store])
-
+export const Layout: React.FC<LayoutProps> = ({ profile, children }) => {
   return (
     <Section>
       <Header>
@@ -44,8 +41,8 @@ const Layout = ({ store, children }: LayoutProps) => {
       </Content>
       <Footer>
         <Profile>
-          <Img src="https://picsum.photos/seed/picsum/30/30" alt="avatar" />
-          <div>Shokunin</div>
+          <Avatar author={profile.name} />
+          <div>{profile.name}</div>
           <div>Edit</div>
         </Profile>
         <Copyright>© Permaweb</Copyright>
@@ -144,4 +141,13 @@ const Img = styled.img`
   border-radius: 50%;
 `
 
-export default inject('store')(observer(props => <Layout {...props} />))
+const LayoutWrapper: React.FC<{ store: Store }> = ({ store, children }) => {
+  useEffect(() => {
+    store.groupsGetAll()
+  }, [store])
+
+  return <Layout profile={store.profile}>{children}</Layout>
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default inject('store')(LayoutWrapper as any)

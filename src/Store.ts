@@ -6,7 +6,7 @@ import {
   IObservableArray
 } from 'mobx'
 import { Textile, FileIndex } from '@textile/js-http-client'
-import { Group, Post, Comment } from './domain'
+import { Group, Post, Comment, Profile } from './domain'
 
 configure({ enforceActions: 'always' })
 
@@ -44,6 +44,11 @@ const textile = new Textile({
 class Store {
   gateway: string = 'http://127.0.0.1:5052'
   schema: FileIndex | undefined = undefined
+  profile: Profile = {
+    id: 'ERROR',
+    name: 'ERROR',
+    avatar: 'ERROR'
+  }
   @observable status: string = 'offline'
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   @observable groups: IObservableArray<Group> = [] as any
@@ -54,9 +59,17 @@ class Store {
   async connect() {
     const schema = await textile.schemas.add(SCHEMA)
     // todo update this to profileGet as init
+
+    const profile = await textile.profile.get()
+
     runInAction(() => {
       this.schema = schema
       this.status = 'online'
+      this.profile = {
+        id: profile.id,
+        name: profile.name,
+        avatar: profile.avatar
+      }
     })
   }
 
